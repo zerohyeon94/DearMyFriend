@@ -1,10 +1,3 @@
-//
-//  MainViewController.swift
-//  DearMyFriend
-//
-//  Created by Macbook on 10/11/23.
-//
-
 import UIKit
 
 class MainViewController: UIViewController {
@@ -31,8 +24,8 @@ class MainViewController: UIViewController {
         NSLayoutConstraint.activate([
             menuView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             menuView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            menuView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30),
-            menuView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
+            menuView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 40),
+            menuView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -40),
             menuView.heightAnchor.constraint(equalToConstant: 300)
         ])
     }

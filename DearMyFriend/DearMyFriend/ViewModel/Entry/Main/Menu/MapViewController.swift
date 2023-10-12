@@ -1,10 +1,3 @@
-//
-//  MapViewController.swift
-//  DearMyFriend
-//
-//  Created by Macbook on 10/11/23.
-//
-
 import UIKit
 
 class MapViewController: UIViewController {

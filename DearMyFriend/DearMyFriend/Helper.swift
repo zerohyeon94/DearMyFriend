@@ -5,3 +5,5 @@ struct Collection {
     static let spacingWitdh: CGFloat = 40
     static let cellColumns: CGFloat = 3
 }
+
+
