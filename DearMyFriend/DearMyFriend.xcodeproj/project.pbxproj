@@ -29,6 +29,14 @@
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
 		EBD2B7372AE21C33007FD1DA /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EBD2B7362AE21C33007FD1DA /* .gitignore */; };
 		EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */; };
+		EBD2B73E2AE221F5007FD1DA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73D2AE221F5007FD1DA /* FirebaseAnalytics */; };
+		EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */; };
+		EBD2B7422AE221F5007FD1DA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7412AE221F5007FD1DA /* FirebaseFirestoreSwift */; };
+		EBD2B7442AE221F5007FD1DA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7432AE221F5007FD1DA /* FirebaseStorage */; };
+		EBD2B7472AE2220A007FD1DA /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7462AE2220A007FD1DA /* NMapsMap */; };
+		EBD2B74A2AE2221B007FD1DA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7492AE2221B007FD1DA /* Lottie */; };
+		EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74C2AE22232007FD1DA /* Moya */; };
+		EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74F2AE22241007FD1DA /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +71,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBD2B73E2AE221F5007FD1DA /* FirebaseAnalytics in Frameworks */,
+				EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */,
+				EBD2B7442AE221F5007FD1DA /* FirebaseStorage in Frameworks */,
+				EBD2B7472AE2220A007FD1DA /* NMapsMap in Frameworks */,
+				EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */,
+				EBD2B7422AE221F5007FD1DA /* FirebaseFirestoreSwift in Frameworks */,
+				EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */,
+				EBD2B74A2AE2221B007FD1DA /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,6 +227,16 @@
 			dependencies = (
 			);
 			name = DearMyFriend;
+			packageProductDependencies = (
+				EBD2B73D2AE221F5007FD1DA /* FirebaseAnalytics */,
+				EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */,
+				EBD2B7412AE221F5007FD1DA /* FirebaseFirestoreSwift */,
+				EBD2B7432AE221F5007FD1DA /* FirebaseStorage */,
+				EBD2B7462AE2220A007FD1DA /* NMapsMap */,
+				EBD2B7492AE2221B007FD1DA /* Lottie */,
+				EBD2B74C2AE22232007FD1DA /* Moya */,
+				EBD2B74F2AE22241007FD1DA /* SnapKit */,
+			);
 			productName = DearMyFriend;
 			productReference = 52D998132AD6A89600679B15 /* DearMyFriend.app */;
 			productType = "com.apple.product-type.application";
@@ -239,6 +265,13 @@
 				Base,
 			);
 			mainGroup = 52D9980A2AD6A89600679B15;
+			packageReferences = (
+				EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */,
+				EBD2B7482AE2221B007FD1DA /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				EBD2B74B2AE22232007FD1DA /* XCRemoteSwiftPackageReference "Moya" */,
+				EBD2B74E2AE22241007FD1DA /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 52D998142AD6A89600679B15 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -505,6 +538,92 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+		EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jaemyeong/NMapsMap.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		EBD2B7482AE2221B007FD1DA /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+		EBD2B74B2AE22232007FD1DA /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.0;
+			};
+		};
+		EBD2B74E2AE22241007FD1DA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EBD2B73D2AE221F5007FD1DA /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		EBD2B7412AE221F5007FD1DA /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
+		EBD2B7432AE221F5007FD1DA /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		EBD2B7462AE2220A007FD1DA /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */;
+			productName = NMapsMap;
+		};
+		EBD2B7492AE2221B007FD1DA /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBD2B7482AE2221B007FD1DA /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		EBD2B74C2AE22232007FD1DA /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBD2B74B2AE22232007FD1DA /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		EBD2B74F2AE22241007FD1DA /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBD2B74E2AE22241007FD1DA /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 52D9980B2AD6A89600679B15 /* Project object */;
 }
