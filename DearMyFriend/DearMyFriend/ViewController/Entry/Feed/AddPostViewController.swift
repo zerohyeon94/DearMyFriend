@@ -1,6 +1,8 @@
 import Foundation
 import UIKit
+import Firebase
 import FirebaseFirestore
+import FirebaseStorage
 import PhotosUI
 
 class AddPostViewController: UIViewController {
@@ -49,13 +51,65 @@ extension AddPostViewController: AddPostViewDelegate {
     func cancelButtonTapped() {
         dismiss(animated: true)
     }
+    //    let id: String
+    //    let image: [String]
+    //    let post: String
+    //    let like: [String]
+    //    let comment: [[String: String]]
     
     func uploadButtonTapped() {
-        let feedId: String = "현재 로그인된 ID"
-        let feedImage: [String] = ["여러 이미지"]
+        print("_zerohyeon")
+        print("selectedImages: \(selectedImages)")
+        
+        // document : 현재 시간
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
+
+        let now = Date() // 현재 시간 가져오기
+        let formattedDate = dateFormatter.string(from: now) // 형식에 맞게 날짜를 문자열로 변환
+
+        print("현재 시간: \(formattedDate)")
+        
+        let feedId: String = "_zerohyeon"
+        var feedImage: [String] = []
         let feedPost: String = addPostView.postTextView.text
         let feedLike: [String] = [""] // 처음에 생성할 때는 좋아요 수가 없음.
-        let feedComment: [[String: String]] = [[:]] // 처음에 생성할 때는 댓글이 없음.
+        let feedComment: [[String: String]] = [["A":"a"], ["B":"b"]] // 처음에 생성할 때는 댓글이 없음.
+        
+//        let image = selectedImages[0]
+        
+        // Firebase Storage에 이미지 업로드
+        let storage = Storage.storage()
+        let storageRef = storage.reference()
+        for image in selectedImages.enumerated() {
+            let savePath = "Feed/\(feedId)/\(formattedDate)/image\(image.offset).jpg"
+            let imageRef = storageRef.child(savePath)
+            
+            if let imageData = image.element.jpegData(compressionQuality: 0.8) {
+                imageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                    print("put")
+                    if let error = error {
+                        print("이미지 업로드 실패: \(error.localizedDescription)")
+                    } else {
+                        print("이미지 업로드 성공")
+                        
+                        // 이미지 다운로드 URL 가져오기
+                        imageRef.downloadURL { (url, error) in
+                            if let error = error {
+                                print("URL 가져오기 실패: \(error.localizedDescription)")
+                            } else {
+                                if let downloadURL = url?.absoluteString {
+                                    // Firestore에 URL 저장
+                                    feedImage.append(downloadURL)
+                                    print("feedImage: \(feedImage)")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        print("feedImage: \(feedImage)")
         
         let data = FeedData(id: feedId, image: feedImage, post: feedPost, like: feedLike, comment: feedComment)
         myFirestore.saveUserFeed(feedData: data) { error in
