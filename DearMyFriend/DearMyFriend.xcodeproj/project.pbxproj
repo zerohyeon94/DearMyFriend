@@ -44,6 +44,7 @@
 		EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */; };
 		EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B75F2AE240FA007FD1DA /* FeedView.swift */; };
 		EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7612AE2410F007FD1DA /* AddPostView.swift */; };
+		EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTitleView.swift; sourceTree = "<group>"; };
 		EBD2B75F2AE240FA007FD1DA /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		EBD2B7612AE2410F007FD1DA /* AddPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostView.swift; sourceTree = "<group>"; };
+		EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				52D9982A2AD6AADC00679B15 /* FeedViewController.swift */,
+				EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 				EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */,
 				52D998332AD6AB0E00679B15 /* YouTubeViewController.swift in Sources */,
 				52D9984C2AD6B32F00679B15 /* Helper.swift in Sources */,
+				EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */,
 				52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */,
 				52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */,
 				52D9982F2AD6AAF800679B15 /* UserInfoViewController.swift in Sources */,
