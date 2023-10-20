@@ -24,8 +24,8 @@
 		52D9983F2AD6ABB500679B15 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9983E2AD6ABB500679B15 /* StoreViewController.swift */; };
 		52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998492AD6B0B900679B15 /* Extension.swift */; };
 		52D9984C2AD6B32F00679B15 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984B2AD6B32F00679B15 /* Helper.swift */; };
-		52D9984E2AD6B88600679B15 /* MainCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984D2AD6B88600679B15 /* MainCollectionView.swift */; };
-		52D998502AD6BAC000679B15 /* MainMenuCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984F2AD6BAC000679B15 /* MainMenuCellView.swift */; };
+		52D9984E2AD6B88600679B15 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984D2AD6B88600679B15 /* MainView.swift */; };
+		52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984F2AD6BAC000679B15 /* MenuCellView.swift */; };
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
 		EBD2B7372AE21C33007FD1DA /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EBD2B7362AE21C33007FD1DA /* .gitignore */; };
 		EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */; };
@@ -60,8 +60,8 @@
 		52D9983E2AD6ABB500679B15 /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
 		52D998492AD6B0B900679B15 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		52D9984B2AD6B32F00679B15 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
-		52D9984D2AD6B88600679B15 /* MainCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionView.swift; sourceTree = "<group>"; };
-		52D9984F2AD6BAC000679B15 /* MainMenuCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuCellView.swift; sourceTree = "<group>"; };
+		52D9984D2AD6B88600679B15 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		52D9984F2AD6BAC000679B15 /* MenuCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellView.swift; sourceTree = "<group>"; };
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		EBD2B7362AE21C33007FD1DA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
@@ -87,6 +87,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		526EB6702AE226430073C77D /* MainPage */ = {
+			isa = PBXGroup;
+			children = (
+				52D9984D2AD6B88600679B15 /* MainView.swift */,
+				52D9984F2AD6BAC000679B15 /* MenuCellView.swift */,
+			);
+			path = MainPage;
+			sourceTree = "<group>";
+		};
 		52D9980A2AD6A89600679B15 = {
 			isa = PBXGroup;
 			children = (
@@ -124,8 +133,7 @@
 		52D998412AD6AC7600679B15 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				52D9984D2AD6B88600679B15 /* MainCollectionView.swift */,
-				52D9984F2AD6BAC000679B15 /* MainMenuCellView.swift */,
+				526EB6702AE226430073C77D /* MainPage */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -307,7 +315,7 @@
 				52D998332AD6AB0E00679B15 /* YouTubeViewController.swift in Sources */,
 				52D9984C2AD6B32F00679B15 /* Helper.swift in Sources */,
 				52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */,
-				52D998502AD6BAC000679B15 /* MainMenuCellView.swift in Sources */,
+				52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */,
 				52D9982F2AD6AAF800679B15 /* UserInfoViewController.swift in Sources */,
 				52D998392AD6AB6600679B15 /* PopularityViewController.swift in Sources */,
 				52D998172AD6A89600679B15 /* AppDelegate.swift in Sources */,
@@ -315,7 +323,7 @@
 				52D9983F2AD6ABB500679B15 /* StoreViewController.swift in Sources */,
 				52D9982B2AD6AADC00679B15 /* FeedViewController.swift in Sources */,
 				52D9983B2AD6AB9B00679B15 /* MapViewController.swift in Sources */,
-				52D9984E2AD6B88600679B15 /* MainCollectionView.swift in Sources */,
+				52D9984E2AD6B88600679B15 /* MainView.swift in Sources */,
 				52D9982D2AD6AAF000679B15 /* MyViewController.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
 				52D998352AD6AB1800679B15 /* CalculatorViewController.swift in Sources */,
