@@ -1,7 +1,7 @@
 // FeadViewController
 // Title View
 // 사용자의 ID와 게시글을 작성하는 View
-
+//
 import Foundation
 import UIKit
 

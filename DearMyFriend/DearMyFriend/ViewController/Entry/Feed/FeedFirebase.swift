@@ -74,8 +74,16 @@ final class MyFirestore {
             print("decode error")
             return
         }
-        // document : 사용자의 이름(userData.id)
-        collectionListener.document("\(feedData.id)").setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
+        // document : 현재 시간
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
+
+        let now = Date() // 현재 시간 가져오기
+        let formattedDate = dateFormatter.string(from: now) // 형식에 맞게 날짜를 문자열로 변환
+
+        print("현재 시간: \(formattedDate)")
+        
+        collectionListener.document("\(formattedDate)").setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
             completion?(error)
         }
     }

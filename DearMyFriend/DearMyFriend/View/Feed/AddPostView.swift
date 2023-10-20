@@ -23,7 +23,7 @@ class AddPostView: UIView {
     // Image
     let imageName: String = "spider1"
     // TextView
-    let postTextViewHeight: CGFloat = 100
+    let textViewFont: CGFloat = 15
     
     lazy var userNicknameLabel: UILabel = {
         let label = UILabel()
@@ -108,8 +108,8 @@ class AddPostView: UIView {
         textView.isEditable = true
         textView.isSelectable = true
         
-        textView.backgroundColor = .blue
-        textView.text = "Test 입니다."
+        textView.font = UIFont.systemFont(ofSize: textViewFont)
+        textView.text = "게시글 작성"
         
         return textView
     }()
@@ -157,6 +157,10 @@ class AddPostView: UIView {
     let imageCollectionSideSpaceConstant: CGFloat = 16
     let imageCollectionViewHeight: CGFloat = 300
     let pageControlHeight: CGFloat = 30
+    // TextView
+    let postTextViewHeight: CGFloat = 100
+    let textViewTopConstant: CGFloat = 10
+    let sideSpaceConstant: CGFloat = 16
     
     private func setNicknameLabelConstraint() {
         NSLayoutConstraint.activate([
@@ -219,9 +223,9 @@ class AddPostView: UIView {
     
     private func setPostTextViewConstraint() {
         NSLayoutConstraint.activate([
-            postTextView.topAnchor.constraint(equalTo: postImageView.bottomAnchor),
-            postTextView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            postTextView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            postTextView.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: textViewTopConstant),
+            postTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: sideSpaceConstant),
+            postTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: sideSpaceConstant),
             postTextView.heightAnchor.constraint(equalToConstant: postTextViewHeight)
         ])
     }
