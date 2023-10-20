@@ -1,39 +1,46 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    
-    let menuView: MainCollectionView = {
-        let view = MainCollectionView()
+
+    // view = testView와 같이 자체를 할당하니 적용되지 않음
+    let testView: MainView = {
+        let view = MainView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let MenuViewControllers = [YouTubeViewController(), MapViewController(), WishViewController(), StoreViewController(), CalculatorViewController()]
+    let MenuViewControllers = [YouTubeViewController(), MapViewController(), WishViewController(), CalculatorViewController()]
     
-    let MenuImages = ["play.rectangle", "map.fill", "heart.fill", "carrot.fill", "fork.knife"]
+    let MenuIcons = ButtonIcon.allButton
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupCollectionView()
         autoLayout()
+        setupNavi()
+    }
+    
+    func setupNavi() {
+        self.navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.titleView = testView.logoImgae
     }
     
     func autoLayout() {
-        self.view.addSubview(menuView)
+        self.view.addSubview(testView)
+        
         NSLayoutConstraint.activate([
-            menuView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            menuView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            menuView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 40),
-            menuView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -40),
-            menuView.heightAnchor.constraint(equalToConstant: 300)
+            testView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            testView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            testView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            testView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
     
     func setupCollectionView() {
-        menuView.collectionView.dataSource = self
-        menuView.collectionView.delegate = self
-        menuView.collectionView.register(MainMenuCellView.self, forCellWithReuseIdentifier: Collection.identifiet)
+        testView.collectionView.dataSource = self
+        testView.collectionView.delegate = self
+        testView.collectionView.register(MainMenuCellView.self, forCellWithReuseIdentifier: Collection.identifiet)
     }
 }
 
@@ -45,7 +52,7 @@ extension MainViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.identifiet, for: indexPath) as! MainMenuCellView
-        cell.imageUrl = MenuImages[indexPath.row]
+        cell.iconSet = MenuTest.allMenu[indexPath.item]
         return cell
     }
     
@@ -53,6 +60,7 @@ extension MainViewController: UICollectionViewDataSource {
 
 extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.navigationController?.pushViewController(MenuViewControllers[indexPath.row], animated: true)
+        navigationController?.isNavigationBarHidden = false
+        self.navigationController?.pushViewController(MenuViewControllers[indexPath.row], animated: false)
     }
 }
