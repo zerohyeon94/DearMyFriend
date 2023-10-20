@@ -37,6 +37,15 @@
 		EBD2B74A2AE2221B007FD1DA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7492AE2221B007FD1DA /* Lottie */; };
 		EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74C2AE22232007FD1DA /* Moya */; };
 		EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74F2AE22241007FD1DA /* SnapKit */; };
+		EBD2B7522AE2235C007FD1DA /* FeedFirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */; };
+		EBD2B7542AE23FC3007FD1DA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */; };
+		EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */; };
+		EBD2B75A2AE2402F007FD1DA /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7592AE2402F007FD1DA /* ImageCollectionViewCell.swift */; };
+		EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */; };
+		EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B75F2AE240FA007FD1DA /* FeedView.swift */; };
+		EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7612AE2410F007FD1DA /* AddPostView.swift */; };
+		EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */; };
+		EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +73,15 @@
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		EBD2B7362AE21C33007FD1DA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
+		EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebaseError.swift; sourceTree = "<group>"; };
+		EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
+		EBD2B7592AE2402F007FD1DA /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTitleView.swift; sourceTree = "<group>"; };
+		EBD2B75F2AE240FA007FD1DA /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
+		EBD2B7612AE2410F007FD1DA /* AddPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostView.swift; sourceTree = "<group>"; };
+		EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
+		EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +139,7 @@
 				52D9981F2AD6A89700679B15 /* Assets.xcassets */,
 				52D998212AD6A89700679B15 /* LaunchScreen.storyboard */,
 				52D998242AD6A89700679B15 /* Info.plist */,
+				EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */,
 				EBD2B7382AE21C4A007FD1DA /* Model */,
 				52D998412AD6AC7600679B15 /* View */,
 				52D998422AD6AC7B00679B15 /* ViewController */,
@@ -131,6 +150,7 @@
 		52D998412AD6AC7600679B15 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EBD2B7552AE23FCD007FD1DA /* Feed */,
 				526EB6702AE226430073C77D /* MainPage */,
 			);
 			path = View;
@@ -176,6 +196,8 @@
 			isa = PBXGroup;
 			children = (
 				52D9982A2AD6AADC00679B15 /* FeedViewController.swift */,
+				EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */,
+				EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -215,8 +237,29 @@
 			isa = PBXGroup;
 			children = (
 				EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */,
+				EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */,
 			);
 			path = Feed;
+			sourceTree = "<group>";
+		};
+		EBD2B7552AE23FCD007FD1DA /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				EBD2B7562AE23FDA007FD1DA /* Cell */,
+				EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */,
+				EBD2B75F2AE240FA007FD1DA /* FeedView.swift */,
+				EBD2B7612AE2410F007FD1DA /* AddPostView.swift */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		EBD2B7562AE23FDA007FD1DA /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */,
+				EBD2B7592AE2402F007FD1DA /* ImageCollectionViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				52D998232AD6A89700679B15 /* LaunchScreen.storyboard in Resources */,
+				EBD2B7542AE23FC3007FD1DA /* GoogleService-Info.plist in Resources */,
 				EBD2B7372AE21C33007FD1DA /* .gitignore in Resources */,
 				52D998202AD6A89700679B15 /* Assets.xcassets in Resources */,
 			);
@@ -311,19 +355,27 @@
 				EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */,
 				52D998332AD6AB0E00679B15 /* YouTubeViewController.swift in Sources */,
 				52D9984C2AD6B32F00679B15 /* Helper.swift in Sources */,
+				EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */,
 				52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */,
 				52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */,
 				52D9982F2AD6AAF800679B15 /* UserInfoViewController.swift in Sources */,
 				52D998392AD6AB6600679B15 /* PopularityViewController.swift in Sources */,
 				52D998172AD6A89600679B15 /* AppDelegate.swift in Sources */,
+				EBD2B7522AE2235C007FD1DA /* FeedFirebaseError.swift in Sources */,
 				52D9983F2AD6ABB500679B15 /* StoreViewController.swift in Sources */,
 				52D9982B2AD6AADC00679B15 /* FeedViewController.swift in Sources */,
+				EBD2B75A2AE2402F007FD1DA /* ImageCollectionViewCell.swift in Sources */,
 				52D9983B2AD6AB9B00679B15 /* MapViewController.swift in Sources */,
 				52D9984E2AD6B88600679B15 /* MainView.swift in Sources */,
 				52D9982D2AD6AAF000679B15 /* MyViewController.swift in Sources */,
+				EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
+				EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */,
+				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,
+				EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */,
 				52D998352AD6AB1800679B15 /* CalculatorViewController.swift in Sources */,
 				52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */,
+				EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */,
 				52D9983D2AD6ABA700679B15 /* WishViewController.swift in Sources */,
 				52D998372AD6AB2900679B15 /* MainViewController.swift in Sources */,
 			);
