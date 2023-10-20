@@ -1,7 +1,7 @@
 import UIKit
 
 class MainCollectionView: UIView {
-    
+    //
     let collectionView : UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         
