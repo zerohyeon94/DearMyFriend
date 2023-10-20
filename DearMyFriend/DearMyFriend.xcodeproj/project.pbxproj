@@ -43,6 +43,7 @@
 		EBD2B7542AE23FC3007FD1DA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */; };
 		EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */; };
 		EBD2B75A2AE2402F007FD1DA /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7592AE2402F007FD1DA /* ImageCollectionViewCell.swift */; };
+		EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
 		EBD2B7592AE2402F007FD1DA /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTitleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				EBD2B7562AE23FDA007FD1DA /* Cell */,
+				EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */,
 				4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */,
 				52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */,
+				EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */,
 				52D9983D2AD6ABA700679B15 /* WishViewController.swift in Sources */,
 				52D998372AD6AB2900679B15 /* MainViewController.swift in Sources */,
 			);
