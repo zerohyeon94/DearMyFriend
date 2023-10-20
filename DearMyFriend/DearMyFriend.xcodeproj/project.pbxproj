@@ -27,6 +27,8 @@
 		52D9984E2AD6B88600679B15 /* MainCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984D2AD6B88600679B15 /* MainCollectionView.swift */; };
 		52D998502AD6BAC000679B15 /* MainMenuCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984F2AD6BAC000679B15 /* MainMenuCellView.swift */; };
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
+		EBD2B7372AE21C33007FD1DA /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EBD2B7362AE21C33007FD1DA /* .gitignore */; };
+		EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		52D9984D2AD6B88600679B15 /* MainCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionView.swift; sourceTree = "<group>"; };
 		52D9984F2AD6BAC000679B15 /* MainMenuCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuCellView.swift; sourceTree = "<group>"; };
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		EBD2B7362AE21C33007FD1DA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +72,7 @@
 		52D9980A2AD6A89600679B15 = {
 			isa = PBXGroup;
 			children = (
+				EBD2B7362AE21C33007FD1DA /* .gitignore */,
 				52D998152AD6A89600679B15 /* DearMyFriend */,
 				52D998142AD6A89600679B15 /* Products */,
 			);
@@ -91,18 +96,11 @@
 				52D9981F2AD6A89700679B15 /* Assets.xcassets */,
 				52D998212AD6A89700679B15 /* LaunchScreen.storyboard */,
 				52D998242AD6A89700679B15 /* Info.plist */,
-				52D998402AD6AC5200679B15 /* Model */,
+				EBD2B7382AE21C4A007FD1DA /* Model */,
 				52D998412AD6AC7600679B15 /* View */,
-				52D998422AD6AC7B00679B15 /* ViewModel */,
+				52D998422AD6AC7B00679B15 /* ViewController */,
 			);
 			path = DearMyFriend;
-			sourceTree = "<group>";
-		};
-		52D998402AD6AC5200679B15 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		52D998412AD6AC7600679B15 /* View */ = {
@@ -114,13 +112,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		52D998422AD6AC7B00679B15 /* ViewModel */ = {
+		52D998422AD6AC7B00679B15 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
 				52D998432AD6AC8B00679B15 /* Login */,
 				52D998572AD6CE9C00679B15 /* Entry */,
 			);
-			path = ViewModel;
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 		52D998432AD6AC8B00679B15 /* Login */ = {
@@ -179,6 +177,22 @@
 				52D998452AD6AE4800679B15 /* MyProfile */,
 			);
 			path = Entry;
+			sourceTree = "<group>";
+		};
+		EBD2B7382AE21C4A007FD1DA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EBD2B7392AE21C56007FD1DA /* Feed */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EBD2B7392AE21C56007FD1DA /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */,
+			);
+			path = Feed;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				52D998232AD6A89700679B15 /* LaunchScreen.storyboard in Resources */,
+				EBD2B7372AE21C33007FD1DA /* .gitignore in Resources */,
 				52D998202AD6A89700679B15 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -252,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				52D998312AD6AB0100679B15 /* LoginViewController.swift in Sources */,
+				EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */,
 				52D998332AD6AB0E00679B15 /* YouTubeViewController.swift in Sources */,
 				52D9984C2AD6B32F00679B15 /* Helper.swift in Sources */,
 				52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */,
