@@ -39,6 +39,7 @@
 		EBD2B74A2AE2221B007FD1DA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7492AE2221B007FD1DA /* Lottie */; };
 		EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74C2AE22232007FD1DA /* Moya */; };
 		EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74F2AE22241007FD1DA /* SnapKit */; };
+		EBD2B7522AE2235C007FD1DA /* FeedFirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		EBD2B7362AE21C33007FD1DA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
+		EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebaseError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */,
+				EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				52D9982F2AD6AAF800679B15 /* UserInfoViewController.swift in Sources */,
 				52D998392AD6AB6600679B15 /* PopularityViewController.swift in Sources */,
 				52D998172AD6A89600679B15 /* AppDelegate.swift in Sources */,
+				EBD2B7522AE2235C007FD1DA /* FeedFirebaseError.swift in Sources */,
 				52D9983F2AD6ABB500679B15 /* StoreViewController.swift in Sources */,
 				52D9982B2AD6AADC00679B15 /* FeedViewController.swift in Sources */,
 				52D9983B2AD6AB9B00679B15 /* MapViewController.swift in Sources */,
