@@ -40,6 +40,8 @@
 		EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74C2AE22232007FD1DA /* Moya */; };
 		EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74F2AE22241007FD1DA /* SnapKit */; };
 		EBD2B7522AE2235C007FD1DA /* FeedFirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */; };
+		EBD2B7542AE23FC3007FD1DA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */; };
+		EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +72,8 @@
 		EBD2B7362AE21C33007FD1DA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebaseError.swift; sourceTree = "<group>"; };
+		EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +131,7 @@
 				52D9981F2AD6A89700679B15 /* Assets.xcassets */,
 				52D998212AD6A89700679B15 /* LaunchScreen.storyboard */,
 				52D998242AD6A89700679B15 /* Info.plist */,
+				EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */,
 				EBD2B7382AE21C4A007FD1DA /* Model */,
 				52D998412AD6AC7600679B15 /* View */,
 				52D998422AD6AC7B00679B15 /* ViewController */,
@@ -137,6 +142,7 @@
 		52D998412AD6AC7600679B15 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EBD2B7552AE23FCD007FD1DA /* Feed */,
 				526EB6702AE226430073C77D /* MainPage */,
 			);
 			path = View;
@@ -228,6 +234,22 @@
 			path = Feed;
 			sourceTree = "<group>";
 		};
+		EBD2B7552AE23FCD007FD1DA /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				EBD2B7562AE23FDA007FD1DA /* Cell */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
+		EBD2B7562AE23FDA007FD1DA /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -304,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				52D998232AD6A89700679B15 /* LaunchScreen.storyboard in Resources */,
+				EBD2B7542AE23FC3007FD1DA /* GoogleService-Info.plist in Resources */,
 				EBD2B7372AE21C33007FD1DA /* .gitignore in Resources */,
 				52D998202AD6A89700679B15 /* Assets.xcassets in Resources */,
 			);
@@ -332,6 +355,7 @@
 				52D9984E2AD6B88600679B15 /* MainView.swift in Sources */,
 				52D9982D2AD6AAF000679B15 /* MyViewController.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
+				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,
 				52D998352AD6AB1800679B15 /* CalculatorViewController.swift in Sources */,
 				4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */,
 				4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */,
