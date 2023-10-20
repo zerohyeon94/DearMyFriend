@@ -12,7 +12,7 @@ class MainView: UIView {
     let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.showsVerticalScrollIndicator = false
+        view.showsVerticalScrollIndicator = true
         return view
     }()
     
@@ -30,21 +30,46 @@ class MainView: UIView {
         return view
     }()
     
+    let rankCollectionView : UICollectionView = {
+
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 0
+        flowLayout.minimumInteritemSpacing = 0
+
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collection.backgroundColor = .clear
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.isScrollEnabled = true
+        collection.isPagingEnabled = true
+        collection.showsHorizontalScrollIndicator = false
+
+        return collection
+    }()
+    
+    let pageControl: UIPageControl = {
+       let pageControl = UIPageControl()
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.backgroundColor = .systemMint
+        return pageControl
+    }()
+    
     let collectionView : UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         
         flowLayout.scrollDirection = .vertical
-        flowLayout.itemSize = CGSize(width: Collection.itemSize, height: Collection.itemSize)
-        flowLayout.minimumLineSpacing = Collection.spacingWitdh
-        flowLayout.minimumInteritemSpacing = Collection.spacingWitdh
+        flowLayout.minimumLineSpacing = Collection.spacingWidth
+        flowLayout.minimumInteritemSpacing = Collection.spacingWidth
 
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.backgroundColor = .systemBlue
         return collection
     }()
     
     let recommendationView: UIView = {
         let view = UIView()
+        view.backgroundColor = .systemGray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -79,26 +104,31 @@ class MainView: UIView {
     }
     
     func setupContentView() {
-        contentView.addSubview(rankeView)
+        contentView.addSubview(rankCollectionView)
+        contentView.addSubview(pageControl)
         contentView.addSubview(collectionView)
         contentView.addSubview(recommendationView)
         
         NSLayoutConstraint.activate([
-            rankeView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
-            rankeView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            rankeView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            rankeView.heightAnchor.constraint(equalToConstant: 200),
+            rankCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            rankCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            rankCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            rankCollectionView.heightAnchor.constraint(equalToConstant: 250),
+            
+            pageControl.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor, constant: 10),
+            pageControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            pageControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
                     
-            collectionView.topAnchor.constraint(equalTo: rankeView.bottomAnchor, constant: 20),
+            collectionView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 10),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            collectionView.heightAnchor.constraint(equalToConstant: Collection.itemSize*2 + Collection.spacingWitdh),
+            collectionView.heightAnchor.constraint(equalToConstant: Collection.itemSize),
                     
             recommendationView.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
             recommendationView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             recommendationView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             recommendationView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            recommendationView.heightAnchor.constraint(equalToConstant: 500),
+            recommendationView.heightAnchor.constraint(equalToConstant: 1500),
             ])
     }
 }
