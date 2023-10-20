@@ -42,6 +42,8 @@
 		EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */; };
 		EBD2B75A2AE2402F007FD1DA /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7592AE2402F007FD1DA /* ImageCollectionViewCell.swift */; };
 		EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */; };
+		EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B75F2AE240FA007FD1DA /* FeedView.swift */; };
+		EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7612AE2410F007FD1DA /* AddPostView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +76,8 @@
 		EBD2B7572AE23FEE007FD1DA /* FeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
 		EBD2B7592AE2402F007FD1DA /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTitleView.swift; sourceTree = "<group>"; };
+		EBD2B75F2AE240FA007FD1DA /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
+		EBD2B7612AE2410F007FD1DA /* AddPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +241,8 @@
 			children = (
 				EBD2B7562AE23FDA007FD1DA /* Cell */,
 				EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */,
+				EBD2B75F2AE240FA007FD1DA /* FeedView.swift */,
+				EBD2B7612AE2410F007FD1DA /* AddPostView.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -355,8 +361,10 @@
 				52D9983B2AD6AB9B00679B15 /* MapViewController.swift in Sources */,
 				52D9984E2AD6B88600679B15 /* MainView.swift in Sources */,
 				52D9982D2AD6AAF000679B15 /* MyViewController.swift in Sources */,
+				EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
 				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,
+				EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */,
 				52D998352AD6AB1800679B15 /* CalculatorViewController.swift in Sources */,
 				52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */,
 				EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */,
