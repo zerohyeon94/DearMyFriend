@@ -136,7 +136,7 @@ class FeedView: UIView {
         imageView.image = UIImage(named: "spider2")
         
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 7
+        imageView.layer.cornerRadius = likeImageFrame / 2
         imageView.layer.borderColor = UIColor.black.cgColor
         imageView.layer.borderWidth = 1.0
         
@@ -152,7 +152,7 @@ class FeedView: UIView {
         imageView.image = UIImage(named: "spider3")
         
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 7
+        imageView.layer.cornerRadius = likeImageFrame / 2
         imageView.layer.borderColor = UIColor.black.cgColor
         imageView.layer.borderWidth = 1.0
         

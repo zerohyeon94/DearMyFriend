@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		526EB6722AE263200073C77D /* RankeImageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526EB6712AE263200073C77D /* RankeImageCellView.swift */; };
+		4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */; };
+		4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AB12AE27D39005146AA /* NaverSearchService.swift */; };
 		52D998172AD6A89600679B15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998162AD6A89600679B15 /* AppDelegate.swift */; };
 		52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998182AD6A89600679B15 /* SceneDelegate.swift */; };
 		52D998202AD6A89700679B15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52D9981F2AD6A89700679B15 /* Assets.xcassets */; };
@@ -28,7 +30,6 @@
 		52D9984E2AD6B88600679B15 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984D2AD6B88600679B15 /* MainView.swift */; };
 		52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984F2AD6BAC000679B15 /* MenuCellView.swift */; };
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
-		EBD2B7372AE21C33007FD1DA /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EBD2B7362AE21C33007FD1DA /* .gitignore */; };
 		EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */; };
 		EBD2B73E2AE221F5007FD1DA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73D2AE221F5007FD1DA /* FirebaseAnalytics */; };
 		EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */; };
@@ -51,6 +52,8 @@
 
 /* Begin PBXFileReference section */
 		526EB6712AE263200073C77D /* RankeImageCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankeImageCellView.swift; sourceTree = "<group>"; };
+		4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAPIManager.swift; sourceTree = "<group>"; };
+		4E275AB12AE27D39005146AA /* NaverSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchService.swift; sourceTree = "<group>"; };
 		52D998132AD6A89600679B15 /* DearMyFriend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DearMyFriend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D998162AD6A89600679B15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52D998182AD6A89600679B15 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,7 +76,6 @@
 		52D9984D2AD6B88600679B15 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		52D9984F2AD6BAC000679B15 /* MenuCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellView.swift; sourceTree = "<group>"; };
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		EBD2B7362AE21C33007FD1DA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebaseError.swift; sourceTree = "<group>"; };
 		EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -118,7 +120,6 @@
 		52D9980A2AD6A89600679B15 = {
 			isa = PBXGroup;
 			children = (
-				EBD2B7362AE21C33007FD1DA /* .gitignore */,
 				52D998152AD6A89600679B15 /* DearMyFriend */,
 				52D998142AD6A89600679B15 /* Products */,
 			);
@@ -210,6 +211,8 @@
 			children = (
 				52D998322AD6AB0E00679B15 /* YouTubeViewController.swift */,
 				52D9983A2AD6AB9B00679B15 /* MapViewController.swift */,
+				4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */,
+				4E275AB12AE27D39005146AA /* NaverSearchService.swift */,
 				52D9983C2AD6ABA700679B15 /* WishViewController.swift */,
 				52D9983E2AD6ABB500679B15 /* StoreViewController.swift */,
 				52D998342AD6AB1800679B15 /* CalculatorViewController.swift */,
@@ -342,7 +345,6 @@
 			files = (
 				52D998232AD6A89700679B15 /* LaunchScreen.storyboard in Resources */,
 				EBD2B7542AE23FC3007FD1DA /* GoogleService-Info.plist in Resources */,
-				EBD2B7372AE21C33007FD1DA /* .gitignore in Resources */,
 				52D998202AD6A89700679B15 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,6 +380,8 @@
 				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,
 				EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */,
 				52D998352AD6AB1800679B15 /* CalculatorViewController.swift in Sources */,
+				4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */,
+				4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */,
 				52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */,
 				EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */,
 				52D9983D2AD6ABA700679B15 /* WishViewController.swift in Sources */,
