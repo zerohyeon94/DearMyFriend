@@ -45,6 +45,7 @@
 		EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B75F2AE240FA007FD1DA /* FeedView.swift */; };
 		EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7612AE2410F007FD1DA /* AddPostView.swift */; };
 		EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */; };
+		EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		EBD2B75F2AE240FA007FD1DA /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		EBD2B7612AE2410F007FD1DA /* AddPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostView.swift; sourceTree = "<group>"; };
 		EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
+		EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 			children = (
 				52D9982A2AD6AADC00679B15 /* FeedViewController.swift */,
 				EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */,
+				EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				52D9982D2AD6AAF000679B15 /* MyViewController.swift in Sources */,
 				EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
+				EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */,
 				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,
 				EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */,
 				52D998352AD6AB1800679B15 /* CalculatorViewController.swift in Sources */,
