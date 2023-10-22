@@ -110,14 +110,14 @@ class MainView: UIView {
         contentView.addSubview(recommendationView)
         
         NSLayoutConstraint.activate([
-            rankCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            rankCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            rankCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            rankCollectionView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            rankCollectionView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            rankCollectionView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             rankCollectionView.heightAnchor.constraint(equalToConstant: 250),
             
             pageControl.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor, constant: 10),
-            pageControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            pageControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            pageControl.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            pageControl.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
                     
             collectionView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 10),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
