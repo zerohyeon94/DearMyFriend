@@ -15,6 +15,7 @@ class MainViewController: UIViewController {
     let MenuIcons = ButtonIcon.allButton
     
     override func viewDidLoad() {
+        print("뷰진입")
         super.viewDidLoad()
         view.backgroundColor = .white
         setupBanner()
@@ -141,7 +142,6 @@ extension MainViewController: UIScrollViewDelegate {
      로드되면  scrollview.contentOffset.x의 위치는 scrollView.frame.width와 같음 (0 아님)
      
      무한스크롤
-     [1,2,3] 이라면 [3,1,2,3,1] 과 같이 추가해놓고 첫 시작점을 첫번째 1번으로 했음
      scrollview.contentOffset.x (현재의 위치)가 첫번째 페이지라면 마지막 페이지 전으로 이동 (1번과 4번은 같음)
      scrollview.contentOffset.x (현재의 위치)가 마지막 페이지라면 첫번째 페이지 다음으로 이동 (0번과 3번은 같음)
      

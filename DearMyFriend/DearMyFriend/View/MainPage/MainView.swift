@@ -50,7 +50,8 @@ class MainView: UIView {
     let pageControl: UIPageControl = {
        let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.backgroundColor = .systemMint
+        pageControl.pageIndicatorTintColor = UIColor.systemGray
+        pageControl.currentPageIndicatorTintColor = UIColor.systemRed
         return pageControl
     }()
     
@@ -115,7 +116,7 @@ class MainView: UIView {
             rankCollectionView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             rankCollectionView.heightAnchor.constraint(equalToConstant: 250),
             
-            pageControl.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor, constant: 10),
+            pageControl.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor),
             pageControl.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
             pageControl.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
                     
