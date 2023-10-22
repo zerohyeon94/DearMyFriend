@@ -1,8 +1,10 @@
 import UIKit
 
 class MainViewController: UIViewController {
-
-    // view = testView와 같이 자체를 할당하니 적용되지 않음
+    
+    var pageOfNumber = 1
+    var bannerTime = Timer()
+    
     let mainView: MainView = {
         let view = MainView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -15,9 +17,11 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setupBanner()
         autoLayout()
         setupCollectionView()
         setupNavi()
+        setupTimer()
     }
     
     func autoLayout() {
@@ -47,6 +51,29 @@ class MainViewController: UIViewController {
         mainView.rankCollectionView.delegate = self
         mainView.rankCollectionView.register(RankImageCellView.self, forCellWithReuseIdentifier: Collection.rankIdentifier)
     }
+    
+    func setupBanner() {
+        Rankbanner.image.insert(Rankbanner.image[Rankbanner.image.count-1], at: 0)
+        Rankbanner.image.append(Rankbanner.image[1])
+    }
+    
+    override func viewDidLayoutSubviews() {
+        mainView.rankCollectionView.scrollToItem(at: [0, 1], at: .left, animated: false)
+    }
+    
+    func setupTimer() {
+        bannerTime = Timer.scheduledTimer(timeInterval: 3 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+    }
+    
+    @objc func timerCounter() {
+        if pageOfNumber < 5 {
+            pageOfNumber += 1
+            mainView.rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
+        } else {
+            pageOfNumber = 1
+            mainView.rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
+        }
+    }
 }
 
 extension MainViewController: UICollectionViewDataSource {
@@ -56,8 +83,8 @@ extension MainViewController: UICollectionViewDataSource {
         case 0:
             return MenuViewControllers.count
         case 1:
-            mainView.pageControl.numberOfPages = 5
-            return 5
+            mainView.pageControl.numberOfPages = Rankbanner.image.count-2
+            return Rankbanner.image.count
         default:
             return 0
         }
@@ -70,7 +97,6 @@ extension MainViewController: UICollectionViewDataSource {
             cell.iconSet = MenuTest.allMenu[indexPath.item]
             return cell
         case 1:
-            print("test")
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankIdentifier, for: indexPath) as! RankImageCellView
             cell.myImageView.image = Rankbanner.image[indexPath.item]
             return cell
@@ -108,11 +134,46 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension MainViewController: UIScrollViewDelegate {
+    
+    /*
+     무한스크롤을 위해서 첫번째와 마지막 데이터를 추가해놓은 상황
+     [1,2,3] 이라면 [3,1,2,3,1] 과 같이 추가해놓고 첫 시작점을 첫번째 1번으로 했음
+     로드되면  scrollview.contentOffset.x의 위치는 scrollView.frame.width와 같음 (0 아님)
+     
+     무한스크롤
+     [1,2,3] 이라면 [3,1,2,3,1] 과 같이 추가해놓고 첫 시작점을 첫번째 1번으로 했음
+     scrollview.contentOffset.x (현재의 위치)가 첫번째 페이지라면 마지막 페이지 전으로 이동 (1번과 4번은 같음)
+     scrollview.contentOffset.x (현재의 위치)가 마지막 페이지라면 첫번째 페이지 다음으로 이동 (0번과 3번은 같음)
+     
+     페이지컨트롤
+     * page indicator의 계산식 : scrollview.contentOffset.x (현재의 위치) / scrollView.frame.width (스크롤뷰의 사이즈 : contentSize X)
+     * 발생하는 문제: pageControl이 첫번째 1의 위치를 2번째로 인지하고 page indicator가 2번째에 표시되어 있음
+     * 해결하는 방법
+        1. 첫 시작점의 위치가 0이어야 하나 무한스크롤을 위해서 3을 추가해두었기 때문에 scrollView.contentOffset.x = scrollview.frame.width와 같음
+        2. scrollView.contentOffset.x에서 scrollView.frame.width를 뺀 값을 기본값으로 잡아주면 처음 값이 0이 됨
+     */
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // page control 설정.
+        let pageCoordinate = scrollView.contentOffset.x - scrollView.frame.width
+        
         if scrollView.frame.size.width != 0 {
-            let value = (scrollView.contentOffset.x / scrollView.frame.width)
+            let value = (pageCoordinate / scrollView.frame.width)
             mainView.pageControl.currentPage = Int(round(value))
         }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+        let last = Rankbanner.image.count-2
+        if scrollView.contentOffset.x == 0  {
+            mainView.rankCollectionView.scrollToItem(at: [0, last], at: .left, animated: false)
+        }
+        if scrollView.contentOffset.x == scrollView.frame.width * (Rankbanner.imageNum-1)  {
+            mainView.rankCollectionView.scrollToItem(at: [0, 1], at: .left, animated: false)
+        }
+        
+        let page = scrollView.contentOffset.x / scrollView.frame.width
+        let intPage = Int(page)
+        pageOfNumber = intPage
     }
 }
