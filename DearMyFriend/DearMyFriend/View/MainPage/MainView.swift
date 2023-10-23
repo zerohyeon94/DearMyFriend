@@ -22,14 +22,6 @@ class MainView: UIView {
         return view
     }()
     
-    let rankeView: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.image = UIImage(named: "three")
-        view.contentMode = .scaleToFill
-        return view
-    }()
-    
     let rankCollectionView : UICollectionView = {
 
         let flowLayout = UICollectionViewFlowLayout()

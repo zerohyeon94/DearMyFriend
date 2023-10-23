@@ -63,7 +63,9 @@ class MainViewController: UIViewController {
     }
     
     func setupTimer() {
-        bannerTime = Timer.scheduledTimer(timeInterval: 3 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+        bannerTime = Timer.scheduledTimer(timeInterval: 2 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+        RunLoop.current.add(bannerTime, forMode: .common)
+        // https://withthemilkyway.tistory.com/59
     }
     
     @objc func timerCounter() {
@@ -100,6 +102,17 @@ extension MainViewController: UICollectionViewDataSource {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankIdentifier, for: indexPath) as! RankImageCellView
             cell.myImageView.image = Rankbanner.image[indexPath.item]
+            // 터치 이벤트 처리
+            cell.bannerTouchesBegan = { [weak self] in
+                guard let self = self else { return }
+                print("cell.began")
+                self.bannerTime.invalidate()
+            }
+            cell.bannerTouchesEnded = { [weak self] in
+                guard let self = self else { return }
+                print("cell.end")
+                self.setupTimer()
+            }
             return cell
         default:
             return UICollectionViewCell()
@@ -175,5 +188,16 @@ extension MainViewController: UIScrollViewDelegate {
         let page = scrollView.contentOffset.x / scrollView.frame.width
         let intPage = Int(page)
         pageOfNumber = intPage
+    }
+    
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        print("scrollBegin")
+        bannerTime.invalidate()
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("scrollEnd")
+        setupTimer()
     }
 }

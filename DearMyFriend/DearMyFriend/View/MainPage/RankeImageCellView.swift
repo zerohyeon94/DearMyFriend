@@ -28,4 +28,18 @@ class RankImageCellView: UICollectionViewCell {
             myImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
     }
+    
+    var bannerTouchesBegan: (()->()) = { }
+    var bannerTouchesEnded: (()->()) = { }
+    
+    // 터치 이벤트 처리
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        bannerTouchesBegan()
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        bannerTouchesEnded()
+    }
 }
