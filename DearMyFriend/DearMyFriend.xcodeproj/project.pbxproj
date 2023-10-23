@@ -78,6 +78,7 @@
 		52D9984D2AD6B88600679B15 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		52D9984F2AD6BAC000679B15 /* MenuCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellView.swift; sourceTree = "<group>"; };
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		EBD2B7362AE21C33007FD1DA /*  */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ""; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebaseError.swift; sourceTree = "<group>"; };
 		EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -122,6 +123,7 @@
 		52D9980A2AD6A89600679B15 = {
 			isa = PBXGroup;
 			children = (
+				EBD2B7362AE21C33007FD1DA /*  */,
 				52D998152AD6A89600679B15 /* DearMyFriend */,
 				52D998142AD6A89600679B15 /* Products */,
 			);
