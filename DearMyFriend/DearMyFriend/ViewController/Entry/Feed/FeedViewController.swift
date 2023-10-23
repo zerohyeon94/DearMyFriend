@@ -15,7 +15,7 @@ class FeedViewController: UIViewController {
         
         configure()
 //        subscribeFirestore()
-//        getFirestore()
+        getFirestore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
