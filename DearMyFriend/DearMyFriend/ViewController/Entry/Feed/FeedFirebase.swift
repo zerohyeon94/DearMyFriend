@@ -88,6 +88,45 @@ final class MyFirestore {
         }
     }
     
+    func getFeed(completion: ((Error?) -> Void)? = nil) -> [[String: Any]] {
+        var feedUserAndDataCount: [[String: Int]] = [[:]]
+        var feedUploadDate: [String] = []
+        var feedData: [[String: Any]] = [[:]]
+        
+        let collectionPath = "Users"
+        let collectionListener = Firestore.firestore().collection(collectionPath)
+        
+        collectionListener.getDocuments() { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                // Users에 있는 사용자들의 ID 정보 획득
+                for document in querySnapshot!.documents {
+                    print("\(document.documentID) => \(document.data())")
+                    
+                    collectionListener.document(document.documentID).collection("Feed").getDocuments() { (querySnapshot, error) in
+                        if let error = error {
+                            print("Error getting documents: \(error)")
+                        } else {
+                            print("querySnapshot!.documents type: \(type(of: querySnapshot!.documents))")
+                            for document in querySnapshot!.documents {
+                                print("\(document.documentID) => \(document.data())")
+                                let data = document.data() // Firestore 문서의 데이터를 딕셔너리로 가져옴
+                                
+                                print("data type: \(type(of: data))")
+                                
+                                if let comment = data["comment"] as? [[String: String]] {
+                                    print("comment: \(comment)")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return feedData
+    }
+    
     // 리스너 제거
     func removeListener() {
         documentListener?.remove()
