@@ -2,8 +2,8 @@ import UIKit
 
 class TabBarController: UITabBarController {
     
-    var login:Bool = true
-    var completionStatus:Bool = true
+    var login:Bool = false
+    var completionStatus:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
