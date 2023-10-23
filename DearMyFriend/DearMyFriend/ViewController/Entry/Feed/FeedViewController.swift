@@ -14,7 +14,8 @@ class FeedViewController: UIViewController {
         super.viewDidLoad()
         
         configure()
-        subscribeFirestore()
+//        subscribeFirestore()
+//        getFirestore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,6 +81,11 @@ class FeedViewController: UIViewController {
                 print(error)
             }
         }
+    }
+    
+    private func getFirestore() {
+        print("getFirestore")
+        myFirestore.getFeed()
     }
 }
 
