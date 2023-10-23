@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		526EB6722AE263200073C77D /* RankeImageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526EB6712AE263200073C77D /* RankeImageCellView.swift */; };
+		1FBA09922AE6732700A3B42C /* YouTubeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBA09912AE6732700A3B42C /* YouTubeTableViewCell.swift */; };
 		4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */; };
 		4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AB12AE27D39005146AA /* NaverSearchService.swift */; };
+		526EB6722AE263200073C77D /* RankeImageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526EB6712AE263200073C77D /* RankeImageCellView.swift */; };
 		52D998172AD6A89600679B15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998162AD6A89600679B15 /* AppDelegate.swift */; };
 		52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998182AD6A89600679B15 /* SceneDelegate.swift */; };
 		52D998202AD6A89700679B15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52D9981F2AD6A89700679B15 /* Assets.xcassets */; };
@@ -51,9 +52,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		526EB6712AE263200073C77D /* RankeImageCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankeImageCellView.swift; sourceTree = "<group>"; };
+		1FBA09912AE6732700A3B42C /* YouTubeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeTableViewCell.swift; sourceTree = "<group>"; };
 		4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAPIManager.swift; sourceTree = "<group>"; };
 		4E275AB12AE27D39005146AA /* NaverSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchService.swift; sourceTree = "<group>"; };
+		526EB6712AE263200073C77D /* RankeImageCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankeImageCellView.swift; sourceTree = "<group>"; };
 		52D998132AD6A89600679B15 /* DearMyFriend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DearMyFriend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D998162AD6A89600679B15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52D998182AD6A89600679B15 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				52D998322AD6AB0E00679B15 /* YouTubeViewController.swift */,
+				1FBA09912AE6732700A3B42C /* YouTubeTableViewCell.swift */,
 				52D9983A2AD6AB9B00679B15 /* MapViewController.swift */,
 				4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */,
 				4E275AB12AE27D39005146AA /* NaverSearchService.swift */,
@@ -381,6 +384,7 @@
 				EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */,
 				52D998352AD6AB1800679B15 /* CalculatorViewController.swift in Sources */,
 				4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */,
+				1FBA09922AE6732700A3B42C /* YouTubeTableViewCell.swift in Sources */,
 				4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */,
 				52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */,
 				EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */,
