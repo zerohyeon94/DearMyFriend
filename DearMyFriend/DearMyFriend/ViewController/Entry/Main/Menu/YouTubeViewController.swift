@@ -10,7 +10,7 @@ class YouTubeViewController: UIViewController {
     private let pageName = {
         let label = UILabel()
         label.text = "추천 유튜버"
-        label.textColor = UIColor(named: "주요텍스트컬러")
+        label.textColor = UIColor(named: "maintext")
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textAlignment = .center
         return label
@@ -29,19 +29,19 @@ class YouTubeViewController: UIViewController {
     private let leftSide = {
         let side = UIView()
         side.frame = CGRect(x: 0, y: 0, width: 20, height: 908)
-        side.layer.backgroundColor = UIColor(named: "태두리컬러")?.cgColor
+        side.layer.backgroundColor = UIColor(named: "side")?.cgColor
         return side
     }()
 
     private let rightSide = {
         let side = UIView()
         side.frame = CGRect(x: 0, y: 0, width: 20, height: 908)
-        side.layer.backgroundColor = UIColor(named: "태두리컬러")?.cgColor
+        side.layer.backgroundColor = UIColor(named: "side")?.cgColor
         return side
     }()
 
     private var cellSelectAnime = {
-        let animeView = LottieAnimationView(name: "로딩")
+        let animeView = LottieAnimationView(name: "loading")
 
         animeView.contentMode = .scaleAspectFit
 
@@ -58,7 +58,7 @@ class YouTubeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor(named: "뷰컬러")        // navigationController?.isNavigationBarHidden = true
+        view.backgroundColor = UIColor(named: "view")        // navigationController?.isNavigationBarHidden = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
@@ -193,7 +193,7 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
-            headerView.contentView.backgroundColor = UIColor(named: "뷰컬러")
+            headerView.contentView.backgroundColor = UIColor(named: "view")
             headerView.textLabel?.textColor = UIColor(named: "주요택스트컬러")
         }
     }
@@ -217,9 +217,10 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellForYoutube", for: indexPath) as! YouTubeTableViewCell
         let channelDocumentName = "채널\(indexPath.row + 1)"
+        let channelImageName = "채널\(indexPath.row + 1)"
         if indexPath.section == 0 {
             telechargerDesInfos(collection: "고양이 유튜브", document: channelDocumentName) { donnes, _ in
-                if let imageURLString = donnes?["채널이미지"] as? String {
+                if let imageURLString = donnes?[channelImageName] as? String {
                     self.telechargerDesImg(from: imageURLString) { image in
                         DispatchQueue.main.async {
                             cell.youtubeImage.image = image
@@ -240,7 +241,7 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
             }
         } else if indexPath.section == 1 {
             telechargerDesInfos(collection: "강아지 유튜브", document: channelDocumentName) { donnes, _ in
-                if let imageURLString = donnes?["채널이미지"] as? String {
+                if let imageURLString = donnes?[channelImageName] as? String {
                     self.telechargerDesImg(from: imageURLString) { image in
                         DispatchQueue.main.async {
                             cell.youtubeImage.image = image
