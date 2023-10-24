@@ -31,7 +31,6 @@ class FeedViewController: UIViewController {
     private func configure() {
         view.backgroundColor = .white
         setupFeedTitleView()
-        setupTableView()
     }
     
     private func setupFeedTitleView() {
@@ -121,6 +120,10 @@ class FeedViewController: UIViewController {
             print("feedAllData[0].values : \(feedAllData[0].values.first)")
             print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys.first))")
             print("feedAllData[0].values - type : \(type(of: feedAllData[0].values.first))")
+            
+            self.feedDatas = feedAllData
+            
+            self.setupTableView()
         }
     }
 }
@@ -128,7 +131,7 @@ class FeedViewController: UIViewController {
 extension FeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3 // 추후 받아오는 데이터 정보에 따라 표시되는 수 설정
+        return feedDatas.count // 추후 받아오는 데이터 정보에 따라 표시되는 수 설정
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -136,10 +139,10 @@ extension FeedViewController: UITableViewDataSource {
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
         // 전체 데이터 중 순서대로 나열
-//        let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
-//        let indexData: FeedData = allData.values.first!
-//
-//        cell.setFeed(feedData: indexData)
+        let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
+        let indexData: FeedData = allData.values.first!
+
+        cell.setFeed(feedData: indexData)
         
         return cell
     }
