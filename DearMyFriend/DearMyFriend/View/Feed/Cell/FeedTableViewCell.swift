@@ -12,7 +12,7 @@ class FeedTableViewCell: UITableViewCell {
     let sideSpaceConstant: CGFloat = 16
     
     // TableView Cell 내 CollectionView
-    let imageNames: [String] = ["spider1.png", "spider2.png", "spider3.png"]
+    var imageNames: [String] = ["spider1.png", "spider2.png", "spider3.png"]
     
     private func setupCollectionView() {
         feedView.imageCollectionView.delegate = self
@@ -26,7 +26,6 @@ class FeedTableViewCell: UITableViewCell {
         self.contentView.backgroundColor = .yellow
         
         configure()
-        setupCollectionView()
     }
     
     required init?(coder: NSCoder) {
@@ -53,6 +52,13 @@ class FeedTableViewCell: UITableViewCell {
         ])
     }
     
+    func setFeed(feedData: FeedData) {
+        feedView.userNicknameLabel.text = feedData.id
+        feedView.postTextView.text = feedData.post
+        imageNames = feedData.image
+        
+        setupCollectionView()
+    }
 }
 
 extension FeedTableViewCell: UIScrollViewDelegate {
@@ -74,7 +80,7 @@ extension FeedTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as! ImageCollectionViewCell
         
-        cell.configure(image: UIImage(named: imageNames[indexPath.item])!)
+        cell.configureURL(imageURL: imageNames[indexPath.item])
         
         return cell
     }
