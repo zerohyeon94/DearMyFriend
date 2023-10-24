@@ -9,12 +9,16 @@ class FeedViewController: UIViewController {
     
     // TableView
     private let feedTableView = UITableView()
+    // Feed Data
+    var feedDatas: [[String: FeedData]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configure()
-//        subscribeFirestore()
+        //        subscribeFirestore()
+        //        getFirestore()
+        
         getFirestore()
     }
     
@@ -84,8 +88,40 @@ class FeedViewController: UIViewController {
     }
     
     private func getFirestore() {
-        print("getFirestore")
-        myFirestore.getFeed()
+        let postImageView: UIImageView = {
+            let imageView = UIImageView()
+            imageView.contentMode = .scaleAspectFill
+            //            imageView.image = UIImage(named: imageName)
+            
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            return imageView
+        }()
+        
+        view.addSubview(postImageView)
+        
+        NSLayoutConstraint.activate([
+            postImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            postImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            postImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            postImageView.heightAnchor.constraint(equalToConstant: 300)
+        ])
+        
+        
+        
+        myFirestore.getFeed { feedAllData in
+            print("feedAllData : \(feedAllData)")
+            print("feedAllData[0] : \(feedAllData[0])")
+            print("feedAllData[0].keys : \(feedAllData[0].keys)")
+            print("feedAllData[0].values : \(feedAllData[0].values.count)")
+            print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys))")
+            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values))")
+            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values))")
+            print("feedAllData[0].keys : \(feedAllData[0].keys.first)")
+            print("feedAllData[0].values : \(feedAllData[0].values.first)")
+            print("feedAllData[0].values : \(feedAllData[0].values.first)")
+            print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys.first))")
+            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values.first))")
+        }
     }
 }
 
@@ -98,6 +134,12 @@ extension FeedViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.identifier, for: indexPath) as! FeedTableViewCell
         cell.selectionStyle = .none // cell 선택 효과 없애기
+        
+        // 전체 데이터 중 순서대로 나열
+        let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
+        let indexData: FeedData = allData.values.first!
+        
+        cell.setFeed(feedData: indexData)
         
         return cell
     }

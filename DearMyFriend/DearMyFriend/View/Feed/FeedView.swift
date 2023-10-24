@@ -331,7 +331,7 @@ class FeedView: UIView {
     }
     
     // MARK: - Helper
-    // 이미지를 조절하고 싶었으나, SF Symbol이
+    // 이미지를 조절하고 싶었으나, SF Symbol이 각각 크기가 달라서 힘듬.
     private func resizeUIImage(imageName: String, heightSize: Double) -> UIImage {
         let image = UIImage(systemName: imageName)
         // 원하는 높이를 설정

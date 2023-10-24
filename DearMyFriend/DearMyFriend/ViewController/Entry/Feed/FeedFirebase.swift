@@ -88,7 +88,7 @@ final class MyFirestore {
         }
     }
     
-    func getFeed(completion: ((Error?) -> Void)? = nil) { //} -> [[String: Any]] {
+    func getFeed(completion: @escaping ([[String: FeedData]]) -> Void) { //} -> [[String: FeedData]] {
         // 계정 순서대로 날짜 순으로 데이터를 받는다.
         // 데이터에 대한 기준은 5일.
         // 전체 사용자들의 게시물이 5일 안에 없을 경우.
@@ -175,6 +175,11 @@ final class MyFirestore {
                                     userFeedId = id
                                 }
                                 
+                                if let image = data["image"] as? [String] {
+                                    print("image: \(image)")
+                                    userFeedImage = image
+                                }
+                                
                                 if let post = data["post"] as? String {
                                     print("post: \([post])")
                                     userFeedPost = post
@@ -190,7 +195,7 @@ final class MyFirestore {
                                     userFeedComment = comment
                                 }
                                 
-                                let userFeedData = FeedData(id: userFeedId, image: [], post: userFeedPost, like: userFeedLike, comment: userFeedComment)
+                                let userFeedData = FeedData(id: userFeedId, image: userFeedImage, post: userFeedPost, like: userFeedLike, comment: userFeedComment)
                                 feedAllData.append([document.documentID : userFeedData])
                             }
                         }
@@ -221,10 +226,11 @@ final class MyFirestore {
                     for item in feedAllData {
                         print("1. 시간순 정렬 : \(item.keys) \(item.values)")
                     }
+                    completion(feedAllData)
                 }
             }
         }
-        //        return feedData
+//        return feedAllData
     }
     
     // 리스너 제거
