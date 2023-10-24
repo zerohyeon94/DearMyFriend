@@ -3,10 +3,24 @@ import UIKit
 struct Collection {
     static let menuIdentifier = "mainCV"
     static let rankIdentifier = "rankeCV"
-    static let spacingWidth: CGFloat = 5
-    static let cellColumns: CGFloat = 4
+    static let storeIdentifier = "storeCV"
+    static let placeIdentifier = "placeCV"
     
-    static let itemSize = ((UIScreen.main.bounds.width-80) - Collection.spacingWidth * (Collection.cellColumns - 1)) / Collection.cellColumns
+    static let menuColumns: CGFloat = 4
+    static let menuSize = ((UIScreen.main.bounds.width-40) / Collection.menuColumns)
+    
+    static let reuseSpacing: CGFloat = 10
+    static let reuseStoreColumns: CGFloat = 2.5
+    static let reuseStoreWidtSize = ((UIScreen.main.bounds.width-40) / Collection.reuseStoreColumns)
+    static let reuseStoreHeightSize:CGFloat = 100
+    
+    static let reusePlaceColumns: CGFloat = 2
+    static let reusePlaceWidtSize = ((UIScreen.main.bounds.width-40) / Collection.reusePlaceColumns)
+    static let reusePlaceHeightSize:CGFloat = 150
+}
+
+struct AppstoreSearchUrl {
+    static let url = "https://itunes.apple.com/search?media=software&country=kr&limit=5"
 }
 
 enum ButtonIcon {
