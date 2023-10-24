@@ -1,18 +1,11 @@
 import UIKit
 
 class MainView: UIView {
-
-    let logoImgae: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(named: "logo")
-        image.contentMode = .scaleAspectFit
-        return image
-    }()
     
     let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.showsVerticalScrollIndicator = true
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     
@@ -22,49 +15,71 @@ class MainView: UIView {
         return view
     }()
     
+    let logoImgae: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "logo")
+        image.contentMode = .scaleAspectFit
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
     let rankCollectionView : UICollectionView = {
-
+        
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
         flowLayout.minimumInteritemSpacing = 0
-
+        
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collection.backgroundColor = .clear
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.isScrollEnabled = true
         collection.isPagingEnabled = true
         collection.showsHorizontalScrollIndicator = false
-
+        
         return collection
     }()
     
     let pageControl: UIPageControl = {
-       let pageControl = UIPageControl()
+        let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.pageIndicatorTintColor = UIColor.systemGray
         pageControl.currentPageIndicatorTintColor = UIColor.systemRed
         return pageControl
     }()
     
-    let collectionView : UICollectionView = {
+    let menuCollectionView : UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 0
+        flowLayout.minimumInteritemSpacing = 0
         
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = Collection.spacingWidth
-        flowLayout.minimumInteritemSpacing = Collection.spacingWidth
-
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.backgroundColor = .systemBlue
+        collection.isScrollEnabled = false
+        collection.backgroundColor = .clear
         return collection
     }()
     
-    let recommendationView: UIView = {
+    let borderView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor(hexCode: "dee2e6", alpha: 1)
         return view
+    }()
+    
+    let recommendedStore: ReuseCollectionView = {
+        let storeCollection = ReuseCollectionView()
+        storeCollection.translatesAutoresizingMaskIntoConstraints = false
+        storeCollection.titleLabel.text = "추천 스토어"
+        return storeCollection
+    }()
+    
+    let recommendedPlace: ReuseCollectionView = {
+        let storeCollection = ReuseCollectionView()
+        storeCollection.translatesAutoresizingMaskIntoConstraints = false
+        storeCollection.titleLabel.text = "추천 플레이스"
+        return storeCollection
     }()
 
     override init(frame: CGRect) {
@@ -97,13 +112,21 @@ class MainView: UIView {
     }
     
     func setupContentView() {
+        contentView.addSubview(logoImgae)
         contentView.addSubview(rankCollectionView)
         contentView.addSubview(pageControl)
-        contentView.addSubview(collectionView)
-        contentView.addSubview(recommendationView)
+        contentView.addSubview(menuCollectionView)
+        contentView.addSubview(borderView)
+        contentView.addSubview(recommendedStore)
+        contentView.addSubview(recommendedPlace)
         
         NSLayoutConstraint.activate([
-            rankCollectionView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            logoImgae.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            logoImgae.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            logoImgae.widthAnchor.constraint(equalToConstant: 30),
+            logoImgae.heightAnchor.constraint(equalToConstant: 30),
+            
+            rankCollectionView.topAnchor.constraint(equalTo: logoImgae.bottomAnchor, constant: 5),
             rankCollectionView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
             rankCollectionView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             rankCollectionView.heightAnchor.constraint(equalToConstant: 250),
@@ -112,16 +135,26 @@ class MainView: UIView {
             pageControl.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
             pageControl.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
                     
-            collectionView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 10),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            collectionView.heightAnchor.constraint(equalToConstant: Collection.itemSize),
-                    
-            recommendationView.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
-            recommendationView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            recommendationView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            recommendationView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            recommendationView.heightAnchor.constraint(equalToConstant: 1500),
+            menuCollectionView.topAnchor.constraint(equalTo: pageControl.bottomAnchor),
+            menuCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            menuCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            menuCollectionView.heightAnchor.constraint(equalToConstant: Collection.menuSize),
+            
+            borderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            borderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            borderView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor, constant: 10),
+            borderView.heightAnchor.constraint(equalToConstant: 2),
+            
+            recommendedStore.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 30),
+            recommendedStore.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            recommendedStore.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            recommendedStore.reuseCollection.heightAnchor.constraint(equalToConstant: Collection.reuseStoreHeightSize),
+            
+            recommendedPlace.topAnchor.constraint(equalTo: recommendedStore.bottomAnchor, constant: 30),
+            recommendedPlace.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            recommendedPlace.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            recommendedPlace.reuseCollection.heightAnchor.constraint(equalToConstant: Collection.reusePlaceHeightSize),
+            recommendedPlace.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50),
             ])
     }
 }
