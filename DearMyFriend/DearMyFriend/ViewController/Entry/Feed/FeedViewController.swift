@@ -105,8 +105,6 @@ class FeedViewController: UIViewController {
             postImageView.heightAnchor.constraint(equalToConstant: 300)
         ])
         
-        
-        
         myFirestore.getFeed { feedAllData in
             print("feedAllData : \(feedAllData)")
             print("feedAllData[0] : \(feedAllData[0])")

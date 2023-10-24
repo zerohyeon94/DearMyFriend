@@ -67,6 +67,17 @@ final class MyFirestore {
     }
     
     func saveUserFeed(feedData: FeedData, completion: ((Error?) -> Void)? = nil) {
+        let collectionDocumentPath = "\(collectionUsers)"
+        let collectionDocumentListener = Firestore.firestore().collection(collectionDocumentPath)
+        // document 생성
+        collectionDocumentListener.document("\(feedData.id)").setData(["id":"\(feedData.id)"]) { error in
+            if let error = error {
+                    print("Error adding document: \(error)")
+                } else {
+                    print("Document added successfully!")
+                }
+        }
+        
         let collectionPath = "\(collectionUsers)/\(feedData.id)/\(collectionFeed)"
         let collectionListener = Firestore.firestore().collection(collectionPath)
         
@@ -105,7 +116,7 @@ final class MyFirestore {
                 print("Error getting documents: \(error)")
             } else {
                 let dispatchGroup = DispatchGroup() // 디스패치 그룹 생성
-                
+                print("querySnapshot!.documents: \(querySnapshot!.documents.count)")
                 // Users에 있는 사용자들의 ID 정보 획득
                 for document in querySnapshot!.documents {
                     print("등록된 사용자 : \(document.documentID)")
