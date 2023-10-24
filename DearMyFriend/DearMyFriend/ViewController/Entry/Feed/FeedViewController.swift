@@ -136,10 +136,10 @@ extension FeedViewController: UITableViewDataSource {
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
         // 전체 데이터 중 순서대로 나열
-        let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
-        let indexData: FeedData = allData.values.first!
-        
-        cell.setFeed(feedData: indexData)
+//        let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
+//        let indexData: FeedData = allData.values.first!
+//
+//        cell.setFeed(feedData: indexData)
         
         return cell
     }
