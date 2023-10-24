@@ -6,6 +6,12 @@ import SnapKit
 import UIKit
 class YouTubeTableViewCell: UITableViewCell {
     
+    var titleLabel = {
+        let label = UILabel()
+        label.text = ""
+        return label
+    } ()
+    
     var youtubeImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
