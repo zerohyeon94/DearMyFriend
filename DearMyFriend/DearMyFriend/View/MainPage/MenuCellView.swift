@@ -24,14 +24,12 @@ class MainMenuCellView: UICollectionViewCell {
        let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
         title.textColor = .black
-        title.font = .systemFont(ofSize: 15, weight: .semibold)
-        title.text = "Test"
+        title.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 15)
         return title
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .clear
         autoLayout()
         makeBounds()
     }
@@ -45,9 +43,8 @@ class MainMenuCellView: UICollectionViewCell {
         self.contentView.addSubview(menuTitle)
         NSLayoutConstraint.activate([
             menuIcon.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-            menuIcon.bottomAnchor.constraint(equalTo: menuTitle.topAnchor),
-            menuIcon.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-            menuIcon.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            menuIcon.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+            menuIcon.widthAnchor.constraint(equalToConstant: 50),
             
             menuTitle.topAnchor.constraint(equalTo: menuIcon.bottomAnchor),
             menuTitle.centerXAnchor.constraint(equalTo: self.centerXAnchor),
