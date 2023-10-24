@@ -6,13 +6,19 @@ import SnapKit
 import UIKit
 class YouTubeTableViewCell: UITableViewCell {
     
+    var titleLabel = {
+        let label = UILabel()
+        label.text = ""
+        return label
+    } ()
+    
     var youtubeImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = false
         imageView.layer.cornerRadius = 10
         imageView.layer.borderWidth = 1
-        imageView.layer.borderColor = UIColor(named: "보더컬러")?.cgColor
+        imageView.layer.borderColor = UIColor(named: "border")?.cgColor
         imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         imageView.layer.masksToBounds = true
         return imageView
@@ -33,22 +39,22 @@ class YouTubeTableViewCell: UITableViewCell {
     var youtubeName: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = UIColor(named: "주요택스트컬러")
+        label.textColor = UIColor(named: "maintext")
         return label
     }()
     
     var youtubeExplanation: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
-        label.textColor = UIColor(named: "보조택스트컬러")
+        label.textColor = UIColor(named: "subtext")
         label.numberOfLines = 0
         return label
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = UIColor(named: "셀컬러")
-        layer.borderColor = UIColor(named: "보더컬러")?.cgColor
+        self.backgroundColor = UIColor(named: "cell")
+        layer.borderColor = UIColor(named: "border")?.cgColor
         layer.borderWidth = 1
         layer.cornerRadius = 10
         

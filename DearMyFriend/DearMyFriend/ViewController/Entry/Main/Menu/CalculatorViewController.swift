@@ -8,14 +8,14 @@ class CalculatorViewController: UIViewController {
     private let leftSide = {
         let side = UIView()
         side.frame = CGRect(x: 0, y: 0, width: 20, height: 908)
-        side.layer.backgroundColor = UIColor(named: "태두리컬러")?.cgColor
+        side.layer.backgroundColor = UIColor(named: "side")?.cgColor
         return side
     }()
     
     private let rightSide = {
         let side = UIView()
         side.frame = CGRect(x: 0, y: 0, width: 20, height: 908)
-        side.layer.backgroundColor = UIColor(named: "태두리컬러")?.cgColor
+        side.layer.backgroundColor = UIColor(named: "side")?.cgColor
         return side
     }()
     
@@ -24,7 +24,7 @@ class CalculatorViewController: UIViewController {
         
         label.text = "표준 사료 급여량 계산기"
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = UIColor(named: "일반택스트컬러")
+        label.textColor = UIColor(named: "maintext")
         label.textAlignment = .right
         
         return label
@@ -32,7 +32,7 @@ class CalculatorViewController: UIViewController {
     
     private let selectLabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "주요택스트컬러")
+        label.textColor = UIColor(named: "maintext")
         label.textAlignment = .center
         label.text = "반려동물 선택"
         return label
@@ -40,12 +40,12 @@ class CalculatorViewController: UIViewController {
     
     private let 강아지버튼 = {
         let button = UIButton()
-        button.setImage(UIImage(named: "강아지예스클릭"), for: .selected)
+        button.setImage(UIImage(named: "dogon"), for: .selected)
         button.contentMode = .scaleAspectFit
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor(named: "보더컬러")?.cgColor
+        button.layer.borderColor = UIColor(named: "border")?.cgColor
         button.layer.cornerRadius = 10
-        button.setImage(UIImage(named: "강아지노클릭"), for: .normal)
+        button.setImage(UIImage(named: "dogoff"), for: .normal)
         button.contentMode = .scaleAspectFit
         button.isSelected = true
         return button
@@ -53,12 +53,12 @@ class CalculatorViewController: UIViewController {
     
     private let 고양이버튼 = {
         let button = UIButton()
-        button.setImage(UIImage(named: "고양이예스클릭"), for: .selected)
+        button.setImage(UIImage(named: "caton"), for: .selected)
         button.contentMode = .scaleAspectFit
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor(named: "보더컬러")?.cgColor
+        button.layer.borderColor = UIColor(named: "border")?.cgColor
         button.layer.cornerRadius = 10
-        button.setImage(UIImage(named: "고양이노클릭"), for: .normal)
+        button.setImage(UIImage(named: "catoff"), for: .normal)
         button.contentMode = .scaleAspectFit
         button.isSelected = true
         return button
@@ -75,7 +75,7 @@ class CalculatorViewController: UIViewController {
     
     private let weightLabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "주요택스트컬러")
+        label.textColor = UIColor(named: "maintext")
         label.textAlignment = .center
         label.text = "반려동물 몸무게"
         return label
@@ -87,11 +87,11 @@ class CalculatorViewController: UIViewController {
         textField.contentVerticalAlignment = .center
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 10
-        textField.textColor = UIColor(named: "텍스트컬러")
+        textField.textColor = UIColor(named: "maintext")
         
         textField.font = UIFont.boldSystemFont(ofSize: 18)
         textField.textAlignment = .center
-        textField.layer.borderColor = UIColor(named: "보더컬러")?.cgColor
+        textField.layer.borderColor = UIColor(named: "border")?.cgColor
         textField.layer.borderWidth = 2.0
         textField.tintColor = .magenta
         textField.clearButtonMode = .whileEditing
@@ -103,9 +103,9 @@ class CalculatorViewController: UIViewController {
     private let 계산버튼 = {
         let button = UIButton()
         button.setTitle("계산하기", for: .normal)
-        button.setTitleColor(UIColor(named: "주요택스트컬러"), for: .normal)
+        button.setTitleColor(UIColor(named: "maintext"), for: .normal)
         button.setTitle("계산중", for: .selected)
-        button.layer.borderColor = UIColor(named: "보더컬러")?.cgColor
+        button.layer.borderColor = UIColor(named: "border")?.cgColor
         button.layer.cornerRadius = 10
         button.layer.borderWidth = 2
         button.backgroundColor = UIColor.clear
@@ -115,7 +115,7 @@ class CalculatorViewController: UIViewController {
     }()
     
     private var playingButton = {
-        let animeView = LottieAnimationView(name: "계산버튼")
+        let animeView = LottieAnimationView(name: "calcul")
         animeView.contentMode = .scaleAspectFit
         animeView.loopMode = .playOnce
         animeView.animationSpeed = 1
@@ -123,10 +123,30 @@ class CalculatorViewController: UIViewController {
         
     }()
     
+    private var result = {
+        let label = UILabel()
+        label.text = ""
+        label.textColor = UIColor(named: "maintext")
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private var warnning = {
+        let label = UILabel()
+        label.text = ""
+        label.textColor = UIColor(named: "subtext")
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        view.backgroundColor = UIColor(named: "뷰컬러")
+        view.backgroundColor = UIColor(named: "view")
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
@@ -170,7 +190,7 @@ class CalculatorViewController: UIViewController {
             make.width.equalTo(138)
             make.height.equalTo(24)
             make.centerX.equalToSuperview()
-            make.top.equalTo(selectLabel.snp.bottom).offset(261)
+            make.top.equalTo(selectLabel.snp.bottom).offset(200)
             make.leading.equalToSuperview().offset(80)
         }
         강아지버튼.snp.makeConstraints { make in
@@ -189,7 +209,7 @@ class CalculatorViewController: UIViewController {
     }
     
     func 계산기화면레이아웃() {
-        for 계산기유아이 in [몸무게입력, 계산버튼] {
+        for 계산기유아이 in [몸무게입력, 계산버튼, result, warnning] {
             view.addSubview(계산기유아이)
         }
         몸무게입력.snp.makeConstraints { make in
@@ -201,7 +221,19 @@ class CalculatorViewController: UIViewController {
         계산버튼.snp.makeConstraints { make in
             make.width.equalTo(220)
             make.height.equalTo(35)
-            make.top.equalTo(몸무게입력.snp.bottom).offset(40)
+            make.top.equalTo(몸무게입력.snp.bottom).offset(25)
+            make.centerX.equalToSuperview()
+        }
+        result.snp.makeConstraints { make in
+            make.width.equalTo(300)
+            make.height.equalTo(150)
+            make.top.equalTo(계산버튼).offset(30)
+            make.centerX.equalToSuperview()
+        }
+        warnning.snp.makeConstraints { make in
+            make.width.equalTo(300)
+            make.height.equalTo(20)
+            make.top.equalTo(result.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
         }
     }
@@ -264,13 +296,64 @@ class CalculatorViewController: UIViewController {
             }
             checking.play()
             print("강아지버튼에서 고양이버튼이 클릭되었습니다.")
-            weightLabel.text = "반려동물 몸무게"
+            weightLabel.text = "냥냥이 몸무게"
         }
+    }
+
+    func calculateFeedingAmount(weightKg: String) -> (lowerLimit: Double, upperLimit: Double)? {
+        guard let weight = Double(weightKg) else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                print("몸무게를 입력해주세요.")
+                self.계산버튼.isSelected = false
+                self.result.text = "몸무게를 입력해주세요."
+            }
+            return nil
+        }
+        if weightLabel.text == "댕댕이 몸무게" {
+            let lowerLimit = weight * 25
+            let upperLimit = weight * 38
+            몸무게입력.text = weightKg
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                print("댕댕이 체중이 \(weightKg)kg 일 때, 권장 사료 급여량은 \(lowerLimit)g 에서 \(upperLimit)g 사이입니다.")
+                self.계산버튼.isSelected = false
+                self.result.text = "댕댕이 체중이 \(weightKg)kg 일 때,\n권장 사료 급여량은\n\(lowerLimit)g 에서 \(upperLimit)g 사이입니다."
+                self.warnning.text = "( 나이, 건강상태 등에 따라 다를 수 있습니다.)"
+
+            }
+            return (lowerLimit, upperLimit)
+        }
+        else if weightLabel.text == "냥냥이 몸무게" {
+            let lowerLimit = weight * 20
+            let upperLimit = weight * 30
+            몸무게입력.text = weightKg
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                print("냥냥이 체중이 \(weightKg)kg 일 때, 권장 사료 급여량은 \(lowerLimit)g 에서 \(upperLimit)g 사이입니다.")
+                self.계산버튼.isSelected = false
+                self.result.text = "냥냥이 체중이 \(weightKg)kg 일 때,\n권장 사료 급여량은\n\(lowerLimit)g 에서 \(upperLimit)g 사이입니다."
+                self.warnning.text = "( 나이, 건강상태 등에 따라 다를 수 있습니다.)"
+            }
+            return (lowerLimit, upperLimit)
+        }
+        
+        else if weightLabel.text == "반려동물 몸무게" {
+            print("댕댕이 혹은 냥냥이 둘중 하나를 선택해주세요")
+            계산버튼.isSelected = false
+            result.text = "댕댕이 혹은 냥냥이 둘중 하나를 선택해주세요"
+        }
+
+        return nil
+    }
+
+    @objc func 계산버튼클릭() {
+        print("계산중")
+        계산버튼.isSelected = true
+        calculateFeedingAmount(weightKg: 몸무게입력.text ?? "")
     }
     
     func clickEvent() {
         강아지버튼.addTarget(self, action: #selector(강아지버튼클릭), for: .touchUpInside)
         고양이버튼.addTarget(self, action: #selector(고양이버튼클릭), for: .touchUpInside)
+        계산버튼.addTarget(self, action: #selector(계산버튼클릭), for: .touchUpInside)
     }
 }
    
