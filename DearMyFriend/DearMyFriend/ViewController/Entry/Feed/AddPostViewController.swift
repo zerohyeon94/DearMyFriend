@@ -19,6 +19,8 @@ class AddPostViewController: UIViewController {
     private func setupCollectionView() {
         addPostView.imageCollectionView.delegate = self
         addPostView.imageCollectionView.dataSource = self
+        
+        self.addPostView.imageCollectionView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -64,10 +66,10 @@ extension AddPostViewController: AddPostViewDelegate {
         // document : 현재 시간
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
-
+        
         let now = Date() // 현재 시간 가져오기
         let formattedDate = dateFormatter.string(from: now) // 형식에 맞게 날짜를 문자열로 변환
-
+        
         print("현재 시간: \(formattedDate)")
         
         let feedId: String = "_zerohyeon"
@@ -76,23 +78,24 @@ extension AddPostViewController: AddPostViewDelegate {
         let feedLike: [String] = [""] // 처음에 생성할 때는 좋아요 수가 없음.
         let feedComment: [[String: String]] = [["A":"a"], ["B":"b"]] // 처음에 생성할 때는 댓글이 없음.
         
-//        let image = selectedImages[0]
-        
         // Firebase Storage에 이미지 업로드
+        // Firebase Storage 인스턴스, 스토리지 참조 생성
         let storage = Storage.storage()
         let storageRef = storage.reference()
+        let group = DispatchGroup() // Dispatch Group 생성
+        // 선택한 이미지 전체 확인
         for image in selectedImages.enumerated() {
-            let savePath = "Feed/\(feedId)/\(formattedDate)/image\(image.offset).jpg"
+            group.enter() // Dispatch Group 진입
+            
+            let savePath = "Feed/\(feedId)/\(formattedDate)/image\(image.offset).jpg" // Firebase Storage 이미지 업로드 경로
             let imageRef = storageRef.child(savePath)
             
-            if let imageData = image.element.jpegData(compressionQuality: 0.8) {
+            if let imageData = image.element.jpegData(compressionQuality: 0.8) { // JPEG형식의 데이터로 변환. compressionQuality 이미지 품질(0.8 일반적인 값)
                 imageRef.putData(imageData, metadata: nil) { (metadata, error) in
-                    print("put")
                     if let error = error {
                         print("이미지 업로드 실패: \(error.localizedDescription)")
                     } else {
                         print("이미지 업로드 성공")
-                        
                         // 이미지 다운로드 URL 가져오기
                         imageRef.downloadURL { (url, error) in
                             if let error = error {
@@ -104,18 +107,24 @@ extension AddPostViewController: AddPostViewDelegate {
                                     print("feedImage: \(feedImage)")
                                 }
                             }
+                            group.leave()
                         }
                     }
                 }
             }
         }
-        print("feedImage: \(feedImage)")
         
-        let data = FeedData(id: feedId, image: feedImage, post: feedPost, like: feedLike, comment: feedComment)
-        myFirestore.saveUserFeed(feedData: data) { error in
-            print("error: \(error)")
+        // 모든 이미지 업로드 및 URL 저장 작업 완료시까지 대기
+        group.notify(queue: .main) {
+            print("전체 feedImage: \(feedImage)")
+            
+            let data = FeedData(id: feedId, image: feedImage, post: feedPost, like: feedLike, comment: feedComment)
+            print("data: \(data)")
+            self.myFirestore.saveUserFeed(feedData: data) { error in
+                print("error: \(error)")
+            }
+            self.dismiss(animated: true)
         }
-        dismiss(animated: true)
     }
     
     func imageViewTapped(){
@@ -140,7 +149,7 @@ extension AddPostViewController: UIScrollViewDelegate {
 
 extension AddPostViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(selectedImages.count, "!!!!!!")
+        print("selectedImages.count: \(selectedImages.count)")
         
         addPostView.pageControl.numberOfPages = selectedImages.count
         return self.selectedImages.count
@@ -186,25 +195,34 @@ extension AddPostViewController: PHPickerViewControllerDelegate {
         }
         print("results: \(results.count)")
         print("results: \(results)")
+        
+        var loadedImages: [UIImage] = [] // 이미지를 로드한 배열
+        let dispatchGroup = DispatchGroup() // 디스패치 그룹 생성
+        
         for result in results {
             let itemProvider = result.itemProvider
             if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                dispatchGroup.enter() // 디스패치 그룹 진입
+                
                 itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
                     if let image = image as? UIImage {
-                        // 선택한 이미지를 배열에 추가
-                        self.selectedImages.append(image)
-                        // 선택한 이미지를 화면에 표시 (예: 이미지 뷰에 추가)
-                        DispatchQueue.main.async {
-                            self.setupCollectionView()
-                        }
+                        
+                        loadedImages.append(image) // 이미지 로드한 배열에 추가
                     }
+                    dispatchGroup.leave() // 디스패치 그룹 이탈
                 }
             }
         }
         
-        self.addPostView.postImageView.isHidden = true
-        
-        self.addPostView.imageCollectionView.isHidden = false
-        self.addPostView.pageControl.isHidden = false
+        dispatchGroup.notify(queue: .main) {
+            // 모든 이미지 로드가 완료된 후에 실행됨
+            self.selectedImages.append(contentsOf: loadedImages) // 선택한 이미지를 배열에 추가
+            
+            self.setupCollectionView()
+            
+            self.addPostView.postImageView.isHidden = true
+            self.addPostView.imageCollectionView.isHidden = false
+            self.addPostView.pageControl.isHidden = false
+        }
     }
 }

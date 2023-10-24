@@ -41,7 +41,7 @@ class LoginViewController: UIViewController {
     
     private var emailInfoLabel: UILabel = {
             var label = UILabel()
-            label.text = "이메일 주소 또는 전화번호"   //라벨 문구 설정
+            label.text = "아이디"   //라벨 문구 설정
             label.font = UIFont.systemFont(ofSize: 18)  //라벨 폰트 크기 설정
             label.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) //라벨 폰트 색상을 흰색으로 설정
             return label
@@ -231,3 +231,23 @@ class LoginViewController: UIViewController {
         dismiss(animated: true)
     }
 }
+
+//    @objc private func textFieldEditingChanged(_ textField: UITextField) {
+//    if textField.text?.count == 1 {
+//        if textField.text?.first == " " {
+//            textField.text = ""
+//            return
+//        }
+//    }
+//    guard
+//        let email = emailTextField.text, !email.isEmpty,
+//        let password = passwordTextField.text, !password.isEmpty
+//    else {
+//        loginButton.backgroundColor = .clear
+//        loginButton.isEnabled = false
+//        return
+//    }
+//    loginButton.backgroundColor = .yellow
+//    loginButton.isEnabled = true
+//}
+
