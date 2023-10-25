@@ -134,13 +134,15 @@ final class MyFirestore {
                             for document in querySnapshot!.documents {
                                 
                                 print("게시물 업로드 날짜 : \(document.documentID)")
+                                print("게시물 : \(document.data())")
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                                dateFormatter.timeZone = TimeZone(identifier: "UTC")
                                 
                                 var feedUploadDate: Date // 게시물의 업로드 날짜를 Date로 바꿈.
                                 if let calculatedDate = dateFormatter.date(from: document.documentID) {
                                     // fiveDaysAgo를 사용하여 작업 수행
-                                    print("게시물 업로드 날짜 : \(calculatedDate)")
+//                                    print("게시물 업로드 날짜 : \(calculatedDate)")
                                     feedUploadDate = calculatedDate
                                 } else {
                                     // 날짜 계산 실패 시 대체 처리 수행
@@ -154,7 +156,7 @@ final class MyFirestore {
                                 var fiveDaysAgo: Date
                                 if let calculatedDate = calendar.date(byAdding: .day, value: -5, to: currentDate) {
                                     // fiveDaysAgo를 사용하여 작업 수행
-                                    print("5일 전 날짜: \(calculatedDate)")
+//                                    print("5일 전 날짜: \(calculatedDate)")
                                     fiveDaysAgo = calculatedDate
                                 } else {
                                     // 날짜 계산 실패 시 대체 처리 수행
@@ -162,12 +164,11 @@ final class MyFirestore {
                                     break
                                 }
                                 
-                                print("feedUploadDate : \(feedUploadDate)")
-                                print("fiveDaysAgo : \(fiveDaysAgo)")
+//                                print("feedUploadDate : \(feedUploadDate)")
+//                                print("fiveDaysAgo : \(fiveDaysAgo)")
                                 
                                 // 업로드 날짜가 게시글 날짜보다 작으면 5일보다 더 과거다! 그러면 필요가 없다!
                                 if feedUploadDate < fiveDaysAgo {
-                                    print("작다")
                                     // 다음 항목을 가지고 온나!
                                     continue
                                 } else {
@@ -182,27 +183,22 @@ final class MyFirestore {
                                 
                                 let data = document.data()
                                 if let id = data["id"] as? String {
-                                    print("id: \(id)")
                                     userFeedId = id
                                 }
                                 
                                 if let image = data["image"] as? [String] {
-                                    print("image: \(image)")
                                     userFeedImage = image
                                 }
                                 
                                 if let post = data["post"] as? String {
-                                    print("post: \([post])")
                                     userFeedPost = post
                                 }
                                 
                                 if let like = data["like"] as? [String] {
-                                    print("like: \(like)")
                                     userFeedLike = like
                                 }
                                 
                                 if let comment = data["comment"] as? [[String: String]] {
-                                    print("comment: \(comment)")
                                     userFeedComment = comment
                                 }
                                 
@@ -220,7 +216,11 @@ final class MyFirestore {
                     // 시간 순으로 재배열
                     // Date로 변환하고 정렬
                     let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                    
+                    for item in feedAllData {
+                        print("시간순 정렬 전 : \(item.keys) \(item.values.first?.id)")
+                    }
                     
                     feedAllData.sort { (dictionary1, dictionary2) in
                         guard let dateString1 = dictionary1.keys.first,
@@ -229,13 +229,12 @@ final class MyFirestore {
                               let date2 = dateFormatter.date(from: dateString2) else {
                             return false
                         }
+                        
                         return date1 > date2
                     }
-                    
-                    print("전체 데이터 : \(feedAllData)")
-                    
+
                     for item in feedAllData {
-                        print("1. 시간순 정렬 : \(item.keys) \(item.values)")
+                        print("시간순 정렬 후 : \(item.keys) \(item.values.first?.id)")
                     }
                     completion(feedAllData)
                 }

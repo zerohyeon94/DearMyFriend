@@ -12,9 +12,10 @@ class FeedTableViewCell: UITableViewCell {
     let sideSpaceConstant: CGFloat = 16
     
     // TableView Cell 내 CollectionView
-    var imageNames: [String] = ["spider1.png", "spider2.png", "spider3.png"]
+    var imageNames: [String] = []
     
     private func setupCollectionView() {
+        print("setupCollectionView")
         feedView.imageCollectionView.delegate = self
         feedView.imageCollectionView.dataSource = self
     }
@@ -53,9 +54,20 @@ class FeedTableViewCell: UITableViewCell {
     }
     
     func setFeed(feedData: FeedData) {
+        print("setFeed")
+        print("feedData.id : \(feedData.id)")
+        print("feedData.post : \(feedData.post)")
+        print("feedData.image : \(feedData.image)")
         feedView.userNicknameLabel.text = feedData.id
         feedView.postTextView.text = feedData.post
+        print("비우기 전 imageNames: \(imageNames)")
+//        imageNames = [] // 한번 비워준다면?
+//        print("비우기 후 imageNames: \(imageNames)")
         imageNames = feedData.image
+        print("최종 imageNames: \(imageNames)")
+        
+        // CollectionView를 다시 로드
+        feedView.imageCollectionView.reloadData()
         
         setupCollectionView()
     }
@@ -74,12 +86,14 @@ extension FeedTableViewCell: UIScrollViewDelegate {
 extension FeedTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         feedView.pageControl.numberOfPages = imageNames.count
+        print("imageNames.count: \(imageNames.count)")
         return self.imageNames.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as! ImageCollectionViewCell
         
+        print("cell에서 확인 imageNames: \(imageNames)")
         cell.configureURL(imageURL: imageNames[indexPath.item])
         
         return cell

@@ -106,18 +106,18 @@ class FeedViewController: UIViewController {
         ])
         
         myFirestore.getFeed { feedAllData in
-            print("feedAllData : \(feedAllData)")
-            print("feedAllData[0] : \(feedAllData[0])")
-            print("feedAllData[0].keys : \(feedAllData[0].keys)")
-            print("feedAllData[0].values : \(feedAllData[0].values.count)")
-            print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys))")
-            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values))")
-            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values))")
-            print("feedAllData[0].keys : \(feedAllData[0].keys.first)")
-            print("feedAllData[0].values : \(feedAllData[0].values.first)")
-            print("feedAllData[0].values : \(feedAllData[0].values.first)")
-            print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys.first))")
-            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values.first))")
+//            print("feedAllData : \(feedAllData)")
+//            print("feedAllData[0] : \(feedAllData[0])")
+//            print("feedAllData[0].keys : \(feedAllData[0].keys)")
+//            print("feedAllData[0].values : \(feedAllData[0].values.count)")
+//            print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys))")
+//            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values))")
+//            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values))")
+//            print("feedAllData[0].keys : \(feedAllData[0].keys.first)")
+//            print("feedAllData[0].values : \(feedAllData[0].values.first)")
+//            print("feedAllData[0].values : \(feedAllData[0].values.first)")
+//            print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys.first))")
+//            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values.first))")
             
             self.feedDatas = feedAllData
             
@@ -136,9 +136,11 @@ extension FeedViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.identifier, for: indexPath) as! FeedTableViewCell
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
+        print("tableViewCell의 indexPath.row : \(indexPath.row)")
         // 전체 데이터 중 순서대로 나열
         let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
         let indexData: FeedData = allData.values.first!
+        print("indexData: \(indexData)")
 
         cell.setFeed(feedData: indexData)
         
