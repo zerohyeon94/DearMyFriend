@@ -137,7 +137,6 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankIdentifier, for: indexPath) as! RankImageCellView
-//            cell.myImageView.contentMode = .scaleAspectFit
             cell.myImageView.image = bannerImageList[indexPath.item]
             cell.bannerTouchesBegan = { [weak self] in
                 guard let self = self else { return }
@@ -223,7 +222,7 @@ extension MainViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView == mainView.rankCollectionView {
-            let last = Rankbanner.image.count-2
+            let last = bannerImageList.count-2
             if scrollView.contentOffset.x == 0  {
                 mainView.rankCollectionView.scrollToItem(at: [0, last], at: .left, animated: false)
             }

@@ -8,8 +8,7 @@
 import UIKit
 
 class PopularityCellView: UICollectionViewCell {
-    
-    var touchBool:Bool = false
+
     var toucheOfImage: (PopularityCellView)->() = { PopularityCellView in }
     
     // 사진
@@ -18,6 +17,8 @@ class PopularityCellView: UICollectionViewCell {
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFit
         image.backgroundColor = .systemOrange
+        image.clipsToBounds = true
+        image.layer.cornerRadius = 20
         return image
     }()
     
@@ -81,9 +82,7 @@ class PopularityCellView: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .systemMint
         autoLayout()
-        makeBounds()
     }
     
     required init?(coder: NSCoder) {
@@ -101,12 +100,12 @@ class PopularityCellView: UICollectionViewCell {
         NSLayoutConstraint.activate([
             petPhoto.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             petPhoto.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
-            petPhoto.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-            petPhoto.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            petPhoto.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
+            petPhoto.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
             
             topStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-            topStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
-            topStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
+            topStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 15),
+            topStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -15),
             topStackView.heightAnchor.constraint(equalToConstant: IndicatorInfo.size),
             
             profileView.widthAnchor.constraint(equalToConstant: IndicatorInfo.size),
@@ -128,25 +127,16 @@ class PopularityCellView: UICollectionViewCell {
         ])
     }
     
-    func makeBounds() {
-        self.clipsToBounds = true
-        self.layer.cornerRadius = 20
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        self.touchBool.toggle()
+        PopularityTouch.touch = true
         self.toucheOfImage(self)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        self.touchBool.toggle()
+        PopularityTouch.touch = false
         self.toucheOfImage(self)
     }
     
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        self.indicatorCircle.resetTime()
-//    }
 }
