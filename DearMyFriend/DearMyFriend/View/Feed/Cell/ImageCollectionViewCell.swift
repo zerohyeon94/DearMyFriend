@@ -21,7 +21,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //
+    // 이미지가 중복표시되던 부분 수정.
     override func prepareForReuse() {
         super.prepareForReuse()
         
