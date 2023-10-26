@@ -41,6 +41,7 @@
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
 		52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */; };
 		52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */; };
+		EB5EDEE22AEA4030002075F9 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE12AEA4030002075F9 /* UserModel.swift */; };
 		EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */; };
 		EBD2B73E2AE221F5007FD1DA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73D2AE221F5007FD1DA /* FirebaseAnalytics */; };
 		EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */; };
@@ -98,6 +99,7 @@
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorCircle.swift; sourceTree = "<group>"; };
 		52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularityCellView.swift; sourceTree = "<group>"; };
+		EB5EDEE12AEA4030002075F9 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebaseError.swift; sourceTree = "<group>"; };
 		EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -287,9 +289,18 @@
 			path = PopularityView;
 			sourceTree = "<group>";
 		};
+        EB5EDEE02AEA4013002075F9 /* User */ = {
+            isa = PBXGroup;
+            children = (
+                EB5EDEE12AEA4030002075F9 /* UserModel.swift */,
+            );
+            path = User;
+            sourceTree = "<group>";
+        };
 		EBD2B7382AE21C4A007FD1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EB5EDEE02AEA4013002075F9 /* User */,
 				5258C26F2AE65BDF00E9FC2B /* MainPage */,
 				EBD2B7392AE21C56007FD1DA /* Feed */,
 			);
@@ -428,6 +439,7 @@
 				52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */,
 				52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */,
 				52D9982F2AD6AAF800679B15 /* UserInfoViewController.swift in Sources */,
+				EB5EDEE22AEA4030002075F9 /* UserModel.swift in Sources */,
 				52D998392AD6AB6600679B15 /* PopularityViewController.swift in Sources */,
 				52D998172AD6A89600679B15 /* AppDelegate.swift in Sources */,
 				EBD2B7522AE2235C007FD1DA /* FeedFirebaseError.swift in Sources */,
