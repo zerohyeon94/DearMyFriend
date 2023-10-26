@@ -119,7 +119,7 @@ class MainView: UIView {
         contentView.addSubview(borderView)
         contentView.addSubview(recommendedStore)
         contentView.addSubview(recommendedPlace)
-        
+        print("asdf",UIScreen.main.bounds.width)
         NSLayoutConstraint.activate([
             logoImgae.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             logoImgae.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
@@ -127,9 +127,13 @@ class MainView: UIView {
             logoImgae.heightAnchor.constraint(equalToConstant: 30),
             
             rankCollectionView.topAnchor.constraint(equalTo: logoImgae.bottomAnchor, constant: 5),
-            rankCollectionView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
-            rankCollectionView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
-            rankCollectionView.heightAnchor.constraint(equalToConstant: 250),
+            // rankCollectionView 배너와 같이 뷰의 크기와 셀의 크기를 맞추는 경우
+            // 뷰의 크기를 화면 크기와 맞추는 경우
+            // 소수점이 들어가는 경우
+            // rankCollectionView와 cell크기를 동일하게 맞추었지만 cell의 높이에 0.16666666 차이발생
+            // 정수화시켜서 크기를 맞추어서 해결 (모든 constraints에 해당하는 사항은 아님)
+            rankCollectionView.widthAnchor.constraint(equalToConstant: CGFloat(Collection.bannerWidth)),
+            rankCollectionView.heightAnchor.constraint(equalToConstant: CGFloat(Collection.bannerHeight)),
             
             pageControl.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor),
             pageControl.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
