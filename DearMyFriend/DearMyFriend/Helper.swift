@@ -34,6 +34,10 @@ struct IndicatorInfo {
     static let duration: CFTimeInterval = 5
 }
 
+struct PopularityTouch {
+    static var touch: Bool = false
+}
+
 struct AppstoreSearchUrl {
     static let url = "https://itunes.apple.com/search?media=software&country=kr&limit=5"
 }
@@ -59,9 +63,9 @@ struct MenuTest {
 
 struct Rankbanner {
     static var image = [UIImage(named: "banner_01"),
-                        UIImage(named: "banner_02"),
-                        UIImage(named: "banner_03"),
                         UIImage(named: "four"),
+                        UIImage(named: "banner_03"),
+                        UIImage(named: "banner_02"),
                         UIImage(named: "five")]
     static let imageNum = CGFloat(image.count)
 }

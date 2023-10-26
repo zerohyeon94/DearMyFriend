@@ -72,10 +72,11 @@ class IndicatorCircle: UIView {
     
     private func loadLayers() {
         self.backgroundView.layer.addSublayer(self.backgroundLayer)
-        self.indicatorView.layer.addSublayer(self.indicatorLayer)
     }
     
     func animateForegroundLayer() {
+        self.indicatorView.layer.addSublayer(self.indicatorLayer)
+
         let startAnimation = CABasicAnimation(keyPath: "strokeEnd")
         startAnimation.fromValue = startPoint
         startAnimation.toValue = 1
