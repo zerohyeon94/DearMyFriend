@@ -142,6 +142,7 @@ class CalculatorViewController: UIViewController {
     let testLAbel = { // test label
         let label = UILabel()
         label.text = "asdfsafdsf"
+        label.textColor = UIColor.black
         return label
     } ()
     private let targetAnimal = {
