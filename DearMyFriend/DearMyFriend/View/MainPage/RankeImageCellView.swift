@@ -14,7 +14,7 @@ class RankImageCellView: UICollectionViewCell {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
-        view.contentMode = .scaleToFill
+//        view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.layer.cornerRadius = 10
         return view
@@ -57,7 +57,6 @@ class RankImageCellView: UICollectionViewCell {
     var bannerTouchesBegan: (()->()) = { }
     var bannerTouchesEnded: (()->()) = { }
     
-    // 터치 이벤트 처리
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         bannerTouchesBegan()
