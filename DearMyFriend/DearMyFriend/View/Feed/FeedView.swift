@@ -6,8 +6,14 @@
 import Foundation
 import UIKit
 
+protocol FeedViewDelegate: AnyObject {
+    func likeButtonTapped()
+    func commentButtonTapped()
+}
+
 class FeedView: UIView {
     // MARK: Properties
+    var delegate: FeedViewDelegate?
     // ImageView
     let profileImageFrame: CGFloat = 40
     // Label
@@ -89,6 +95,8 @@ class FeedView: UIView {
         let resizedImage = resizeUIImage(imageName: likeButtonImage, heightSize: buttonSize)
         button.setImage(resizedImage, for: .normal)
         
+        button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        
         // 패딩 설정
         let padding = UIEdgeInsets(top: buttonPadding, left: buttonPadding, bottom: buttonPadding, right: buttonPadding)
         button.contentEdgeInsets = padding
@@ -103,6 +111,8 @@ class FeedView: UIView {
         
         let resizedImage = resizeUIImage(imageName: commentButtonImage, heightSize: buttonSize)
         button.setImage(resizedImage, for: .normal)
+        
+        button.addTarget(self, action: #selector(commentButtonTapped), for: .touchUpInside)
         
         // 패딩 설정
         let padding = UIEdgeInsets(top: buttonPadding, left: buttonPadding, bottom: buttonPadding, right: buttonPadding)
@@ -328,6 +338,16 @@ class FeedView: UIView {
             postTextView.trailingAnchor.constraint(equalTo: trailingAnchor),
             postTextView.heightAnchor.constraint(equalToConstant: postTextViewHeight)
         ])
+    }
+
+    // MARK: - Action
+    @objc private func likeButtonTapped(){
+        print("like 클릭")
+        delegate?.likeButtonTapped()
+    }
+    @objc private func commentButtonTapped(){
+        print("comment 클릭")
+        delegate?.commentButtonTapped()
     }
     
     // MARK: - Helper

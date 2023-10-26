@@ -72,10 +72,10 @@ extension AddPostViewController: AddPostViewDelegate {
         
         print("현재 시간: \(formattedDate)")
         
-        let feedId: String = "_zerohyeon"
+        let feedId: String = "pikachu"
         var feedImage: [String] = []
         let feedPost: String = addPostView.postTextView.text
-        let feedLike: [String] = [""] // 처음에 생성할 때는 좋아요 수가 없음.
+        let feedLike: [String] = ["_zerohyeon", "ironMan"] // 처음에 생성할 때는 좋아요 수가 없음.
         let feedComment: [[String: String]] = [["A":"a"], ["B":"b"]] // 처음에 생성할 때는 댓글이 없음.
         
         // Firebase Storage에 이미지 업로드
