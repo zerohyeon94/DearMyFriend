@@ -18,7 +18,6 @@ class FeedViewController: UIViewController {
         configure()
         //        subscribeFirestore()
         //        getFirestore()
-        
         getFirestore()
     }
     
@@ -143,6 +142,7 @@ extension FeedViewController: UITableViewDataSource {
         let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
         let indexData: FeedData = allData.values.first!
 //        print("indexData: \(indexData)")
+        cell.cellIndex = indexPath.row
         cell.setFeed(feedData: indexData)
         
         return cell

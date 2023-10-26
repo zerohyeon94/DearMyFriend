@@ -8,7 +8,7 @@ class FeedTableViewCell: UITableViewCell {
     // MARK: Properties
     static let identifier = "FeedTableViewCell"
     
-//    var cellIndex:
+    var cellIndex: Int = 0
     
     let feedView: FeedView = .init(frame: .zero)
     let sideSpaceConstant: CGFloat = 16

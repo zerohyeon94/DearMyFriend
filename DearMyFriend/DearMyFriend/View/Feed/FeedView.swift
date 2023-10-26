@@ -21,10 +21,12 @@ class FeedView: UIView {
     // Image CollectionView & Page Control
     let imageNames: [String] = ["spider1", "spider2", "spider3"]
     // Like & Comment Button
+    var isLikeButtonSelected = false
     let buttonFrame: CGFloat = 50
     let buttonSize: CGFloat = 28
     let buttonPadding: CGFloat = 8
     let likeButtonImage: String = "heart"
+    let likeFillButtonImage: String = "heart.fill"
     let likeButtonColor: UIColor = .black
     let commentButtonImage: String = "message"
     let commentButtonColor: UIColor = .black
@@ -92,8 +94,10 @@ class FeedView: UIView {
         
         button.frame = CGRect(x: 0, y: 0, width: buttonFrame, height: buttonFrame) // image Button 크기 지정.
         
-        let resizedImage = resizeUIImage(imageName: likeButtonImage, heightSize: buttonSize)
-        button.setImage(resizedImage, for: .normal)
+        let resizedLikeImage = resizeUIImage(imageName: likeButtonImage, heightSize: buttonSize)
+        button.setImage(resizedLikeImage, for: .normal)
+        let resizedLikeFillImage = resizeUIImage(imageName: likeFillButtonImage, heightSize: buttonSize)
+        button.setImage(resizedLikeFillImage, for: .selected)
         
         button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
         
@@ -343,8 +347,15 @@ class FeedView: UIView {
     // MARK: - Action
     @objc private func likeButtonTapped(){
         print("like 클릭")
+        isLikeButtonSelected.toggle()
+        likeButton.isSelected = isLikeButtonSelected
+        
+        let resizedImage = resizeUIImage(imageName: isLikeButtonSelected ? likeFillButtonImage : likeButtonImage, heightSize: buttonSize)
+        likeButton.setImage(resizedImage, for: .selected)
+        
         delegate?.likeButtonTapped()
     }
+    
     @objc private func commentButtonTapped(){
         print("comment 클릭")
         delegate?.commentButtonTapped()
