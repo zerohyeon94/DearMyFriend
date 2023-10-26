@@ -218,10 +218,6 @@ final class MyFirestore {
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
                     
-                    for item in feedAllData {
-                        print("시간순 정렬 전 : \(item.keys) \(item.values.first?.id)")
-                    }
-                    
                     feedAllData.sort { (dictionary1, dictionary2) in
                         guard let dateString1 = dictionary1.keys.first,
                               let dateString2 = dictionary2.keys.first,
@@ -231,10 +227,6 @@ final class MyFirestore {
                         }
                         
                         return date1 > date2
-                    }
-
-                    for item in feedAllData {
-                        print("시간순 정렬 후 : \(item.keys) \(item.values.first?.id)")
                     }
                     completion(feedAllData)
                 }

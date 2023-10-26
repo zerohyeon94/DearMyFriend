@@ -136,12 +136,13 @@ extension FeedViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.identifier, for: indexPath) as! FeedTableViewCell
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
+        cell.feedView.delegate = self
+        
         print("tableViewCell의 indexPath.row : \(indexPath.row)")
         // 전체 데이터 중 순서대로 나열
         let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
         let indexData: FeedData = allData.values.first!
-        print("indexData: \(indexData)")
-
+//        print("indexData: \(indexData)")
         cell.setFeed(feedData: indexData)
         
         return cell
@@ -153,5 +154,15 @@ extension FeedViewController: FeadTitleViewDelegate {
         let addPostViewController = AddPostViewController()
         addPostViewController.modalPresentationStyle = .fullScreen
         present(addPostViewController, animated: true, completion: nil)
+    }
+}
+
+extension FeedViewController: FeedViewDelegate {
+    func likeButtonTapped() {
+        print("likeButtonTapped")
+    }
+    
+    func commentButtonTapped() {
+        print("commentButtonTapped")
     }
 }
