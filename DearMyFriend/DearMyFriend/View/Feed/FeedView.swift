@@ -6,8 +6,14 @@
 import Foundation
 import UIKit
 
+protocol FeedViewDelegate: AnyObject {
+    func likeButtonTapped()
+    func commentButtonTapped()
+}
+
 class FeedView: UIView {
     // MARK: Properties
+    var delegate: FeedViewDelegate?
     // ImageView
     let profileImageFrame: CGFloat = 40
     // Label
@@ -89,6 +95,8 @@ class FeedView: UIView {
         let resizedImage = resizeUIImage(imageName: likeButtonImage, heightSize: buttonSize)
         button.setImage(resizedImage, for: .normal)
         
+        button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        
         // 패딩 설정
         let padding = UIEdgeInsets(top: buttonPadding, left: buttonPadding, bottom: buttonPadding, right: buttonPadding)
         button.contentEdgeInsets = padding
@@ -103,6 +111,8 @@ class FeedView: UIView {
         
         let resizedImage = resizeUIImage(imageName: commentButtonImage, heightSize: buttonSize)
         button.setImage(resizedImage, for: .normal)
+        
+        button.addTarget(self, action: #selector(commentButtonTapped), for: .touchUpInside)
         
         // 패딩 설정
         let padding = UIEdgeInsets(top: buttonPadding, left: buttonPadding, bottom: buttonPadding, right: buttonPadding)
@@ -329,9 +339,19 @@ class FeedView: UIView {
             postTextView.heightAnchor.constraint(equalToConstant: postTextViewHeight)
         ])
     }
+
+    // MARK: - Action
+    @objc private func likeButtonTapped(){
+        print("like 클릭")
+        delegate?.likeButtonTapped()
+    }
+    @objc private func commentButtonTapped(){
+        print("comment 클릭")
+        delegate?.commentButtonTapped()
+    }
     
     // MARK: - Helper
-    // 이미지를 조절하고 싶었으나, SF Symbol이
+    // 이미지를 조절하고 싶었으나, SF Symbol이 각각 크기가 달라서 힘듬.
     private func resizeUIImage(imageName: String, heightSize: Double) -> UIImage {
         let image = UIImage(systemName: imageName)
         // 원하는 높이를 설정

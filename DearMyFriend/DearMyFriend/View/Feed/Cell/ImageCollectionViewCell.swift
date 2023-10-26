@@ -21,6 +21,13 @@ class ImageCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // 이미지가 중복표시되던 부분 수정.
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        imageView.image = nil
+    }
+    
     private func setupUI() {
         self.contentView.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,5 +42,22 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     func configure(image: UIImage) {
         imageView.image = image
+    }
+    
+    func configureURL(imageURL: String) {
+        let url = URL(string: imageURL) //입력받은 url string을 URL로 변경
+        
+        //main thread에서 load할 경우 URL 로딩이 길면 화면이 멈춘다.
+        //이를 방지하기 위해 다른 thread에서 처리함.
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url!) {
+                if let image = UIImage(data: data) {
+                    //UI 변경 작업은 main thread에서 해야함.
+                    DispatchQueue.main.async {
+                        self?.imageView.image = image
+                    }
+                }
+            }
+        }
     }
 }
