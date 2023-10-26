@@ -24,13 +24,13 @@ class MainViewController: UIViewController {
         setupAppList()
         setupBanner()
         autoLayout()
-        setupTimer()
         setupCollectionView()
         print(Collection.reusePlaceWidtSize)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
+        self.setupTimer()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
