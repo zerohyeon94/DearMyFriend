@@ -3,6 +3,7 @@ import UIKit
 class MainViewController: UIViewController {
     
     let appManager = AppNetworking.shared
+    var bannerImageList: [UIImage?] = []
     var appList: [SearchResult] = []
     var searchKeyword = "펫용품"
     var pageOfNumber = 1
@@ -24,11 +25,16 @@ class MainViewController: UIViewController {
         setupBanner()
         autoLayout()
         setupCollectionView()
-        setupTimer()
+        print(Collection.reusePlaceWidtSize)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
+        self.setupTimer()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.bannerTime.invalidate()
     }
     
     func autoLayout() {
@@ -65,8 +71,9 @@ class MainViewController: UIViewController {
     }
     
     func setupBanner() {
-        Rankbanner.image.insert(Rankbanner.image[Rankbanner.image.count-1], at: 0)
-        Rankbanner.image.append(Rankbanner.image[1])
+        bannerImageList = Rankbanner.image
+        bannerImageList.insert(bannerImageList[bannerImageList.count-1], at: 0)
+        bannerImageList.append(bannerImageList[1])
     }
     
     override func viewDidLayoutSubviews() {
@@ -74,9 +81,11 @@ class MainViewController: UIViewController {
     }
     
     func setupTimer() {
-        bannerTime = Timer.scheduledTimer(timeInterval: 2 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
-        RunLoop.current.add(bannerTime, forMode: .common)
-        // https://withthemilkyway.tistory.com/59
+        if !bannerTime.isValid {
+            bannerTime = Timer.scheduledTimer(timeInterval: 2 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+            RunLoop.current.add(bannerTime, forMode: .common)
+            // https://withthemilkyway.tistory.com/59
+        }
     }
     
     @objc func timerCounter() {
@@ -111,8 +120,8 @@ extension MainViewController: UICollectionViewDataSource {
         case 0:
             return MenuViewControllers.count
         case 1:
-            mainView.pageControl.numberOfPages = Rankbanner.image.count-2
-            return Rankbanner.image.count
+            mainView.pageControl.numberOfPages = bannerImageList.count-2
+            return bannerImageList.count
         case 2:
             return appList.count
         case 3:
@@ -130,7 +139,7 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankIdentifier, for: indexPath) as! RankImageCellView
-            cell.myImageView.image = Rankbanner.image[indexPath.item]
+            cell.myImageView.image = bannerImageList[indexPath.item]
             cell.bannerTouchesBegan = { [weak self] in
                 guard let self = self else { return }
                 self.bannerTime.invalidate()
@@ -139,6 +148,7 @@ extension MainViewController: UICollectionViewDataSource {
                 guard let self = self else { return }
                 self.setupTimer()
             }
+            cell.myImageView.backgroundColor = UIColor(hexCode: "fcbf49")
             cell.myImageView.clipsToBounds = false
             return cell
         case 2:
@@ -147,7 +157,7 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.placeIdentifier, for: indexPath) as! RankImageCellView
-            cell.myImageView.image = Rankbanner.image[indexPath.item]
+            cell.myImageView.image = bannerImageList[indexPath.item]
             return cell
         default:
             return UICollectionViewCell()
@@ -163,6 +173,14 @@ extension MainViewController: UICollectionViewDelegate {
         case 0:
             self.navigationController?.navigationBar.isHidden = false
             self.navigationController?.pushViewController(MenuViewControllers[indexPath.row], animated: false)
+        case 1:
+            let popularityView = PopularityViewController()
+            popularityView.mainPage = self
+            popularityView.modalTransitionStyle = .crossDissolve
+            popularityView.modalPresentationStyle = .fullScreen
+            present(popularityView, animated: true) {
+                self.bannerTime.invalidate()
+            }
         case 2:
             guard let appStore = appList[indexPath.item].appUrl else { return }
             if let url = URL(string: appStore) {
@@ -184,9 +202,9 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         case 1:
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         case 2:
-            return CGSize(width: Collection.reuseStoreWidtSize, height: Collection.reuseStoreHeightSize)
+            return CGSize(width: Collection.reuseStoreWidtSize, height: collectionView.frame.height)
         default:
-            return CGSize(width: Collection.reusePlaceWidtSize, height: Collection.reusePlaceHeightSize)
+            return CGSize(width: Collection.reusePlaceWidtSize, height: collectionView.frame.height)
         }
     }
 }
@@ -206,11 +224,11 @@ extension MainViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView == mainView.rankCollectionView {
-            let last = Rankbanner.image.count-2
+            let last = bannerImageList.count-2
             if scrollView.contentOffset.x == 0  {
                 mainView.rankCollectionView.scrollToItem(at: [0, last], at: .left, animated: false)
             }
-            if scrollView.contentOffset.x == scrollView.frame.width * (Rankbanner.imageNum-1)  {
+            if scrollView.contentOffset.x == scrollView.frame.width * CGFloat(bannerImageList.count-1)  {
                 mainView.rankCollectionView.scrollToItem(at: [0, 1], at: .left, animated: false)
             }
             

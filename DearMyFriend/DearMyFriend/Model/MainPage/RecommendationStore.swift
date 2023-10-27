@@ -18,7 +18,7 @@ struct SearchResult: Codable {
     let trackCensoredName: String?
 
     enum CodingKeys: String, CodingKey {
-        case appImage = "artworkUrl100"
+        case appImage = "artworkUrl512"
         case appUrl = "trackViewUrl" 
         case trackCensoredName
     }
