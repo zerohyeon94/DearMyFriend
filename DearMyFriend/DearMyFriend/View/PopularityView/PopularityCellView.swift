@@ -70,16 +70,6 @@ class PopularityCellView: UICollectionViewCell {
         return button
     }()
     
-    lazy var testBt: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large)
-        let buttonImage = UIImage(systemName: "heart", withConfiguration: imageConfig)
-        button.setImage(buttonImage, for: .normal)
-        button.tintColor = .white
-        return button
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         autoLayout()
@@ -94,7 +84,6 @@ class PopularityCellView: UICollectionViewCell {
             petPhoto,
             topStackView,
             subscribeButton,
-            testBt
         ])
         
         NSLayoutConstraint.activate([
@@ -115,15 +104,10 @@ class PopularityCellView: UICollectionViewCell {
             indicatorCircle.widthAnchor.constraint(equalToConstant: IndicatorInfo.size),
             indicatorCircle.heightAnchor.constraint(equalToConstant: IndicatorInfo.size),
             
-            subscribeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
+            subscribeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -15),
             subscribeButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
             subscribeButton.widthAnchor.constraint(equalToConstant: IndicatorInfo.size),
             subscribeButton.heightAnchor.constraint(equalToConstant: IndicatorInfo.size),
-            
-            testBt.trailingAnchor.constraint(equalTo: subscribeButton.leadingAnchor, constant: -10),
-            testBt.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
-            testBt.widthAnchor.constraint(equalToConstant: IndicatorInfo.size),
-            testBt.heightAnchor.constraint(equalToConstant: IndicatorInfo.size),
         ])
     }
     

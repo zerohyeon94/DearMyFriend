@@ -81,9 +81,11 @@ class MainViewController: UIViewController {
     }
     
     func setupTimer() {
-        bannerTime = Timer.scheduledTimer(timeInterval: 2 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
-        RunLoop.current.add(bannerTime, forMode: .common)
-        // https://withthemilkyway.tistory.com/59
+        if !bannerTime.isValid {
+            bannerTime = Timer.scheduledTimer(timeInterval: 2 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+            RunLoop.current.add(bannerTime, forMode: .common)
+            // https://withthemilkyway.tistory.com/59
+        }
     }
     
     @objc func timerCounter() {
