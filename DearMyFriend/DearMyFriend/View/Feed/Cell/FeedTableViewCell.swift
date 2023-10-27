@@ -25,8 +25,9 @@ class FeedTableViewCell: UITableViewCell {
     // MARK: Initalizers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
+//        self.contentView.backgroundColor = .yellow
         
-        self.contentView.backgroundColor = .yellow
+        print("설정된 cell index : \(cellIndex)")
         
         configure()
     }
@@ -50,6 +51,7 @@ class FeedTableViewCell: UITableViewCell {
     private func setUI(){
         self.contentView.addSubview(feedView)
         feedView.translatesAutoresizingMaskIntoConstraints = false
+        feedView.tableVieCellindex = cellIndex
     }
     
     private func setConstraint() {
@@ -61,7 +63,9 @@ class FeedTableViewCell: UITableViewCell {
         ])
     }
     
-    func setFeed(feedData: FeedData) {
+    func setFeed(feedData: FeedData, index: Int) {
+        print("set Feed index: \(index)")
+        feedView.tableVieCellindex = index
 //        print("setFeed")
 //        print("feedData.id : \(feedData.id)")
 //        print("feedData.post : \(feedData.post)")

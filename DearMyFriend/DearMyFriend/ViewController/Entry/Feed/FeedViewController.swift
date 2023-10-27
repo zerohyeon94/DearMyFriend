@@ -36,6 +36,8 @@ class FeedViewController: UIViewController {
         view.addSubview(feedTitleView)
         feedTitleView.translatesAutoresizingMaskIntoConstraints = false
         feedTitleView.delegate = self // UIView와 UIViewController 간의 통신을 설정하는 부분. 그리하여 UIView클래스에서 Delegate 프로토콜을 정의하고 Delegate 프로퍼티를 선언하더라도, UIViewController에서 Delegate를 설정하지 않는다면 UIView에서 발생한 이벤트가 UIViewController로 전달되지 않는다.
+        // 현재 로그인 되어있는 ID 확인. - 추후 구현
+        feedTitleView.userNicknameLabel.text = "_zerohyeon"
         
         NSLayoutConstraint.activate([
             feedTitleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -143,7 +145,7 @@ extension FeedViewController: UITableViewDataSource {
         let indexData: FeedData = allData.values.first!
 //        print("indexData: \(indexData)")
         cell.cellIndex = indexPath.row
-        cell.setFeed(feedData: indexData)
+        cell.setFeed(feedData: indexData, index: indexPath.row)
         
         return cell
     }

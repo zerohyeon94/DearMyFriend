@@ -14,6 +14,7 @@ protocol FeedViewDelegate: AnyObject {
 class FeedView: UIView {
     // MARK: Properties
     var delegate: FeedViewDelegate?
+    var tableVieCellindex: Int = 0
     // ImageView
     let profileImageFrame: CGFloat = 40
     // Label
@@ -352,6 +353,8 @@ class FeedView: UIView {
         
         let resizedImage = resizeUIImage(imageName: isLikeButtonSelected ? likeFillButtonImage : likeButtonImage, heightSize: buttonSize)
         likeButton.setImage(resizedImage, for: .selected)
+        
+        print("cell Index : \(tableVieCellindex)")
         
         delegate?.likeButtonTapped()
     }

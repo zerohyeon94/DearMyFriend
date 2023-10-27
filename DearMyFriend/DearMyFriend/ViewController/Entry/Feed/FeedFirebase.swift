@@ -52,6 +52,12 @@ final class MyFirestore {
         }
     }
     
+    // 리스너 제거
+    func removeListener() {
+        documentListener?.remove()
+    }
+    
+    // MARK: Create
     func saveUserFeed(feedData: FeedData, completion: ((Error?) -> Void)? = nil) {
         let collectionDocumentPath = "\(collectionUsers)"
         let collectionDocumentListener = Firestore.firestore().collection(collectionDocumentPath)
@@ -85,6 +91,7 @@ final class MyFirestore {
         }
     }
     
+    // MARK: Read
     func getFeed(completion: @escaping ([[String: FeedData]]) -> Void) { //} -> [[String: FeedData]] {
         // 계정 순서대로 날짜 순으로 데이터를 받는다.
         // 데이터에 대한 기준은 5일.
@@ -221,8 +228,20 @@ final class MyFirestore {
 //        return feedAllData
     }
     
-    // 리스너 제거
-    func removeListener() {
-        documentListener?.remove()
+    // MARK: Update
+    func updateFeedLikeData(documentID: String, updateFeedData: FeedData, completion: ((Error?) -> Void)? = nil) {
+        let collectionPath = "\(collectionUsers)/\(updateFeedData.id)/\(collectionFeed)" // Users/선택한 FeedData의 ID/Feeds
+        let collectionListener = Firestore.firestore().collection(collectionPath)
+        
+        guard let dictionary = updateFeedData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 있는 dictionary
+            print("decode error")
+            return
+        }
+        
+        collectionListener.document("\(documentID)").setData(dictionary){ error in // Firestore Collection에 데이터 변경.
+            completion?(error)
+        }
     }
+    
+    // MARK: Delete
 }
