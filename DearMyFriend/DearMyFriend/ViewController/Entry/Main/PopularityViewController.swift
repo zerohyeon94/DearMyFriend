@@ -3,11 +3,15 @@ import UIKit
 class PopularityViewController: UIViewController {
     
     var mainPage: MainViewController?
-    var bannerTime = Timer()
-    var pageOfNumber = 0
+    private var startSeting: Bool = false
+    private var storyTime = Timer()
+    private var pageOfNumber = 0
+    private var storyDuration: TimeInterval = IndicatorInfo.duration
+    private var nowCell: PopularityCellView?
+    private var nextCell: PopularityCellView?
     private var initialY: CGFloat = 0.0
     private var translationY: CGFloat = 0.0
-    // 프로필 이미지
+
     let rankCollectionView : UICollectionView = {
         
         let flowLayout = UICollectionViewFlowLayout()
@@ -47,8 +51,11 @@ class PopularityViewController: UIViewController {
         self.rankCollectionView.delegate = self
         self.rankCollectionView.register(PopularityCellView.self, forCellWithReuseIdentifier: Collection.rankStoryIdentifier)
         
+        let doubleTapper = UITapGestureRecognizer(target: self, action: #selector(doubleTap(_:)))
+        doubleTapper.numberOfTapsRequired = 2
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        self.view.addGestureRecognizer(panGesture) // 이 줄 주석 해제
+        self.view.addGestureRecognizer(doubleTapper)
+        self.view.addGestureRecognizer(panGesture)
     }
     
     func indicatorControl(_ indicator: IndicatorCircle, _ touchBool: Bool) {
@@ -58,29 +65,41 @@ class PopularityViewController: UIViewController {
             indicator.indicatorLayer.removeAllAnimations()
             
             let duration = CGFloat(IndicatorInfo.duration)
-            indicator.remainingTime = duration - (presentation.strokeEnd * duration)
-            
+            let remainingTime = duration - (presentation.strokeEnd * duration)
+            indicator.remainingTime = remainingTime
             indicator.startPoint = presentation.strokeEnd
+            storyDuration = remainingTime
+            storyTime.invalidate()
         } else {
             indicator.animateForegroundLayer()
+            setupTimer()
         }
     }
     
     func setupTimer() {
-        bannerTime = Timer.scheduledTimer(timeInterval: IndicatorInfo.duration , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+        print(storyDuration)
+        if !storyTime.isValid {
+            storyTime = Timer.scheduledTimer(timeInterval: storyDuration , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: false)
+        }
     }
     
     @objc func timerCounter() {
-        
+
         if pageOfNumber < 4 {
             pageOfNumber += 1
+            storyDuration = IndicatorInfo.duration
             rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
+            setupTimer()
         } else {
-            self.bannerTime.invalidate()
+            self.storyTime.invalidate()
+            self.mainPage?.setupTimer()
             self.dismiss(animated: true, completion: nil)
         }
     }
     
+    @objc func doubleTap(_ gesture: UITapGestureRecognizer) {
+        // doubletap action
+    }
     
     @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self.view)
@@ -88,26 +107,24 @@ class PopularityViewController: UIViewController {
         
         switch gesture.state {
         case .began:
+            indicatorControl(nowCell!.indicatorCircle, true)
             initialY = rankCollectionView.frame.origin.y
         case .changed:
             if translation.y > 0 && translation.y <= maxYTranslation {
-                // 뷰를 아래로 이동
                 translationY = translation.y
                 rankCollectionView.frame.origin.y = initialY + translationY
             }
         case .ended:
-            print(translationY)
-            print(maxYTranslation)
             if translationY > maxYTranslation*0.6 {
-                // 최소 거리 이상으로 드래그하면 모달을 닫음
                 self.mainPage?.setupTimer()
                 self.dismiss(animated: true, completion: nil)
-                self.bannerTime.invalidate()
+                self.storyTime.invalidate()
             } else {
-                // 최소 거리에 도달하지 않았을 때 초기 위치로 되돌리기
                 UIView.animate(withDuration: 0.3) {
                     self.rankCollectionView.frame.origin.y = self.initialY
                 }
+                indicatorControl(nowCell!.indicatorCircle, false)
+                self.setupTimer()
             }
         default:
             break
@@ -122,14 +139,17 @@ extension PopularityViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+                
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankStoryIdentifier, for: indexPath) as! PopularityCellView
+        if self.nowCell == nil {
+            self.nowCell = cell
+            self.nowCell?.indicatorCircle.resetTime()
+        }
+        
         cell.toucheOfImage = { [weak self] (senderCell) in
-            self?.indicatorControl(senderCell.indicatorCircle, senderCell.touchBool)
+            self?.indicatorControl(senderCell.indicatorCircle, PopularityTouch.touch)
         }
         cell.petPhoto.image = Rankbanner.image[indexPath.item]
-        cell.indicatorCircle.resetTime()
-        cell.indicatorCircle.animateForegroundLayer()
         return cell
     }
     
@@ -139,17 +159,26 @@ extension PopularityViewController: UICollectionViewDataSource {
 extension PopularityViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        self.bannerTime.invalidate()
-        self.setupTimer()
-        if let popularityCell = cell as? PopularityCellView {
-            popularityCell.indicatorCircle.resetTime()
+        guard let popularityCell = cell as? PopularityCellView else { return }
+        self.nextCell = popularityCell
+        if startSeting == true {
+            self.nextCell?.indicatorCircle.indicatorLayer.removeFromSuperlayer()
+            self.storyTime.invalidate()
         }
+        startSeting = true
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        self.setupTimer()
+        self.storyDuration = IndicatorInfo.duration
+        self.nextCell?.indicatorCircle.resetTime()
     }
 }
 
 extension PopularityViewController: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt                            indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         
@@ -163,6 +192,18 @@ extension PopularityViewController: UIScrollViewDelegate {
         let intPage = Int(page)
         if pageOfNumber != intPage {
             pageOfNumber = intPage
+            self.nowCell = self.nextCell
+            self.storyTime.invalidate()
+            self.storyDuration = IndicatorInfo.duration
+            self.setupTimer()
         }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        indicatorControl(self.nowCell!.indicatorCircle, true)
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        indicatorControl(self.nowCell!.indicatorCircle, false)
     }
 }

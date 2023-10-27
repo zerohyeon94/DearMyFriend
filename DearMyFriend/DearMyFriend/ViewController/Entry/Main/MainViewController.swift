@@ -24,13 +24,13 @@ class MainViewController: UIViewController {
         setupAppList()
         setupBanner()
         autoLayout()
-        setupTimer()
         setupCollectionView()
         print(Collection.reusePlaceWidtSize)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
+        self.setupTimer()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -81,9 +81,11 @@ class MainViewController: UIViewController {
     }
     
     func setupTimer() {
-        bannerTime = Timer.scheduledTimer(timeInterval: 2 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
-        RunLoop.current.add(bannerTime, forMode: .common)
-        // https://withthemilkyway.tistory.com/59
+        if !bannerTime.isValid {
+            bannerTime = Timer.scheduledTimer(timeInterval: 2 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+            RunLoop.current.add(bannerTime, forMode: .common)
+            // https://withthemilkyway.tistory.com/59
+        }
     }
     
     @objc func timerCounter() {
@@ -137,7 +139,6 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankIdentifier, for: indexPath) as! RankImageCellView
-//            cell.myImageView.contentMode = .scaleAspectFit
             cell.myImageView.image = bannerImageList[indexPath.item]
             cell.bannerTouchesBegan = { [weak self] in
                 guard let self = self else { return }
@@ -223,7 +224,7 @@ extension MainViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView == mainView.rankCollectionView {
-            let last = Rankbanner.image.count-2
+            let last = bannerImageList.count-2
             if scrollView.contentOffset.x == 0  {
                 mainView.rankCollectionView.scrollToItem(at: [0, last], at: .left, animated: false)
             }
