@@ -2,16 +2,16 @@ import UIKit
 
 class PopularityViewController: UIViewController {
     
-    var startSeting: Bool = false
     var mainPage: MainViewController?
-    var storyTime = Timer()
-    var pageOfNumber = 0
-    var storyDuration: TimeInterval = IndicatorInfo.duration
-    var nowCell: PopularityCellView?
-    var nextCell: PopularityCellView?
+    private var startSeting: Bool = false
+    private var storyTime = Timer()
+    private var pageOfNumber = 0
+    private var storyDuration: TimeInterval = IndicatorInfo.duration
+    private var nowCell: PopularityCellView?
+    private var nextCell: PopularityCellView?
     private var initialY: CGFloat = 0.0
     private var translationY: CGFloat = 0.0
-    // 프로필 이미지
+
     let rankCollectionView : UICollectionView = {
         
         let flowLayout = UICollectionViewFlowLayout()
@@ -51,13 +51,15 @@ class PopularityViewController: UIViewController {
         self.rankCollectionView.delegate = self
         self.rankCollectionView.register(PopularityCellView.self, forCellWithReuseIdentifier: Collection.rankStoryIdentifier)
         
+        let doubleTapper = UITapGestureRecognizer(target: self, action: #selector(doubleTap(_:)))
+        doubleTapper.numberOfTapsRequired = 2
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        self.view.addGestureRecognizer(panGesture) // 이 줄 주석 해제
+        self.view.addGestureRecognizer(doubleTapper)
+        self.view.addGestureRecognizer(panGesture)
     }
     
     func indicatorControl(_ indicator: IndicatorCircle, _ touchBool: Bool) {
         if touchBool {
-            // presentation : layer 가 그려진 정도
             guard let presentation = indicator.indicatorLayer.presentation() else { return }
             indicator.indicatorLayer.strokeEnd = presentation.strokeEnd
             indicator.indicatorLayer.removeAllAnimations()
@@ -75,6 +77,7 @@ class PopularityViewController: UIViewController {
     }
     
     func setupTimer() {
+        print(storyDuration)
         if !storyTime.isValid {
             storyTime = Timer.scheduledTimer(timeInterval: storyDuration , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: false)
         }
@@ -94,6 +97,9 @@ class PopularityViewController: UIViewController {
         }
     }
     
+    @objc func doubleTap(_ gesture: UITapGestureRecognizer) {
+        // doubletap action
+    }
     
     @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self.view)
@@ -158,7 +164,6 @@ extension PopularityViewController: UICollectionViewDelegate {
         if startSeting == true {
             self.nextCell?.indicatorCircle.indicatorLayer.removeFromSuperlayer()
             self.storyTime.invalidate()
-            self.storyDuration = IndicatorInfo.duration
         }
         startSeting = true
         
@@ -166,8 +171,8 @@ extension PopularityViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         self.setupTimer()
+        self.storyDuration = IndicatorInfo.duration
         self.nextCell?.indicatorCircle.resetTime()
-        guard let popularityCell = cell as? PopularityCellView else { return }
     }
 }
 
@@ -188,10 +193,6 @@ extension PopularityViewController: UIScrollViewDelegate {
         if pageOfNumber != intPage {
             pageOfNumber = intPage
             self.nowCell = self.nextCell
-            self.storyTime.invalidate()
-            self.storyDuration = IndicatorInfo.duration
-            self.setupTimer()
-        } else {
             self.storyTime.invalidate()
             self.storyDuration = IndicatorInfo.duration
             self.setupTimer()
