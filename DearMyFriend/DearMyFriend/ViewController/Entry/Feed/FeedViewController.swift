@@ -1,4 +1,5 @@
 import UIKit
+import Lottie
 
 class FeedViewController: UIViewController {
     
@@ -12,13 +13,22 @@ class FeedViewController: UIViewController {
     // Feed Data
     var feedDatas: [[String: FeedData]] = []
     
+    lazy var loadingView = {
+        let animeView = LottieAnimationView(name: "loading")
+        
+        animeView.contentMode = .scaleAspectFit
+        animeView.loopMode = .loop
+        animeView.animationSpeed = 1
+        animeView.play()
+        
+        return animeView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configure()
         //        subscribeFirestore()
-        //        getFirestore()
-        getFirestore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -30,6 +40,21 @@ class FeedViewController: UIViewController {
     private func configure() {
         view.backgroundColor = .white
         setupFeedTitleView()
+        
+        getFirestore() // Firestore에 있는 정보 가져와서 TableView 표시
+    }
+    
+    private func setupLoading() {
+        view.addSubview(loadingView)
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            loadingView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+            loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loadingView.widthAnchor.constraint(equalToConstant: 150),
+            loadingView.heightAnchor.constraint(equalToConstant: 150),
+        ])
     }
     
     private func setupFeedTitleView() {
@@ -49,13 +74,9 @@ class FeedViewController: UIViewController {
     
     func setupTableView(){
         feedTableView.dataSource = self
-        
         feedTableView.separatorStyle = .none // Cell 사이 줄 제거
-        
         let feedCellHeight: CGFloat = FeedView().calFeedViewHeight() + 10 // Cell의 여유분의 높이 10을 줌.
-        
         feedTableView.rowHeight = feedCellHeight
-        
         feedTableView.register(FeedTableViewCell.self, forCellReuseIdentifier: FeedTableViewCell.identifier)
         
         setTableViewConstraints()
@@ -88,41 +109,17 @@ class FeedViewController: UIViewController {
     }
     
     private func getFirestore() {
-        let postImageView: UIImageView = {
-            let imageView = UIImageView()
-            imageView.contentMode = .scaleAspectFill
-            //            imageView.image = UIImage(named: imageName)
-            
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            return imageView
-        }()
-        
-        view.addSubview(postImageView)
-        
-        NSLayoutConstraint.activate([
-            postImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            postImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            postImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            postImageView.heightAnchor.constraint(equalToConstant: 300)
-        ])
+        setupLoading()
         
         myFirestore.getFeed { feedAllData in
-//            print("feedAllData : \(feedAllData)")
-//            print("feedAllData[0] : \(feedAllData[0])")
-//            print("feedAllData[0].keys : \(feedAllData[0].keys)")
-//            print("feedAllData[0].values : \(feedAllData[0].values.count)")
-//            print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys))")
-//            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values))")
-//            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values))")
-//            print("feedAllData[0].keys : \(feedAllData[0].keys.first)")
-//            print("feedAllData[0].values : \(feedAllData[0].values.first)")
-//            print("feedAllData[0].values : \(feedAllData[0].values.first)")
-//            print("feedAllData[0].keys - type : \(type(of: feedAllData[0].keys.first))")
-//            print("feedAllData[0].values - type : \(type(of: feedAllData[0].values.first))")
-            
             self.feedDatas = feedAllData
             
-            self.setupTableView()
+            // 데이터 로딩이 완료되면 로딩 애니메이션 숨기기
+            DispatchQueue.main.asyncAfter(deadline: .now() + 30.0) {
+                self.loadingView.removeFromSuperview()
+                // 테이블 뷰 설정
+                self.setupTableView()
+            }
         }
     }
 }
@@ -143,7 +140,6 @@ extension FeedViewController: UITableViewDataSource {
         // 전체 데이터 중 순서대로 나열
         let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
         let indexData: FeedData = allData.values.first!
-//        print("indexData: \(indexData)")
         cell.cellIndex = indexPath.row
         cell.setFeed(feedData: indexData, index: indexPath.row)
         
