@@ -115,7 +115,7 @@ class FeedViewController: UIViewController {
             self.feedDatas = feedAllData
             
             // 데이터 로딩이 완료되면 로딩 애니메이션 숨기기
-            DispatchQueue.main.asyncAfter(deadline: .now() + 30.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 self.loadingView.removeFromSuperview()
                 // 테이블 뷰 설정
                 self.setupTableView()
@@ -162,5 +162,8 @@ extension FeedViewController: FeedViewDelegate {
     
     func commentButtonTapped() {
         print("commentButtonTapped")
+        let commentViewController = CommentViewController()
+        commentViewController.modalPresentationStyle = .fullScreen
+        present(commentViewController, animated: true, completion: nil)
     }
 }

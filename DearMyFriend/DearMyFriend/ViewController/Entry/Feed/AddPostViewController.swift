@@ -55,12 +55,7 @@ extension AddPostViewController: AddPostViewDelegate {
     func cancelButtonTapped() {
         dismiss(animated: true)
     }
-    //    let id: String
-    //    let image: [String]
-    //    let post: String
-    //    let like: [String]
-    //    let comment: [[String: String]]
-    
+
     func uploadButtonTapped() {
         print("_zerohyeon")
         print("selectedImages: \(selectedImages)")

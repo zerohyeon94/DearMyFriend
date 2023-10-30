@@ -66,18 +66,10 @@ class FeedTableViewCell: UITableViewCell {
     func setFeed(feedData: FeedData, index: Int) {
         print("set Feed index: \(index)")
         feedView.tableVieCellindex = index
-//        print("setFeed")
-//        print("feedData.id : \(feedData.id)")
-//        print("feedData.post : \(feedData.post)")
-//        print("feedData.image : \(feedData.image)")
         feedView.userNicknameLabel.text = feedData.id
         feedView.postTextView.text = feedData.post
-//        print("비우기 전 imageNames: \(imageNames)")
-//        imageNames = [] // 한번 비워준다면?
-//        print("비우기 후 imageNames: \(imageNames)")
         imageNames = feedData.image
-//        print("최종 imageNames: \(imageNames)")
-        
+
         // CollectionView를 다시 로드
         feedView.imageCollectionView.reloadData()
         
