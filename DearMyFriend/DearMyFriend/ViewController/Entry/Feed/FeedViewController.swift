@@ -40,7 +40,7 @@ class FeedViewController: UIViewController {
     private func configure() {
         view.backgroundColor = .white
         setupFeedTitleView()
-        
+        subscribeFirestore()
         getFirestore() // Firestore에 있는 정보 가져와서 TableView 표시
     }
     
@@ -158,6 +158,13 @@ extension FeedViewController: FeadTitleViewDelegate {
 extension FeedViewController: FeedViewDelegate {
     func likeButtonTapped() {
         print("likeButtonTapped")
+        
+        // 좋아요 버튼을 누르고 새롭게 받은 데이터를 최신화해준다.
+        myFirestore.getFeed { feedAllData in
+            FeedViewController.feedDatas = feedAllData
+            
+            self.setupTableView()
+        }
     }
     
     func commentButtonTapped() {

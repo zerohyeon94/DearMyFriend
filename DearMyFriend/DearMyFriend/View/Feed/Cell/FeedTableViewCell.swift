@@ -26,8 +26,6 @@ class FeedTableViewCell: UITableViewCell {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
 //        self.contentView.backgroundColor = .yellow
         
-        print("설정된 cell index : \(cellIndex)")
-        
         configure()
     }
     
@@ -67,6 +65,14 @@ class FeedTableViewCell: UITableViewCell {
         feedView.userNicknameLabel.text = feedData.id
         feedView.postTextView.text = feedData.post
         imageNames = feedData.image
+        
+        // 좋아요 상태 확인
+        var id: String = "_zerohyeon"
+        if feedData.like.contains(id) {
+            feedView.likeButton.isSelected = true
+        } else {
+            feedView.likeButton.isSelected = false
+        }
 
         // CollectionView를 다시 로드
         feedView.imageCollectionView.reloadData()

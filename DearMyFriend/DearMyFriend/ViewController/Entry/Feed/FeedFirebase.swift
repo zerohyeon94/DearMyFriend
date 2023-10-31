@@ -16,7 +16,7 @@ final class MyFirestore {
     
     private var documentListener: ListenerRegistration? // 데이터 변경 이벤트를 수신하기 위한 리스너의 등록과 해제를 관리하는 역할. (데이터의 실시간 업데이트)
     
-    // 해당되는 ID의 데이터를 구독 및 해당 데이터에 대한 변경 사항 실시간 모니터링
+    // 해당되는 ID의 데이터를 구독 및 해당 데이터에 대한 변경 사항 실시간 모니터링 - 아직 기능을 잘 모르겠다.
     func subscribe(collection: String, id: String, completion: @escaping (Result<[UserData], FeedFirebaseError>) -> Void) {
         let collectionPath = "\(collectionUsers)/\(id)/\(collection)"
         removeListener() // 이전에 등록된 Firestore 리스너 제거
@@ -109,10 +109,9 @@ final class MyFirestore {
                 print("Error getting documents: \(error)")
             } else {
                 let dispatchGroup = DispatchGroup() // 디스패치 그룹 생성
-                print("querySnapshot!.documents: \(querySnapshot!.documents.count)")
                 // Users에 있는 사용자들의 ID 정보 획득
                 for document in querySnapshot!.documents {
-                    print("등록된 사용자 : \(document.documentID)")
+//                    print("등록된 사용자 : \(document.documentID)")
                     dispatchGroup.enter() // 디스패치 그룹 진입 - 작업이 시작될 때마다 내부 카운터가 증가
                     
                     // 사용자 정보에 있는 게시물을 저장한다.
@@ -126,8 +125,8 @@ final class MyFirestore {
                             // 게시물을 정보를 나열한다.
                             for document in querySnapshot!.documents {
                                 
-                                print("게시물 업로드 날짜 : \(document.documentID)")
-                                print("게시물 : \(document.data())")
+//                                print("게시물 업로드 날짜 : \(document.documentID)")
+//                                print("게시물 : \(document.data())")
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
                                 dateFormatter.timeZone = TimeZone(identifier: "UTC")
@@ -156,9 +155,6 @@ final class MyFirestore {
                                     print("날짜 계산 실패")
                                     break
                                 }
-                                
-//                                print("feedUploadDate : \(feedUploadDate)")
-//                                print("fiveDaysAgo : \(fiveDaysAgo)")
                                 
                                 // 20231030 Test
                                 /*
@@ -229,7 +225,6 @@ final class MyFirestore {
                 }
             }
         }
-//        return feedAllData
     }
     
     // MARK: Update
