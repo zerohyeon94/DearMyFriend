@@ -39,6 +39,7 @@
 		52D9984E2AD6B88600679B15 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984D2AD6B88600679B15 /* MainView.swift */; };
 		52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984F2AD6BAC000679B15 /* MenuCellView.swift */; };
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
+		7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95703E2AEA452E00F657FF /* joinFirebase.swift */; };
 		EB5EDEE22AEA4030002075F9 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE12AEA4030002075F9 /* UserModel.swift */; };
 		EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */; };
 		EBD2B73E2AE221F5007FD1DA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73D2AE221F5007FD1DA /* FirebaseAnalytics */; };
@@ -95,6 +96,7 @@
 		52D9984D2AD6B88600679B15 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		52D9984F2AD6BAC000679B15 /* MenuCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellView.swift; sourceTree = "<group>"; };
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		7D95703E2AEA452E00F657FF /* joinFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = joinFirebase.swift; sourceTree = "<group>"; };
 		EB5EDEE12AEA4030002075F9 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebaseError.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 			children = (
 				52D998302AD6AB0100679B15 /* LoginViewController.swift */,
 				52D9982E2AD6AAF800679B15 /* UserInfoViewController.swift */,
+				7D95703E2AEA452E00F657FF /* joinFirebase.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 				52D9982D2AD6AAF000679B15 /* MyViewController.swift in Sources */,
 				EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */,
 				526EB6722AE263200073C77D /* RankeImageCellView.swift in Sources */,
+				7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
 				EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */,
 				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,

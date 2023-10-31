@@ -52,6 +52,7 @@ final class MyFirestore {
         }
     }
     
+    //이거 참고해서 만들면됨
     func saveUserInfo(userData: UserData, completion: ((Error?) -> Void)? = nil) {
         let collectionPath = "\(collectionUsers)/\(userData.id)/\(collectionInfo)" //Users/_zerohyeon/Info
         let collectionListener = Firestore.firestore().collection(collectionPath)
