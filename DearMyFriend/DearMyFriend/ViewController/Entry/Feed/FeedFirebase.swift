@@ -160,6 +160,8 @@ final class MyFirestore {
 //                                print("feedUploadDate : \(feedUploadDate)")
 //                                print("fiveDaysAgo : \(fiveDaysAgo)")
                                 
+                                // 20231030 Test
+                                /*
                                 // 업로드 날짜가 게시글 날짜보다 작으면 5일보다 더 과거다! 그러면 필요가 없다!
                                 if feedUploadDate < fiveDaysAgo {
                                     // 다음 항목을 가지고 온나!
@@ -167,6 +169,8 @@ final class MyFirestore {
                                 } else {
                                     // 5일 내 데이터가 없는 경우
                                 }
+                                 */
+                                
                                 // Firestore 문서의 데이터를 딕셔너리로 가져옴
                                 var userFeedId: String = ""
                                 var userFeedImage: [String] = []
@@ -230,8 +234,13 @@ final class MyFirestore {
     
     // MARK: Update
     func updateFeedLikeData(documentID: String, updateFeedData: FeedData, completion: ((Error?) -> Void)? = nil) {
+        print("updateFeedLikeData")
+        print("documentID: \(documentID)")
+        print("updateFeedData: \(updateFeedData)")
+        
         let collectionPath = "\(collectionUsers)/\(updateFeedData.id)/\(collectionFeed)" // Users/선택한 FeedData의 ID/Feeds
         let collectionListener = Firestore.firestore().collection(collectionPath)
+        print("collectionListener: \(collectionListener)")
         
         guard let dictionary = updateFeedData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 있는 dictionary
             print("decode error")

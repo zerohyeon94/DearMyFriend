@@ -14,7 +14,7 @@ protocol FeedViewDelegate: AnyObject {
 class FeedView: UIView {
     // MARK: Properties
     var delegate: FeedViewDelegate?
-    var tableVieCellindex: Int = 0
+    var tableViewCellindex: Int = 0
     // ImageView
     let profileImageFrame: CGFloat = 40
     // Label
@@ -354,7 +354,43 @@ class FeedView: UIView {
         let resizedImage = resizeUIImage(imageName: isLikeButtonSelected ? likeFillButtonImage : likeButtonImage, heightSize: buttonSize)
         likeButton.setImage(resizedImage, for: .selected)
         
-        print("cell Index : \(tableVieCellindex)")
+        // index값을 얻어왔으니까, Feed 정보 중 몇번째인지 확인.
+        print("cell Index : \(tableViewCellindex)")
+        
+        // 현재 Feed에 가져온 정보 확인.
+        var feedCellIndex: Int = tableViewCellindex
+        var feedDataKey: String // 업로드된 시간 -> Feed 내 Document ID
+        if let firstKey = FeedViewController.feedDatas[tableViewCellindex].keys.first {
+            feedDataKey = firstKey
+        } else {
+            // 값이 없는 경우에 대한 처리
+            feedDataKey = "" // 또는 다른 기본값
+        }
+        var feedDataValue: FeedData // 위의 Document ID 내 필드값.
+        if let feedData = FeedViewController.feedDatas[tableViewCellindex].values.first {
+            feedDataValue = feedData
+        } else {
+            // 값이 없는 경우에 대한 처리
+            feedDataValue = FeedData(id: "", image: [""], post: "", like: [""], comment: [[:]])
+        }
+        
+        // TEST: 현재 로그인 되어있는 ID userDefault로 가져오기 임시로 아이디 사용.
+        var id: String = "_zerohyeon"
+        
+        print("feedData 상태 업데이트 전 : \(feedDataValue)")
+        
+        if feedDataValue.like.contains(id) {
+            if let index = feedDataValue.like.firstIndex(of: id) {
+                print("index: \(index)")
+                feedDataValue.like.remove(at: index)
+            }
+        } else {
+            feedDataValue.like.append(id)
+        }
+        
+        print("feedData 상태 업데이트 후 : \(feedDataValue)")
+        
+        MyFirestore().updateFeedLikeData(documentID: feedDataKey, updateFeedData: feedDataValue)
         
         delegate?.likeButtonTapped()
     }

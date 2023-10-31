@@ -11,7 +11,7 @@ class FeedViewController: UIViewController {
     // TableView
     private let feedTableView = UITableView()
     // Feed Data
-    var feedDatas: [[String: FeedData]] = []
+    static var feedDatas: [[String: FeedData]] = []
     
     lazy var loadingView = {
         let animeView = LottieAnimationView(name: "loading")
@@ -112,10 +112,11 @@ class FeedViewController: UIViewController {
         setupLoading()
         
         myFirestore.getFeed { feedAllData in
-            self.feedDatas = feedAllData
+            FeedViewController.feedDatas = feedAllData
             
             // 데이터 로딩이 완료되면 로딩 애니메이션 숨기기
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                
                 self.loadingView.removeFromSuperview()
                 // 테이블 뷰 설정
                 self.setupTableView()
@@ -127,7 +128,7 @@ class FeedViewController: UIViewController {
 extension FeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return feedDatas.count // 추후 받아오는 데이터 정보에 따라 표시되는 수 설정
+        return FeedViewController.feedDatas.count // 추후 받아오는 데이터 정보에 따라 표시되는 수 설정
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -136,9 +137,8 @@ extension FeedViewController: UITableViewDataSource {
         
         cell.feedView.delegate = self
         
-        print("tableViewCell의 indexPath.row : \(indexPath.row)")
         // 전체 데이터 중 순서대로 나열
-        let allData: [String: FeedData] = feedDatas[indexPath.row] // 형태 [String: FeedData]
+        let allData: [String: FeedData] = FeedViewController.feedDatas[indexPath.row] // 형태 [String: FeedData]
         let indexData: FeedData = allData.values.first!
         cell.cellIndex = indexPath.row
         cell.setFeed(feedData: indexData, index: indexPath.row)

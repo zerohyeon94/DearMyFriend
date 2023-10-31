@@ -17,7 +17,6 @@ class FeedTableViewCell: UITableViewCell {
     var imageNames: [String] = []
     
     private func setupCollectionView() {
-        print("setupCollectionView")
         feedView.imageCollectionView.delegate = self
         feedView.imageCollectionView.dataSource = self
     }
@@ -51,7 +50,7 @@ class FeedTableViewCell: UITableViewCell {
     private func setUI(){
         self.contentView.addSubview(feedView)
         feedView.translatesAutoresizingMaskIntoConstraints = false
-        feedView.tableVieCellindex = cellIndex
+        feedView.tableViewCellindex = cellIndex
     }
     
     private func setConstraint() {
@@ -64,8 +63,7 @@ class FeedTableViewCell: UITableViewCell {
     }
     
     func setFeed(feedData: FeedData, index: Int) {
-        print("set Feed index: \(index)")
-        feedView.tableVieCellindex = index
+        feedView.tableViewCellindex = index
         feedView.userNicknameLabel.text = feedData.id
         feedView.postTextView.text = feedData.post
         imageNames = feedData.image
