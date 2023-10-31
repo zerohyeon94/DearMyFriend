@@ -1,14 +1,14 @@
-//
-//  PopularityCellView.swift
-//  DearMyFriend
-//
-//  Created by Macbook on 10/24/23.
-//
-
 import UIKit
 
 class PopularityCellView: UICollectionViewCell {
-
+    
+    var petPhotoImage: String? {
+        didSet{
+            guard let petPhotoImage = petPhotoImage else { return }
+            findAverageColor(petPhotoImage)
+        }
+    }
+    
     var toucheOfImage: (PopularityCellView)->() = { PopularityCellView in }
     
     // 사진
@@ -16,7 +16,6 @@ class PopularityCellView: UICollectionViewCell {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFit
-        image.backgroundColor = .systemOrange
         image.clipsToBounds = true
         image.layer.cornerRadius = 20
         return image
@@ -123,4 +122,14 @@ class PopularityCellView: UICollectionViewCell {
         self.toucheOfImage(self)
     }
     
+    func findAverageColor(_ imageUrl: String) {
+        let petImage = UIImage(named: imageUrl)
+        DispatchQueue.global().async {
+            let averageColor = petImage?.findAverageColor() ?? UIColor.black
+            DispatchQueue.main.async {
+                self.petPhoto.backgroundColor = averageColor
+                self.petPhoto.image = petImage
+            }
+        }
+    }
 }

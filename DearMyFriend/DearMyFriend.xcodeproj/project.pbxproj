@@ -52,7 +52,6 @@
 		EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */; };
 		EBD2B7422AE221F5007FD1DA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7412AE221F5007FD1DA /* FirebaseFirestoreSwift */; };
 		EBD2B7442AE221F5007FD1DA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7432AE221F5007FD1DA /* FirebaseStorage */; };
-		EBD2B7472AE2220A007FD1DA /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7462AE2220A007FD1DA /* NMapsMap */; };
 		EBD2B74A2AE2221B007FD1DA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7492AE2221B007FD1DA /* Lottie */; };
 		EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74C2AE22232007FD1DA /* Moya */; };
 		EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74F2AE22241007FD1DA /* SnapKit */; };
@@ -65,10 +64,13 @@
 		EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7612AE2410F007FD1DA /* AddPostView.swift */; };
 		EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */; };
 		EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */; };
+		EF93D8E598A9724059E59C52 /* libPods-DearMyFriend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F70DC412C4BA07AE6693545 /* libPods-DearMyFriend.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1FBA09912AE6732700A3B42C /* YouTubeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeTableViewCell.swift; sourceTree = "<group>"; };
+		211A4D9FC879324F15DA3B42 /* Pods-DearMyFriend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.debug.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.debug.xcconfig"; sourceTree = "<group>"; };
+		2F70DC412C4BA07AE6693545 /* libPods-DearMyFriend.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DearMyFriend.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAPIManager.swift; sourceTree = "<group>"; };
 		4E275AB12AE27D39005146AA /* NaverSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchService.swift; sourceTree = "<group>"; };
 		5258C2622AE6334600E9FC2B /* ReuseCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseCollectionView.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorCircle.swift; sourceTree = "<group>"; };
 		52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularityCellView.swift; sourceTree = "<group>"; };
+		5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.release.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.release.xcconfig"; sourceTree = "<group>"; };
 		EB5EDEE12AEA4030002075F9 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		EB5EDEE32AEF3C9C002075F9 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		EB5EDEE52AEF484D002075F9 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
@@ -130,17 +133,26 @@
 				EBD2B73E2AE221F5007FD1DA /* FirebaseAnalytics in Frameworks */,
 				EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */,
 				EBD2B7442AE221F5007FD1DA /* FirebaseStorage in Frameworks */,
-				EBD2B7472AE2220A007FD1DA /* NMapsMap in Frameworks */,
 				EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */,
 				EBD2B7422AE221F5007FD1DA /* FirebaseFirestoreSwift in Frameworks */,
 				EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */,
 				EBD2B74A2AE2221B007FD1DA /* Lottie in Frameworks */,
+				EF93D8E598A9724059E59C52 /* libPods-DearMyFriend.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		45FC0727E4D5C86D8C9B1A96 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				211A4D9FC879324F15DA3B42 /* Pods-DearMyFriend.debug.xcconfig */,
+				5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		5258C2642AE6488700E9FC2B /* Font */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,6 +190,8 @@
 			children = (
 				52D998152AD6A89600679B15 /* DearMyFriend */,
 				52D998142AD6A89600679B15 /* Products */,
+				45FC0727E4D5C86D8C9B1A96 /* Pods */,
+				BB298B00E51DBA2F5AA209DA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -300,6 +314,14 @@
 			path = PopularityView;
 			sourceTree = "<group>";
 		};
+		BB298B00E51DBA2F5AA209DA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2F70DC412C4BA07AE6693545 /* libPods-DearMyFriend.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EB5EDEE02AEA4013002075F9 /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -366,9 +388,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 52D998272AD6A89700679B15 /* Build configuration list for PBXNativeTarget "DearMyFriend" */;
 			buildPhases = (
+				8E3F3F097D45B93EB82CCBD9 /* [CP] Check Pods Manifest.lock */,
 				52D9980F2AD6A89600679B15 /* Sources */,
 				52D998102AD6A89600679B15 /* Frameworks */,
 				52D998112AD6A89600679B15 /* Resources */,
+				39C293B31037453A7F2600D5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -380,7 +404,6 @@
 				EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */,
 				EBD2B7412AE221F5007FD1DA /* FirebaseFirestoreSwift */,
 				EBD2B7432AE221F5007FD1DA /* FirebaseStorage */,
-				EBD2B7462AE2220A007FD1DA /* NMapsMap */,
 				EBD2B7492AE2221B007FD1DA /* Lottie */,
 				EBD2B74C2AE22232007FD1DA /* Moya */,
 				EBD2B74F2AE22241007FD1DA /* SnapKit */,
@@ -415,7 +438,6 @@
 			mainGroup = 52D9980A2AD6A89600679B15;
 			packageReferences = (
 				EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */,
 				EBD2B7482AE2221B007FD1DA /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				EBD2B74B2AE22232007FD1DA /* XCRemoteSwiftPackageReference "Moya" */,
 				EBD2B74E2AE22241007FD1DA /* XCRemoteSwiftPackageReference "SnapKit" */,
@@ -446,6 +468,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		39C293B31037453A7F2600D5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8E3F3F097D45B93EB82CCBD9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DearMyFriend-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		52D9980F2AD6A89600679B15 /* Sources */ = {
@@ -548,7 +612,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -563,7 +627,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -611,7 +675,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -620,7 +684,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -632,6 +696,7 @@
 		};
 		52D998282AD6A89700679B15 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 211A4D9FC879324F15DA3B42 /* Pods-DearMyFriend.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -663,6 +728,7 @@
 		};
 		52D998292AD6A89700679B15 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -724,14 +790,6 @@
 				minimumVersion = 10.0.0;
 			};
 		};
-		EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jaemyeong/NMapsMap.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 		EBD2B7482AE2221B007FD1DA /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -778,11 +836,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
-		};
-		EBD2B7462AE2220A007FD1DA /* NMapsMap */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */;
-			productName = NMapsMap;
 		};
 		EBD2B7492AE2221B007FD1DA /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
