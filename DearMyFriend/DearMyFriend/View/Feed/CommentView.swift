@@ -52,6 +52,8 @@ class CommentView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -73,16 +75,18 @@ class CommentView: UIView {
     
     private func setConstraint() {
         setProfileImageViewConstraint()
+        setProfileLabelConstraint()
+        setCommentLabelConstraint()
     }
     
     // MARK: - Constant
     // Profile Image
-    let profileHeight: CGFloat = 60
-    let profileWidth: CGFloat = 60
+    let profileHeight: CGFloat = 30
+    let profileWidth: CGFloat = 30
     // Profile Label
     let profileLeadingConstant: CGFloat = 10
     // Comment Label
-    let commentHeight: CGFloat = 60
+    let commentHeight: CGFloat = 30
     
     private func setProfileImageViewConstraint() {
         NSLayoutConstraint.activate([

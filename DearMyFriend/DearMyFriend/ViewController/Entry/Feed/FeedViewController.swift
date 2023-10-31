@@ -167,9 +167,10 @@ extension FeedViewController: FeedViewDelegate {
         }
     }
     
-    func commentButtonTapped() {
-        print("commentButtonTapped")
-        let commentViewController = CommentViewController()
+    func commentButtonTapped(index: Int) {
+        print("commentButtonTapped : \(index)")
+        
+        let commentViewController = CommentViewController(index: index)
         commentViewController.modalPresentationStyle = .fullScreen
         present(commentViewController, animated: true, completion: nil)
     }

@@ -6,6 +6,7 @@ class CommentTableViewCell: UITableViewCell {
     static let identifier = "CommentTableViewCell"
     
     let commentView: CommentView = .init(frame: .zero)
+    let topSpaceConstant: CGFloat = 5
     let sideSpaceConstant: CGFloat = 16
     
     // MARK: Initalizers
@@ -38,10 +39,16 @@ class CommentTableViewCell: UITableViewCell {
     
     private func setConstraint() {
         NSLayoutConstraint.activate([
-            commentView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+            commentView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topSpaceConstant),
             commentView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: sideSpaceConstant),
             commentView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -sideSpaceConstant),
             commentView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
         ])
+    }
+    
+    func setComment(comment: [String: String]) {
+        commentView.profileImageView.image = UIImage(named: "spider1")
+        commentView.profileLabel.text = comment.keys.first
+        commentView.commentLabel.text = comment.values.first
     }
 }

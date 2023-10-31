@@ -8,7 +8,7 @@ import UIKit
 
 protocol FeedViewDelegate: AnyObject {
     func likeButtonTapped()
-    func commentButtonTapped()
+    func commentButtonTapped(index: Int)
 }
 
 class FeedView: UIView {
@@ -397,7 +397,10 @@ class FeedView: UIView {
     
     @objc private func commentButtonTapped(){
         print("comment 클릭")
-        delegate?.commentButtonTapped()
+        
+        print("cell Index : \(tableViewCellindex)")
+        
+        delegate?.commentButtonTapped(index: tableViewCellindex)
     }
     
     // MARK: - Helper
