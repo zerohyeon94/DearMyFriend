@@ -77,7 +77,6 @@ class PopularityViewController: UIViewController {
     }
     
     func setupTimer() {
-        print(storyDuration)
         if !storyTime.isValid {
             storyTime = Timer.scheduledTimer(timeInterval: storyDuration , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: false)
         }
@@ -149,7 +148,7 @@ extension PopularityViewController: UICollectionViewDataSource {
         cell.toucheOfImage = { [weak self] (senderCell) in
             self?.indicatorControl(senderCell.indicatorCircle, PopularityTouch.touch)
         }
-        cell.petPhoto.image = Rankbanner.image[indexPath.item]
+        cell.petPhotoImage = Rankbanner.testImage[indexPath.item]
         return cell
     }
     
