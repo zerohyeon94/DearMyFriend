@@ -63,10 +63,15 @@ struct MenuTest {
 
 struct Rankbanner {
     static var image = [UIImage(named: "banner_01"),
-                        UIImage(named: "four"),
-                        UIImage(named: "banner_03"),
                         UIImage(named: "banner_02"),
+                        UIImage(named: "banner_03"),
+                        UIImage(named: "four"),
                         UIImage(named: "five")]
-    static let imageNum = CGFloat(image.count)
+    
+    static var testImage = ["one",
+                        "two",
+                        "three",
+                        "four",
+                        "five"]
 }
 
