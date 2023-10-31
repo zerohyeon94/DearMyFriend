@@ -22,13 +22,10 @@ class ReuseCollectionView: UIView {
         
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = Collection.reuseSpacing
-        flowLayout.minimumInteritemSpacing = Collection.reuseSpacing
 
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
-        collection.backgroundColor = .clear
-
         return collection
     }()
 
