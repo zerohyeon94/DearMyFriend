@@ -5,7 +5,7 @@ import Moya
 import SnapKit
 
 class MapViewController: UIViewController {
-//
+
 //    var locationManager = CLLocationManager()
 //    var naverMapView: NMFNaverMapView?
 //    let geocoder = CLGeocoder()
