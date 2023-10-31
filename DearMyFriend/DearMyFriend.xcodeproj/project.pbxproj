@@ -47,7 +47,6 @@
 		EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */; };
 		EBD2B7422AE221F5007FD1DA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7412AE221F5007FD1DA /* FirebaseFirestoreSwift */; };
 		EBD2B7442AE221F5007FD1DA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7432AE221F5007FD1DA /* FirebaseStorage */; };
-		EBD2B7472AE2220A007FD1DA /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7462AE2220A007FD1DA /* NMapsMap */; };
 		EBD2B74A2AE2221B007FD1DA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B7492AE2221B007FD1DA /* Lottie */; };
 		EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74C2AE22232007FD1DA /* Moya */; };
 		EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B74F2AE22241007FD1DA /* SnapKit */; };
@@ -120,7 +119,6 @@
 				EBD2B73E2AE221F5007FD1DA /* FirebaseAnalytics in Frameworks */,
 				EBD2B7502AE22241007FD1DA /* SnapKit in Frameworks */,
 				EBD2B7442AE221F5007FD1DA /* FirebaseStorage in Frameworks */,
-				EBD2B7472AE2220A007FD1DA /* NMapsMap in Frameworks */,
 				EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */,
 				EBD2B7422AE221F5007FD1DA /* FirebaseFirestoreSwift in Frameworks */,
 				EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */,
@@ -289,14 +287,14 @@
 			path = PopularityView;
 			sourceTree = "<group>";
 		};
-        EB5EDEE02AEA4013002075F9 /* User */ = {
-            isa = PBXGroup;
-            children = (
-                EB5EDEE12AEA4030002075F9 /* UserModel.swift */,
-            );
-            path = User;
-            sourceTree = "<group>";
-        };
+		EB5EDEE02AEA4013002075F9 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				EB5EDEE12AEA4030002075F9 /* UserModel.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		EBD2B7382AE21C4A007FD1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,7 +355,6 @@
 				EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */,
 				EBD2B7412AE221F5007FD1DA /* FirebaseFirestoreSwift */,
 				EBD2B7432AE221F5007FD1DA /* FirebaseStorage */,
-				EBD2B7462AE2220A007FD1DA /* NMapsMap */,
 				EBD2B7492AE2221B007FD1DA /* Lottie */,
 				EBD2B74C2AE22232007FD1DA /* Moya */,
 				EBD2B74F2AE22241007FD1DA /* SnapKit */,
@@ -392,7 +389,6 @@
 			mainGroup = 52D9980A2AD6A89600679B15;
 			packageReferences = (
 				EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */,
 				EBD2B7482AE2221B007FD1DA /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				EBD2B74B2AE22232007FD1DA /* XCRemoteSwiftPackageReference "Moya" */,
 				EBD2B74E2AE22241007FD1DA /* XCRemoteSwiftPackageReference "SnapKit" */,
@@ -535,7 +531,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -592,7 +588,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -616,7 +612,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -647,7 +643,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -696,14 +692,6 @@
 				minimumVersion = 10.0.0;
 			};
 		};
-		EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jaemyeong/NMapsMap.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
 		EBD2B7482AE2221B007FD1DA /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -750,11 +738,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
-		};
-		EBD2B7462AE2220A007FD1DA /* NMapsMap */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EBD2B7452AE2220A007FD1DA /* XCRemoteSwiftPackageReference "NMapsMap" */;
-			productName = NMapsMap;
 		};
 		EBD2B7492AE2221B007FD1DA /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;

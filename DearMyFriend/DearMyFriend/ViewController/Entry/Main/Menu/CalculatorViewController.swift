@@ -13,7 +13,7 @@ enum 고양이상태 {
     case 활동량많은고양이
     case 노묘
     case 비만고양이
-
+    
     var 가중치: Double {
         switch self {
         case .Select:
@@ -44,7 +44,7 @@ enum 고양이사료종류 {
     case 건강백서_기능성
     case 힐스_어덜트웨이트
     case 퓨리나_성묘용
-
+    
     var 사료: Double {
         switch self {
         case .Select:
@@ -74,25 +74,25 @@ class CalculatorViewController: UIViewController {
         side.layer.backgroundColor = UIColor(named: "side")?.cgColor
         return side
     }()
-
+    
     private let rightSide = {
         let side = UIView()
         side.frame = CGRect(x: 0, y: 0, width: 20, height: 908)
         side.layer.backgroundColor = UIColor(named: "side")?.cgColor
         return side
     }()
-
+    
     private let pageName = {
         let label = UILabel()
-
+        
         label.text = "사료 급여량 계산기"
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = UIColor(named: "maintext")
         label.textAlignment = .left
-
+        
         return label
     }()
-
+    
     private let selectLabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "maintext")
@@ -100,7 +100,7 @@ class CalculatorViewController: UIViewController {
         label.text = "반려동물 선택"
         return label
     }()
-
+    
     private let 고양이버튼 = {
         let button = UIButton()
         button.setImage(UIImage(named: "caton"), for: .selected)
@@ -113,19 +113,36 @@ class CalculatorViewController: UIViewController {
         button.isSelected = true
         return button
     }()
-
+    
     private var checking = {
         let animeView = LottieAnimationView(name: "checking")
         animeView.contentMode = .scaleAspectFit
         animeView.loopMode = .playOnce
         animeView.animationSpeed = 5
         return animeView
-
+        
     }()
-
-    private let 고양이사료선택 = {
+    
+    //    private let 고양이사료선택 = {
+    //        let textField = UITextField()
+    //        textField.placeholder = "----- 사료 선택 -----"
+    //        textField.contentVerticalAlignment = .center
+    //        textField.layer.masksToBounds = true
+    //        textField.layer.cornerRadius = 10
+    //        textField.textColor = UIColor(named: "maintext")
+    //        textField.font = UIFont.boldSystemFont(ofSize: 18)
+    //        textField.textAlignment = .center
+    //        textField.layer.borderColor = UIColor(named: "border")?.cgColor
+    //        textField.layer.borderWidth = 2.0
+    //        textField.tintColor = .clear
+    //        textField.isUserInteractionEnabled = true
+    //
+    //        return textField
+    //    }()
+    
+    private let 칼로리 = {
         let textField = UITextField()
-        textField.placeholder = "----- 사료 선택 -----"
+        textField.placeholder = "사료10g당 Kcal"
         textField.contentVerticalAlignment = .center
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 10
@@ -134,11 +151,11 @@ class CalculatorViewController: UIViewController {
         textField.textAlignment = .center
         textField.layer.borderColor = UIColor(named: "border")?.cgColor
         textField.layer.borderWidth = 2.0
-        textField.tintColor = .clear
-        textField.isUserInteractionEnabled = true
-
+        textField.tintColor = .magenta
+        
         return textField
-    }()
+    } ()
+    
     
     private let targetAnimal = {
         let label = UILabel()
@@ -147,7 +164,7 @@ class CalculatorViewController: UIViewController {
         label.text = "반려동물 정보"
         return label
     }()
-
+    
     private let 고양이상태선택 = {
         let textField = UITextField()
         textField.placeholder = "----- 상태 선택 -----"
@@ -161,14 +178,14 @@ class CalculatorViewController: UIViewController {
         textField.layer.borderWidth = 2.0
         textField.tintColor = .clear
         textField.isUserInteractionEnabled = true
-
+        
         return textField
     }()
-
+    
     private let 몸무게입력: UITextField = {
         let textField = UITextField()
         textField.placeholder = "몸무게(kg)를 입력해주세요."
-
+        
         textField.contentVerticalAlignment = .center
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 10
@@ -178,13 +195,13 @@ class CalculatorViewController: UIViewController {
         textField.layer.borderColor = UIColor(named: "border")?.cgColor
         textField.layer.borderWidth = 2.0
         textField.tintColor = .magenta
-        textField.clearButtonMode = .whileEditing
-        textField.clearsOnBeginEditing = true
+//        textField.clearButtonMode = .whileEditing
+        textField.clearsOnBeginEditing = false
         textField.isUserInteractionEnabled = true
-
+        
         return textField
     }()
-
+    
     private let 계산버튼 = {
         let button = UIButton()
         button.setTitle("계산하기", for: .normal)
@@ -195,10 +212,10 @@ class CalculatorViewController: UIViewController {
         button.layer.borderWidth = 2
         button.backgroundColor = UIColor.clear
         button.isSelected = false
-
+        
         return button
     }()
-
+    
     private var result = {
         let label = UILabel()
         label.text = ""
@@ -208,7 +225,7 @@ class CalculatorViewController: UIViewController {
         label.textAlignment = .left
         return label
     }()
-
+    
     private var warnning = {
         let label = UILabel()
         label.text = ""
@@ -218,7 +235,7 @@ class CalculatorViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -231,19 +248,19 @@ class CalculatorViewController: UIViewController {
         statePickerView.dataSource = self
         사료PickerView.delegate = self
         사료PickerView.dataSource = self
-
+        
         고양이상태선택.delegate = self
         고양이상태선택.inputView = statePickerView
-
-        고양이사료선택.delegate = self
-        고양이사료선택.inputView = 사료PickerView
-
+        
+        //        고양이사료선택.delegate = self
+        //        고양이사료선택.inputView = 사료PickerView
+        
         유아이레이아웃()
         계산기화면레이아웃()
         몸무게입력.delegate = self
         clickEvent()
     }
-
+    
     func 유아이레이아웃() {
         for 유아이 in [leftSide, rightSide, pageName, selectLabel, targetAnimal, 고양이버튼, 몸무게입력] {
             view.addSubview(유아이)
@@ -279,7 +296,7 @@ class CalculatorViewController: UIViewController {
             make.top.equalTo(selectLabel.snp.bottom).offset(200)
             make.leading.equalToSuperview().offset(80)
         }
-
+        
         고양이버튼.snp.makeConstraints { make in
             make.top.equalTo(selectLabel).offset(40)
             make.width.equalTo(130)
@@ -287,9 +304,9 @@ class CalculatorViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
     }
-
+    
     func 계산기화면레이아웃() {
-        for 계산기유아이 in [고양이상태선택, 고양이사료선택, 몸무게입력, 계산버튼, result, warnning] {
+        for 계산기유아이 in [고양이상태선택, 칼로리, 몸무게입력, 계산버튼, result, warnning] {
             view.addSubview(계산기유아이)
         }
         고양이상태선택.snp.makeConstraints { make in
@@ -298,7 +315,7 @@ class CalculatorViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.top.equalTo(targetAnimal.snp.bottom).offset(5)
         }
-        고양이사료선택.snp.makeConstraints { make in
+        칼로리.snp.makeConstraints { make in
             make.width.equalTo(220)
             make.height.equalTo(35)
             make.centerX.equalToSuperview()
@@ -308,7 +325,7 @@ class CalculatorViewController: UIViewController {
             make.width.equalTo(220)
             make.height.equalTo(35)
             make.centerX.equalToSuperview()
-            make.top.equalTo(고양이사료선택.snp.bottom).offset(17)
+            make.top.equalTo(칼로리.snp.bottom).offset(17)
         }
         계산버튼.snp.makeConstraints { make in
             make.width.equalTo(220)
@@ -329,7 +346,7 @@ class CalculatorViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
     }
-
+    
     @objc func 고양이버튼클릭() {
         if !고양이버튼.subviews.contains(checking) {
             고양이버튼.addSubview(checking)
@@ -347,39 +364,40 @@ class CalculatorViewController: UIViewController {
             targetAnimal.text = "반려동물 & 사료 정보"
         }
     }
-
+    
     func calculateFoodAmount(몸무게: String, 상태: 고양이상태, 사료: 고양이사료종류) -> String {
         guard let weightDouble = Double(몸무게) else {
             return "올바른 몸무게를 입력해주세요."
         }
-
+        
         let 기초대사량 = 30 * weightDouble + 70
-
+        
         let 일일_권장_칼로리 = 기초대사량 * 상태.가중치
+        
+        //        let 사료10g당칼로리 = 사료.사료
+        let 사료10g당칼로리String = 칼로리.text ?? ""
+        let 사료10g당칼로리 = Double(사료10g당칼로리String) ?? 0.0
 
-        let 사료10g당칼로리 = 사료.사료
-
+        
         let 급여량 = 일일_권장_칼로리 / 사료10g당칼로리 * 10
-
         let resultInfo = """
         기초 대사량 : \(round(기초대사량 * 10) / 10) Kcal(칼로리)
         권장 칼로리 : \(round(일일_권장_칼로리 * 10) / 10) kcal(칼로리)
-        선택된 사료 : \(사료) 사료 정보 - 10g 당 \(사료.사료) Kcal(칼로리)
+        10g/칼로리 : \(사료10g당칼로리) Kcal(칼로리)
         사료 급여량 : \(round(급여량 * 10) / 10) g(그람)
         """
-
         return resultInfo
     }
-
+    
     @objc func 계산버튼클릭() {
         print("계산중")
         계산버튼.isSelected = true
         let resultInfo = calculateFoodAmount(몸무게: 몸무게입력.text ?? "", 상태: 상태선택, 사료: 사료선택)
         result.text = "\(resultInfo)"
-
+        
         계산버튼.isSelected = false
     }
-
+    
     func clickEvent() {
         고양이버튼.addTarget(self, action: #selector(고양이버튼클릭), for: .touchUpInside)
         계산버튼.addTarget(self, action: #selector(계산버튼클릭), for: .touchUpInside)
@@ -388,33 +406,52 @@ class CalculatorViewController: UIViewController {
 
 extension CalculatorViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let allowedCharacters = CharacterSet.decimalDigits
-        let characterSet = CharacterSet(charactersIn: string)
-        let maximumtextLengthInTextField = (textField.text?.count ?? 0) + string.count - range.length
-
-        return allowedCharacters.isSuperset(of: characterSet) && maximumtextLengthInTextField <= 3
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == 고양이상태선택 {
-            showPickerView(pickerView: statePickerView, textField: 고양이상태선택)
-        } else if textField == 고양이사료선택 {
-            showPickerView(pickerView: 사료PickerView, textField: 고양이사료선택)
+        //        let allowedCharacters = CharacterSet.decimalDigits
+        //        let characterSet = CharacterSet(charactersIn: string)
+        //        let maximumtextLengthInTextField = (textField.text?.count ?? 0) + string.count - range.length
+        //
+        //        return allowedCharacters.isSuperset(of: characterSet) && maximumtextLengthInTextField <= 3
+        if textField == 칼로리 && textField == 몸무게입력 {
+            // 입력된 문자열이 유효한 double 값인지 확인
+            let isNumeric = string.isEmpty || (string.rangeOfCharacter(from: CharacterSet(charactersIn: "0123456789.").inverted) == nil)
+            
+            // 결과 텍스트가 유효한 double인지 확인
+            let newText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string)
+            let isDouble = Double(newText ?? "") != nil
+            
+            return isNumeric && isDouble
         }
+                else {
+                    // 다른 텍스트 필드의 경우 소수점 자릿수를 제한하여 숫자만 입력
+                    let allowedCharacters = CharacterSet.decimalDigits
+                    let characterSet = CharacterSet(charactersIn: string)
+                    let maximumtextLengthInTextField = (textField.text?.count ?? 0) + string.count - range.length
+        
+                    return allowedCharacters.isSuperset(of: characterSet) && maximumtextLengthInTextField <= 3
+                }
     }
 
-    private func showPickerView(pickerView: UIPickerView, textField: UITextField) {
-        pickerView.delegate = self
-        pickerView.dataSource = self
-        textField.inputView = pickerView
+func textFieldDidBeginEditing(_ textField: UITextField) {
+    if textField == 고양이상태선택 {
+        showPickerView(pickerView: statePickerView, textField: 고양이상태선택)
     }
+    //        else if textField == 고양이사료선택 {
+    //            showPickerView(pickerView: 사료PickerView, textField: 고양이사료선택)
+    //        }
+}
+
+private func showPickerView(pickerView: UIPickerView, textField: UITextField) {
+    pickerView.delegate = self
+    pickerView.dataSource = self
+    textField.inputView = pickerView
+}
 }
 
 extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView == statePickerView {
             return 고양이상태목록.count
@@ -423,7 +460,7 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
         }
         return 0
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView == statePickerView {
             return "\(고양이상태목록[row])"
@@ -432,17 +469,18 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
         }
         return nil
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView == statePickerView {
             상태선택 = 고양이상태목록[row]
             고양이상태선택.text = "\(상태선택)"
-        } else if pickerView == 사료PickerView {
-            사료선택 = 고양이사료목록[row]
-            고양이사료선택.text = "\(사료선택)"
         }
+        //        else if pickerView == 사료PickerView {
+        //            사료선택 = 고양이사료목록[row]
+        //            고양이사료선택.text = "\(사료선택)"
+        //        }
         고양이상태선택.resignFirstResponder()
-        고양이사료선택.resignFirstResponder()
+        //        고양이사료선택.resignFirstResponder()
     }
     
 }
