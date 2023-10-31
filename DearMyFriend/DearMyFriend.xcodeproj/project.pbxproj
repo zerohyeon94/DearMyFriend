@@ -46,6 +46,7 @@
 		EB5EDEE62AEF484D002075F9 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE52AEF484D002075F9 /* CommentTableViewCell.swift */; };
 		EB5EDEE82AEF4EA7002075F9 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE72AEF4EA7002075F9 /* CommentViewController.swift */; };
 		EB5EDEEA2AEF4FBF002075F9 /* CommentTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE92AEF4FBF002075F9 /* CommentTitleView.swift */; };
+		EB5EDEED2AF10277002075F9 /* CommentInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEEC2AF10277002075F9 /* CommentInputView.swift */; };
 		EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */; };
 		EBD2B73E2AE221F5007FD1DA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73D2AE221F5007FD1DA /* FirebaseAnalytics */; };
 		EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = EBD2B73F2AE221F5007FD1DA /* FirebaseFirestore */; };
@@ -108,6 +109,7 @@
 		EB5EDEE52AEF484D002075F9 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		EB5EDEE72AEF4EA7002075F9 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		EB5EDEE92AEF4FBF002075F9 /* CommentTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTitleView.swift; sourceTree = "<group>"; };
+		EB5EDEEC2AF10277002075F9 /* CommentInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputView.swift; sourceTree = "<group>"; };
 		EBD2B73A2AE21C61007FD1DA /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		EBD2B7512AE2235C007FD1DA /* FeedFirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebaseError.swift; sourceTree = "<group>"; };
 		EBD2B7532AE23FC3007FD1DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -306,6 +308,16 @@
 			path = User;
 			sourceTree = "<group>";
 		};
+		EB5EDEEB2AF1024F002075F9 /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				EB5EDEE32AEF3C9C002075F9 /* CommentView.swift */,
+				EB5EDEE92AEF4FBF002075F9 /* CommentTitleView.swift */,
+				EB5EDEEC2AF10277002075F9 /* CommentInputView.swift */,
+			);
+			path = Comment;
+			sourceTree = "<group>";
+		};
 		EBD2B7382AE21C4A007FD1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -332,8 +344,7 @@
 				EBD2B75D2AE240D1007FD1DA /* FeedTitleView.swift */,
 				EBD2B75F2AE240FA007FD1DA /* FeedView.swift */,
 				EBD2B7612AE2410F007FD1DA /* AddPostView.swift */,
-				EB5EDEE32AEF3C9C002075F9 /* CommentView.swift */,
-				EB5EDEE92AEF4FBF002075F9 /* CommentTitleView.swift */,
+				EB5EDEEB2AF1024F002075F9 /* Comment */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -478,6 +489,7 @@
 				52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */,
 				5258C2632AE6334600E9FC2B /* ReuseCollectionView.swift in Sources */,
 				EB5EDEE62AEF484D002075F9 /* CommentTableViewCell.swift in Sources */,
+				EB5EDEED2AF10277002075F9 /* CommentInputView.swift in Sources */,
 				EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */,
 				52D9983D2AD6ABA700679B15 /* WishViewController.swift in Sources */,
 				52D998372AD6AB2900679B15 /* MainViewController.swift in Sources */,
