@@ -61,7 +61,7 @@ class CommentInputView: UIView {
     }
     
     private func setUI(){
-        [commentTextField].forEach { view in
+        [commentTextField, uploadCommentButton].forEach { view in
             addSubview(view)
             view.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -69,14 +69,23 @@ class CommentInputView: UIView {
     
     private func setConstraint() {
         setCommentTextViewConstraint()
+        setCommentUploadButtonConstraint()
     }
     
     private func setCommentTextViewConstraint() {
         NSLayoutConstraint.activate([
             commentTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             commentTextField.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            commentTextField.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             commentTextField.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+    
+    private func setCommentUploadButtonConstraint() {
+        NSLayoutConstraint.activate([
+            uploadCommentButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            uploadCommentButton.leadingAnchor.constraint(equalTo: commentTextField.trailingAnchor),
+            uploadCommentButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            uploadCommentButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     

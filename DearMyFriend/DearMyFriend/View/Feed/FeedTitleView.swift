@@ -24,7 +24,8 @@ class FeedTitleView: UIView {
     lazy var userNicknameLabel: UILabel = {
         let label = UILabel()
         
-        label.font = UIFont.boldSystemFont(ofSize: userNicknameLabelSize)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: userNicknameLabelSize)
+//        label.font = UIFont.boldSystemFont(ofSize: userNicknameLabelSize)
         label.text = "사용자 닉네임" // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
         label.textAlignment = .center
         

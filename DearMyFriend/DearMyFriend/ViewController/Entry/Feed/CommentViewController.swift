@@ -11,7 +11,9 @@ import UIKit
 class CommentViewController: UIViewController {
     // MARK: Properties
     let commentTitleView: CommentTitleView = .init(frame: .zero)
-    let feedTitleViewHeight: CGFloat = 50
+    let commentInputView: CommentInputView = .init(frame: .zero)
+    let commentTitleViewHeight: CGFloat = 50
+    let commentInputViewHeight: CGFloat = 50
     
     // TableView
     private let commentTableView = UITableView()
@@ -36,11 +38,12 @@ class CommentViewController: UIViewController {
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
-        setupFeedTitleView()
+        setupCommentTitleView()
         setupTableView()
+        setupCommentInputView()
     }
     
-    private func setupFeedTitleView() {
+    private func setupCommentTitleView() {
         view.addSubview(commentTitleView)
         commentTitleView.translatesAutoresizingMaskIntoConstraints = false
         commentTitleView.delegate = self
@@ -49,7 +52,7 @@ class CommentViewController: UIViewController {
             commentTitleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             commentTitleView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             commentTitleView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            commentTitleView.heightAnchor.constraint(equalToConstant: feedTitleViewHeight)
+            commentTitleView.heightAnchor.constraint(equalToConstant: commentTitleViewHeight)
         ])
     }
     
@@ -73,7 +76,20 @@ class CommentViewController: UIViewController {
             commentTableView.topAnchor.constraint(equalTo: commentTitleView.bottomAnchor),
             commentTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             commentTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            commentTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    private func setupCommentInputView() {
+        view.addSubview(commentInputView)
+        commentInputView.translatesAutoresizingMaskIntoConstraints = false
+        commentInputView.delegate = self
+        
+        NSLayoutConstraint.activate([
+            commentInputView.topAnchor.constraint(equalTo: commentTableView.bottomAnchor),
+            commentInputView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            commentInputView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            commentInputView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            commentInputView.heightAnchor.constraint(equalToConstant: commentInputViewHeight)
         ])
     }
 }
@@ -81,6 +97,12 @@ class CommentViewController: UIViewController {
 extension CommentViewController: CommentTitleViewDelegate {
     func endButtonTapped() {
         dismiss(animated: true)
+    }
+}
+
+extension CommentViewController: CommentInputViewDelegate {
+    func uploadButtonTapped() {
+        print("upload")
     }
 }
 

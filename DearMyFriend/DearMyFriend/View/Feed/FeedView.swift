@@ -56,7 +56,8 @@ class FeedView: UIView {
     lazy var userNicknameLabel: UILabel = {
         let label = UILabel()
         
-        label.font = UIFont.systemFont(ofSize: userNicknameLabelSize)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: userNicknameLabelSize)
+//        label.font = UIFont.systemFont(ofSize: userNicknameLabelSize)
         label.text = "사용자 닉네임" // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
         label.textAlignment = .left
         
@@ -177,7 +178,8 @@ class FeedView: UIView {
     lazy var likeLabel: UILabel = {
         let label = UILabel()
         
-        label.font = UIFont.systemFont(ofSize: likelabelSize, weight: .medium)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: likelabelSize)
+//        label.font = UIFont.systemFont(ofSize: likelabelSize, weight: .medium)
         label.text = "조영현님 외 5명이 좋아합니다." // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
         label.textAlignment = .left
         
@@ -190,7 +192,8 @@ class FeedView: UIView {
         textView.isEditable = false
         textView.isSelectable = true // TextView 내의 Text를 선택하고 복사 여부.
         
-        textView.font = UIFont.systemFont(ofSize: textViewFont)
+        textView.font = UIFont(name: "SpoqaHanSansNeo-Regular", size: textViewFont)
+//        textView.font = UIFont.systemFont(ofSize: textViewFont)
         textView.text = "게시글을 받아오는 경우"
         
         return textView
