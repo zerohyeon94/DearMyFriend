@@ -16,7 +16,7 @@ final class MyFirestore {
     
     private var documentListener: ListenerRegistration? // 데이터 변경 이벤트를 수신하기 위한 리스너의 등록과 해제를 관리하는 역할. (데이터의 실시간 업데이트)
     
-    // 해당되는 ID의 데이터를 구독 및 해당 데이터에 대한 변경 사항 실시간 모니터링
+    // 해당되는 ID의 데이터를 구독 및 해당 데이터에 대한 변경 사항 실시간 모니터링 - 아직 기능을 잘 모르겠다.
     func subscribe(collection: String, id: String, completion: @escaping (Result<[UserData], FeedFirebaseError>) -> Void) {
         let collectionPath = "\(collectionUsers)/\(id)/\(collection)"
         removeListener() // 이전에 등록된 Firestore 리스너 제거
@@ -52,20 +52,12 @@ final class MyFirestore {
         }
     }
     
-    func saveUserInfo(userData: UserData, completion: ((Error?) -> Void)? = nil) {
-        let collectionPath = "\(collectionUsers)/\(userData.id)/\(collectionInfo)" //Users/_zerohyeon/Info
-        let collectionListener = Firestore.firestore().collection(collectionPath)
-        
-        guard let dictionary = userData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 잇는 dictionary
-            print("decode error")
-            return
-        }
-        // document : 사용자의 이름(userData.id)
-        collectionListener.document("\(userData.id)").setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
-            completion?(error)
-        }
+    // 리스너 제거
+    func removeListener() {
+        documentListener?.remove()
     }
     
+    // MARK: Create
     func saveUserFeed(feedData: FeedData, completion: ((Error?) -> Void)? = nil) {
         let collectionDocumentPath = "\(collectionUsers)"
         let collectionDocumentListener = Firestore.firestore().collection(collectionDocumentPath)
@@ -77,7 +69,7 @@ final class MyFirestore {
                     print("Document added successfully!")
                 }
         }
-        
+        // Users/pikachu/Feed
         let collectionPath = "\(collectionUsers)/\(feedData.id)/\(collectionFeed)"
         let collectionListener = Firestore.firestore().collection(collectionPath)
         
@@ -99,6 +91,7 @@ final class MyFirestore {
         }
     }
     
+    // MARK: Read
     func getFeed(completion: @escaping ([[String: FeedData]]) -> Void) { //} -> [[String: FeedData]] {
         // 계정 순서대로 날짜 순으로 데이터를 받는다.
         // 데이터에 대한 기준은 5일.
@@ -116,10 +109,9 @@ final class MyFirestore {
                 print("Error getting documents: \(error)")
             } else {
                 let dispatchGroup = DispatchGroup() // 디스패치 그룹 생성
-                print("querySnapshot!.documents: \(querySnapshot!.documents.count)")
                 // Users에 있는 사용자들의 ID 정보 획득
                 for document in querySnapshot!.documents {
-                    print("등록된 사용자 : \(document.documentID)")
+//                    print("등록된 사용자 : \(document.documentID)")
                     dispatchGroup.enter() // 디스패치 그룹 진입 - 작업이 시작될 때마다 내부 카운터가 증가
                     
                     // 사용자 정보에 있는 게시물을 저장한다.
@@ -133,8 +125,8 @@ final class MyFirestore {
                             // 게시물을 정보를 나열한다.
                             for document in querySnapshot!.documents {
                                 
-                                print("게시물 업로드 날짜 : \(document.documentID)")
-                                print("게시물 : \(document.data())")
+//                                print("게시물 업로드 날짜 : \(document.documentID)")
+//                                print("게시물 : \(document.data())")
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
                                 dateFormatter.timeZone = TimeZone(identifier: "UTC")
@@ -164,9 +156,8 @@ final class MyFirestore {
                                     break
                                 }
                                 
-//                                print("feedUploadDate : \(feedUploadDate)")
-//                                print("fiveDaysAgo : \(fiveDaysAgo)")
-                                
+                                // 20231030 Test
+                                /*
                                 // 업로드 날짜가 게시글 날짜보다 작으면 5일보다 더 과거다! 그러면 필요가 없다!
                                 if feedUploadDate < fiveDaysAgo {
                                     // 다음 항목을 가지고 온나!
@@ -174,6 +165,8 @@ final class MyFirestore {
                                 } else {
                                     // 5일 내 데이터가 없는 경우
                                 }
+                                 */
+                                
                                 // Firestore 문서의 데이터를 딕셔너리로 가져옴
                                 var userFeedId: String = ""
                                 var userFeedImage: [String] = []
@@ -232,11 +225,27 @@ final class MyFirestore {
                 }
             }
         }
-//        return feedAllData
     }
     
-    // 리스너 제거
-    func removeListener() {
-        documentListener?.remove()
+    // MARK: Update
+    func updateFeedLikeData(documentID: String, updateFeedData: FeedData, completion: ((Error?) -> Void)? = nil) {
+        print("updateFeedLikeData")
+        print("documentID: \(documentID)")
+        print("updateFeedData: \(updateFeedData)")
+        
+        let collectionPath = "\(collectionUsers)/\(updateFeedData.id)/\(collectionFeed)" // Users/선택한 FeedData의 ID/Feeds
+        let collectionListener = Firestore.firestore().collection(collectionPath)
+        print("collectionListener: \(collectionListener)")
+        
+        guard let dictionary = updateFeedData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 있는 dictionary
+            print("decode error")
+            return
+        }
+        
+        collectionListener.document("\(documentID)").setData(dictionary){ error in // Firestore Collection에 데이터 변경.
+            completion?(error)
+        }
     }
+    
+    // MARK: Delete
 }

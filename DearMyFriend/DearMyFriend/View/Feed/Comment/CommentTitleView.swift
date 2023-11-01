@@ -1,32 +1,27 @@
-// FeadViewController
-// Title View
-// 사용자의 ID와 게시글을 작성하는 View
-//
 import Foundation
 import UIKit
 
-protocol FeadTitleViewDelegate: AnyObject {
-    func addButtonTapped()
+protocol CommentTitleViewDelegate: AnyObject {
+    func endButtonTapped()
 }
 
-class FeedTitleView: UIView {
+class CommentTitleView: UIView {
     
     // MARK: Properties
     // Label
-    let userNicknameLabelSize: CGFloat = 20
+    let commentTitleLabelSize: CGFloat = 20
     
     // Button
     let addPostButtonSize: CGFloat = 30
-    let addPostButtonImage: String = "note.text.badge.plus"
+    let addPostButtonImage: String = "xmark"
     let addPostButtonColor: UIColor = .black
-    var delegate: FeadTitleViewDelegate?
+    var delegate: CommentTitleViewDelegate?
     
     lazy var userNicknameLabel: UILabel = {
         let label = UILabel()
         
-        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: userNicknameLabelSize)
-//        label.font = UIFont.boldSystemFont(ofSize: userNicknameLabelSize)
-        label.text = "사용자 닉네임" // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
+        label.font = UIFont.boldSystemFont(ofSize: commentTitleLabelSize)
+        label.text = "댓글"
         label.textAlignment = .center
         
         return label
@@ -41,7 +36,7 @@ class FeedTitleView: UIView {
         button.setImage(image, for: .normal)
         button.tintColor = addPostButtonColor
         
-        button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(endButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -93,8 +88,8 @@ class FeedTitleView: UIView {
     }
     
     // MARK: Action
-    @objc func addButtonTapped() {
-        print("피드 데이터 추가")
-        delegate?.addButtonTapped()
+    @objc func endButtonTapped() {
+        print("comment 창 종료")
+        delegate?.endButtonTapped()
     }
 }

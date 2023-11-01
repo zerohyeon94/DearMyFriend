@@ -20,8 +20,9 @@ class AddPostView: UIView {
     let buttonImage: String = "xmark"
     let buttonColor: UIColor = .black
     var delegate: AddPostViewDelegate?
-    // Image
-    let imageName: String = "spider1"
+    // Image View
+    let imagePlusLabelSize: CGFloat = 15
+    let imageName: String = "photo.badge.plus"
     // TextView
     let textViewFont: CGFloat = 15
     
@@ -55,18 +56,54 @@ class AddPostView: UIView {
         
         button.setImage(image, for: .normal)
         button.tintColor = buttonColor
-
+        
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         
         return button
     }()
     
+    lazy var imagePlusView: UIView = {
+        let view = UIView()
+        
+        view.addSubview(postImageStackView)
+        postImageStackView.translatesAutoresizingMaskIntoConstraints = false
+        postImageStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        postImageStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        return view
+    }()
+    
     lazy var postImageView: UIImageView = {
         let imageView = UIImageView()
+        
+        imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         imageView.contentMode = .scaleAspectFill
         imageView.image = UIImage(named: imageName)
-
+        
         return imageView
+    }()
+    
+    lazy var postLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: imagePlusLabelSize)
+        label.text = "사진을 추가해주세요."
+        label.textAlignment = .center
+        
+        return label
+    }()
+    
+    lazy var postImageStackView: UIStackView = {
+       let stackView = UIStackView()
+        
+        stackView.spacing = 1
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .fillProportionally
+        
+        stackView.addArrangedSubview(postImageView)
+        stackView.addArrangedSubview(postLabel)
+        
+        return stackView
     }()
     
     lazy var imagePickerButton: UIButton = {
@@ -104,7 +141,7 @@ class AddPostView: UIView {
     }()
     
     lazy var postTextView: UITextView = {
-       let textView = UITextView()
+        let textView = UITextView()
         textView.isEditable = true
         textView.isSelectable = true
         
@@ -132,7 +169,7 @@ class AddPostView: UIView {
     }
     
     private func setUI(){
-        [userNicknameLabel, uploadPostButton, cancelPostButton, postImageView, imagePickerButton, imageCollectionView, pageControl, postTextView].forEach { view in
+        [userNicknameLabel, uploadPostButton, cancelPostButton, imagePlusView, imagePickerButton, imageCollectionView, pageControl, postTextView].forEach { view in
             addSubview(view)
             view.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -190,15 +227,15 @@ class AddPostView: UIView {
     private func setPostImageViewConstraint() {
         NSLayoutConstraint.activate([
             // image 표시 전
-            postImageView.topAnchor.constraint(equalTo: userNicknameLabel.bottomAnchor),
-            postImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            postImageView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            postImageView.heightAnchor.constraint(equalToConstant: imageViewHeight),
+            imagePlusView.topAnchor.constraint(equalTo: userNicknameLabel.bottomAnchor),
+            imagePlusView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            imagePlusView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            imagePlusView.heightAnchor.constraint(equalToConstant: imageViewHeight),
             
-            imagePickerButton.topAnchor.constraint(equalTo: postImageView.topAnchor),
-            imagePickerButton.leadingAnchor.constraint(equalTo: postImageView.leadingAnchor),
-            imagePickerButton.trailingAnchor.constraint(equalTo: postImageView.trailingAnchor),
-            imagePickerButton.bottomAnchor.constraint(equalTo: postImageView.bottomAnchor)
+            imagePickerButton.topAnchor.constraint(equalTo: imagePlusView.topAnchor),
+            imagePickerButton.leadingAnchor.constraint(equalTo: imagePlusView.leadingAnchor),
+            imagePickerButton.trailingAnchor.constraint(equalTo: imagePlusView.trailingAnchor),
+            imagePickerButton.bottomAnchor.constraint(equalTo: imagePlusView.bottomAnchor)
         ])
     }
     
@@ -223,7 +260,7 @@ class AddPostView: UIView {
     
     private func setPostTextViewConstraint() {
         NSLayoutConstraint.activate([
-            postTextView.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: textViewTopConstant),
+            postTextView.topAnchor.constraint(equalTo: imagePlusView.bottomAnchor, constant: textViewTopConstant),
             postTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: sideSpaceConstant),
             postTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: sideSpaceConstant),
             postTextView.heightAnchor.constraint(equalToConstant: postTextViewHeight)
