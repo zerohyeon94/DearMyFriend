@@ -39,6 +39,8 @@ class AddPostViewController: UIViewController {
         view.addSubview(addPostView)
         addPostView.translatesAutoresizingMaskIntoConstraints = false
         addPostView.delegate = self
+        // 추후 현재 로그인된 ID를 받아와서 닉네임 표시
+        addPostView.userNicknameLabel.text = "_zerohyeon"
         
         NSLayoutConstraint.activate([
             addPostView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -53,12 +55,7 @@ extension AddPostViewController: AddPostViewDelegate {
     func cancelButtonTapped() {
         dismiss(animated: true)
     }
-    //    let id: String
-    //    let image: [String]
-    //    let post: String
-    //    let like: [String]
-    //    let comment: [[String: String]]
-    
+
     func uploadButtonTapped() {
         print("_zerohyeon")
         print("selectedImages: \(selectedImages)")
@@ -72,10 +69,10 @@ extension AddPostViewController: AddPostViewDelegate {
         
         print("현재 시간: \(formattedDate)")
         
-        let feedId: String = "pikachu"
+        let feedId: String = "_zerohyeon"
         var feedImage: [String] = []
         let feedPost: String = addPostView.postTextView.text
-        let feedLike: [String] = ["_zerohyeon", "ironMan"] // 처음에 생성할 때는 좋아요 수가 없음.
+        let feedLike: [String] = ["pikachu", "ironMan"] // 처음에 생성할 때는 좋아요 수가 없음.
         let feedComment: [[String: String]] = [["A":"a"], ["B":"b"]] // 처음에 생성할 때는 댓글이 없음.
         
         // Firebase Storage에 이미지 업로드
@@ -129,7 +126,7 @@ extension AddPostViewController: AddPostViewDelegate {
     
     func imageViewTapped(){
         var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = 5 // 선택한 이미지 수 제한 (옵션)
+        configuration.selectionLimit = 10 // 선택한 이미지 수 제한 (옵션)
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self

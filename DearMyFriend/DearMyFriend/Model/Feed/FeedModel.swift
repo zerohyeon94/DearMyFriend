@@ -11,9 +11,9 @@ import UIKit
 struct FeedData: Codable {
     let id: String
     let image: [String]
-    let post: String
-    let like: [String]
-    let comment: [[String: String]]
+    var post: String
+    var like: [String]
+    var comment: [[String: String]]
     
     init(id: String, image: [String], post: String, like: [String], comment: [[String : String]]) {
         self.id = id

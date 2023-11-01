@@ -8,12 +8,13 @@ import UIKit
 
 protocol FeedViewDelegate: AnyObject {
     func likeButtonTapped()
-    func commentButtonTapped()
+    func commentButtonTapped(index: Int)
 }
 
 class FeedView: UIView {
     // MARK: Properties
     var delegate: FeedViewDelegate?
+    var tableViewCellindex: Int = 0
     // ImageView
     let profileImageFrame: CGFloat = 40
     // Label
@@ -21,10 +22,12 @@ class FeedView: UIView {
     // Image CollectionView & Page Control
     let imageNames: [String] = ["spider1", "spider2", "spider3"]
     // Like & Comment Button
+    var isLikeButtonSelected = false
     let buttonFrame: CGFloat = 50
     let buttonSize: CGFloat = 28
     let buttonPadding: CGFloat = 8
     let likeButtonImage: String = "heart"
+    let likeFillButtonImage: String = "heart.fill"
     let likeButtonColor: UIColor = .black
     let commentButtonImage: String = "message"
     let commentButtonColor: UIColor = .black
@@ -53,7 +56,8 @@ class FeedView: UIView {
     lazy var userNicknameLabel: UILabel = {
         let label = UILabel()
         
-        label.font = UIFont.systemFont(ofSize: userNicknameLabelSize)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: userNicknameLabelSize)
+//        label.font = UIFont.systemFont(ofSize: userNicknameLabelSize)
         label.text = "사용자 닉네임" // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
         label.textAlignment = .left
         
@@ -92,8 +96,10 @@ class FeedView: UIView {
         
         button.frame = CGRect(x: 0, y: 0, width: buttonFrame, height: buttonFrame) // image Button 크기 지정.
         
-        let resizedImage = resizeUIImage(imageName: likeButtonImage, heightSize: buttonSize)
-        button.setImage(resizedImage, for: .normal)
+        let resizedLikeImage = resizeUIImage(imageName: likeButtonImage, heightSize: buttonSize)
+        button.setImage(resizedLikeImage, for: .normal)
+        let resizedLikeFillImage = resizeUIImage(imageName: likeFillButtonImage, heightSize: buttonSize)
+        button.setImage(resizedLikeFillImage, for: .selected)
         
         button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
         
@@ -172,7 +178,8 @@ class FeedView: UIView {
     lazy var likeLabel: UILabel = {
         let label = UILabel()
         
-        label.font = UIFont.systemFont(ofSize: likelabelSize, weight: .medium)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: likelabelSize)
+//        label.font = UIFont.systemFont(ofSize: likelabelSize, weight: .medium)
         label.text = "조영현님 외 5명이 좋아합니다." // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
         label.textAlignment = .left
         
@@ -185,7 +192,8 @@ class FeedView: UIView {
         textView.isEditable = false
         textView.isSelectable = true // TextView 내의 Text를 선택하고 복사 여부.
         
-        textView.font = UIFont.systemFont(ofSize: textViewFont)
+        textView.font = UIFont(name: "SpoqaHanSansNeo-Regular", size: textViewFont)
+//        textView.font = UIFont.systemFont(ofSize: textViewFont)
         textView.text = "게시글을 받아오는 경우"
         
         return textView
@@ -343,11 +351,59 @@ class FeedView: UIView {
     // MARK: - Action
     @objc private func likeButtonTapped(){
         print("like 클릭")
+        isLikeButtonSelected.toggle()
+        likeButton.isSelected = isLikeButtonSelected
+        
+        let resizedImage = resizeUIImage(imageName: isLikeButtonSelected ? likeFillButtonImage : likeButtonImage, heightSize: buttonSize)
+        likeButton.setImage(resizedImage, for: .selected)
+        
+        // index값을 얻어왔으니까, Feed 정보 중 몇번째인지 확인.
+        print("cell Index : \(tableViewCellindex)")
+        
+        // 현재 Feed에 가져온 정보 확인.
+        var feedCellIndex: Int = tableViewCellindex
+        var feedDataKey: String // 업로드된 시간 -> Feed 내 Document ID
+        if let firstKey = FeedViewController.feedDatas[tableViewCellindex].keys.first {
+            feedDataKey = firstKey
+        } else {
+            // 값이 없는 경우에 대한 처리
+            feedDataKey = "" // 또는 다른 기본값
+        }
+        var feedDataValue: FeedData // 위의 Document ID 내 필드값.
+        if let feedData = FeedViewController.feedDatas[tableViewCellindex].values.first {
+            feedDataValue = feedData
+        } else {
+            // 값이 없는 경우에 대한 처리
+            feedDataValue = FeedData(id: "", image: [""], post: "", like: [""], comment: [[:]])
+        }
+        
+        // TEST: 현재 로그인 되어있는 ID userDefault로 가져오기 임시로 아이디 사용.
+        var id: String = "_zerohyeon"
+        
+        print("feedData 상태 업데이트 전 : \(feedDataValue)")
+        
+        if feedDataValue.like.contains(id) {
+            if let index = feedDataValue.like.firstIndex(of: id) {
+                print("index: \(index)")
+                feedDataValue.like.remove(at: index)
+            }
+        } else {
+            feedDataValue.like.append(id)
+        }
+        
+        print("feedData 상태 업데이트 후 : \(feedDataValue)")
+        
+        MyFirestore().updateFeedLikeData(documentID: feedDataKey, updateFeedData: feedDataValue)
+        
         delegate?.likeButtonTapped()
     }
+    
     @objc private func commentButtonTapped(){
         print("comment 클릭")
-        delegate?.commentButtonTapped()
+        
+        print("cell Index : \(tableViewCellindex)")
+        
+        delegate?.commentButtonTapped(index: tableViewCellindex)
     }
     
     // MARK: - Helper

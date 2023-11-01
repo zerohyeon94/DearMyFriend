@@ -8,7 +8,7 @@ class FeedTableViewCell: UITableViewCell {
     // MARK: Properties
     static let identifier = "FeedTableViewCell"
     
-//    var cellIndex:
+    var cellIndex: Int = 0
     
     let feedView: FeedView = .init(frame: .zero)
     let sideSpaceConstant: CGFloat = 16
@@ -17,7 +17,6 @@ class FeedTableViewCell: UITableViewCell {
     var imageNames: [String] = []
     
     private func setupCollectionView() {
-        print("setupCollectionView")
         feedView.imageCollectionView.delegate = self
         feedView.imageCollectionView.dataSource = self
     }
@@ -25,8 +24,7 @@ class FeedTableViewCell: UITableViewCell {
     // MARK: Initalizers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        
-        self.contentView.backgroundColor = .yellow
+//        self.contentView.backgroundColor = .yellow
         
         configure()
     }
@@ -50,6 +48,7 @@ class FeedTableViewCell: UITableViewCell {
     private func setUI(){
         self.contentView.addSubview(feedView)
         feedView.translatesAutoresizingMaskIntoConstraints = false
+        feedView.tableViewCellindex = cellIndex
     }
     
     private func setConstraint() {
@@ -61,19 +60,20 @@ class FeedTableViewCell: UITableViewCell {
         ])
     }
     
-    func setFeed(feedData: FeedData) {
-//        print("setFeed")
-//        print("feedData.id : \(feedData.id)")
-//        print("feedData.post : \(feedData.post)")
-//        print("feedData.image : \(feedData.image)")
+    func setFeed(feedData: FeedData, index: Int) {
+        feedView.tableViewCellindex = index
         feedView.userNicknameLabel.text = feedData.id
         feedView.postTextView.text = feedData.post
-//        print("비우기 전 imageNames: \(imageNames)")
-//        imageNames = [] // 한번 비워준다면?
-//        print("비우기 후 imageNames: \(imageNames)")
         imageNames = feedData.image
-//        print("최종 imageNames: \(imageNames)")
         
+        // 좋아요 상태 확인
+        var id: String = "_zerohyeon"
+        if feedData.like.contains(id) {
+            feedView.likeButton.isSelected = true
+        } else {
+            feedView.likeButton.isSelected = false
+        }
+
         // CollectionView를 다시 로드
         feedView.imageCollectionView.reloadData()
         
