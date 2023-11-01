@@ -38,36 +38,12 @@ enum 고양이상태 {
     }
 }
 
-enum 고양이사료종류 {
-    case Select
-    case 로얄캐닌_인도어
-    case 건강백서_기능성
-    case 힐스_어덜트웨이트
-    case 퓨리나_성묘용
-    
-    var 사료: Double {
-        switch self {
-        case .Select:
-            return 0
-        case .로얄캐닌_인도어:
-            return 37.7
-        case .건강백서_기능성:
-            return 31.9
-        case .힐스_어덜트웨이트:
-            return 33.6
-        case .퓨리나_성묘용:
-            return 34
-        }
-    }
-}
-
 class CalculatorViewController: UIViewController {
     var 상태선택: 고양이상태 = .생후4개월미만
-    var 사료선택: 고양이사료종류 = .로얄캐닌_인도어
     private let statePickerView = UIPickerView()
     private let 사료PickerView = UIPickerView()
     private let 고양이상태목록: [고양이상태] = [.Select, .생후4개월미만, .생후4에서6개월, .생후7에서12개월, .일반성묘, .중성화된성묘, .활동량많은고양이, .노묘, .비만고양이]
-    private let 고양이사료목록: [고양이사료종류] = [.Select, .로얄캐닌_인도어, .건강백서_기능성, .힐스_어덜트웨이트, .퓨리나_성묘용]
+    
     private let leftSide = {
         let side = UIView()
         side.frame = CGRect(x: 0, y: 0, width: 20, height: 908)
@@ -122,23 +98,6 @@ class CalculatorViewController: UIViewController {
         return animeView
         
     }()
-    
-    //    private let 고양이사료선택 = {
-    //        let textField = UITextField()
-    //        textField.placeholder = "----- 사료 선택 -----"
-    //        textField.contentVerticalAlignment = .center
-    //        textField.layer.masksToBounds = true
-    //        textField.layer.cornerRadius = 10
-    //        textField.textColor = UIColor(named: "maintext")
-    //        textField.font = UIFont.boldSystemFont(ofSize: 18)
-    //        textField.textAlignment = .center
-    //        textField.layer.borderColor = UIColor(named: "border")?.cgColor
-    //        textField.layer.borderWidth = 2.0
-    //        textField.tintColor = .clear
-    //        textField.isUserInteractionEnabled = true
-    //
-    //        return textField
-    //    }()
     
     private let 칼로리 = {
         let textField = UITextField()
@@ -251,10 +210,7 @@ class CalculatorViewController: UIViewController {
         
         고양이상태선택.delegate = self
         고양이상태선택.inputView = statePickerView
-        
-        //        고양이사료선택.delegate = self
-        //        고양이사료선택.inputView = 사료PickerView
-        
+      
         유아이레이아웃()
         계산기화면레이아웃()
         몸무게입력.delegate = self
@@ -365,7 +321,7 @@ class CalculatorViewController: UIViewController {
         }
     }
     
-    func calculateFoodAmount(몸무게: String, 상태: 고양이상태, 사료: 고양이사료종류) -> String {
+    func calculateFoodAmount(몸무게: String, 상태: 고양이상태) -> String {
         guard let weightDouble = Double(몸무게) else {
             return "올바른 몸무게를 입력해주세요."
         }
@@ -392,7 +348,7 @@ class CalculatorViewController: UIViewController {
     @objc func 계산버튼클릭() {
         print("계산중")
         계산버튼.isSelected = true
-        let resultInfo = calculateFoodAmount(몸무게: 몸무게입력.text ?? "", 상태: 상태선택, 사료: 사료선택)
+        let resultInfo = calculateFoodAmount(몸무게: 몸무게입력.text ?? "", 상태: 상태선택)
         result.text = "\(resultInfo)"
         
         계산버튼.isSelected = false
@@ -406,23 +362,16 @@ class CalculatorViewController: UIViewController {
 
 extension CalculatorViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        //        let allowedCharacters = CharacterSet.decimalDigits
-        //        let characterSet = CharacterSet(charactersIn: string)
-        //        let maximumtextLengthInTextField = (textField.text?.count ?? 0) + string.count - range.length
-        //
-        //        return allowedCharacters.isSuperset(of: characterSet) && maximumtextLengthInTextField <= 3
+      
         if textField == 칼로리 && textField == 몸무게입력 {
-            // 입력된 문자열이 유효한 double 값인지 확인
             let isNumeric = string.isEmpty || (string.rangeOfCharacter(from: CharacterSet(charactersIn: "0123456789.").inverted) == nil)
             
-            // 결과 텍스트가 유효한 double인지 확인
             let newText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string)
             let isDouble = Double(newText ?? "") != nil
             
             return isNumeric && isDouble
         }
                 else {
-                    // 다른 텍스트 필드의 경우 소수점 자릿수를 제한하여 숫자만 입력
                     let allowedCharacters = CharacterSet.decimalDigits
                     let characterSet = CharacterSet(charactersIn: string)
                     let maximumtextLengthInTextField = (textField.text?.count ?? 0) + string.count - range.length
@@ -435,9 +384,6 @@ func textFieldDidBeginEditing(_ textField: UITextField) {
     if textField == 고양이상태선택 {
         showPickerView(pickerView: statePickerView, textField: 고양이상태선택)
     }
-    //        else if textField == 고양이사료선택 {
-    //            showPickerView(pickerView: 사료PickerView, textField: 고양이사료선택)
-    //        }
 }
 
 private func showPickerView(pickerView: UIPickerView, textField: UITextField) {
@@ -455,8 +401,6 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView == statePickerView {
             return 고양이상태목록.count
-        } else if pickerView == 사료PickerView {
-            return 고양이사료목록.count
         }
         return 0
     }
@@ -464,8 +408,6 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView == statePickerView {
             return "\(고양이상태목록[row])"
-        } else if pickerView == 사료PickerView {
-            return "\(고양이사료목록[row])"
         }
         return nil
     }
@@ -475,12 +417,7 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
             상태선택 = 고양이상태목록[row]
             고양이상태선택.text = "\(상태선택)"
         }
-        //        else if pickerView == 사료PickerView {
-        //            사료선택 = 고양이사료목록[row]
-        //            고양이사료선택.text = "\(사료선택)"
-        //        }
         고양이상태선택.resignFirstResponder()
-        //        고양이사료선택.resignFirstResponder()
     }
     
 }
