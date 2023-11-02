@@ -9,7 +9,7 @@ class YouTubeViewController: UIViewController {
     var compterDeuxiemeColDocSec: Int = 0
     private let pageName = {
         let label = UILabel()
-        label.text = "추천 유튜버"
+        label.text = ""
         label.textColor = UIColor(named: "maintext")
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textAlignment = .center
@@ -26,19 +26,7 @@ class YouTubeViewController: UIViewController {
         return tableView
     }()
 
-    private let leftSide = {
-        let side = UIView()
-        side.frame = CGRect(x: 0, y: 0, width: 20, height: 908)
-        side.layer.backgroundColor = UIColor(named: "side")?.cgColor
-        return side
-    }()
-
-    private let rightSide = {
-        let side = UIView()
-        side.frame = CGRect(x: 0, y: 0, width: 20, height: 908)
-        side.layer.backgroundColor = UIColor(named: "side")?.cgColor
-        return side
-    }()
+    
 
     private var cellSelectAnime = {
         let animeView = LottieAnimationView(name: "loading")
@@ -58,14 +46,10 @@ class YouTubeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor(named: "view") // navigationController?.isNavigationBarHidden = true
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
-        navigationItem.hidesBackButton = true
-
+        view.backgroundColor = UIColor(named: "view") //
+        title = "추천 유튜브"
+        self.navigationController?.navigationBar.tintColor = .black
         layoutForUI()
-        layoutForSide()
         layoutForTableView()
         youtubeTableView.dataSource = self
         youtubeTableView.delegate = self
@@ -93,8 +77,8 @@ extension YouTubeViewController {
     private func layoutForTableView() {
         view.addSubview(youtubeTableView)
         youtubeTableView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(200)
-            make.bottom.equalToSuperview().offset(-49)
+            make.top.equalToSuperview().offset(100)
+            make.bottom.equalToSuperview().offset(-100)
             make.leading.equalToSuperview().offset(25)
             make.trailing.equalToSuperview().offset(-25)
             make.centerX.equalToSuperview()
@@ -102,23 +86,7 @@ extension YouTubeViewController {
         }
     }
 
-    private func layoutForSide() {
-        for side in [leftSide, rightSide] {
-            view.addSubview(side)
-        }
-        leftSide.snp.makeConstraints { make in
-            make.width.equalTo(20)
-            make.height.equalTo(908)
-            make.leading.equalToSuperview()
-            make.top.equalToSuperview()
-        }
-        rightSide.snp.makeConstraints { make in
-            make.width.equalTo(20)
-            make.height.equalTo(908)
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-        }
-    }
+    
 
     func telechargerDesImg(from urlString: String, completion: @escaping (UIImage?) -> Void) {
         guard let url = URL(string: urlString) else {
@@ -274,8 +242,7 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
         }
         pageName.isHidden = true
         youtubeTableView.isHidden = true
-        leftSide.isHidden = true
-        rightSide.isHidden = true
+       
         let channelDocumentName = "채널\(indexPath.row + 1)"
         let collectionName: String
 
@@ -295,7 +262,7 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                             self.cellSelectAnime.removeFromSuperview()
-                            if self.pageName.isHidden == true, self.youtubeTableView.isHidden == true, self.leftSide.isHidden == true, self.rightSide.isHidden == true {
+                            if self.pageName.isHidden == true, self.youtubeTableView.isHidden == true {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                                     self.pageName.isHidden = false
                                     self.youtubeTableView.isHidden = false
@@ -309,4 +276,3 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-//
