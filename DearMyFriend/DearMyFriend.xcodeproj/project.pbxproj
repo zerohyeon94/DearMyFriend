@@ -42,6 +42,7 @@
 		52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */; };
 		52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */; };
 		EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */; };
+		EB17F3E42AF492BF00971859 /* MyProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */; };
 		EB5EDEE22AEA4030002075F9 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE12AEA4030002075F9 /* UserModel.swift */; };
 		EB5EDEE42AEF3C9C002075F9 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE32AEF3C9C002075F9 /* CommentView.swift */; };
 		EB5EDEE62AEF484D002075F9 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE52AEF484D002075F9 /* CommentTableViewCell.swift */; };
@@ -109,6 +110,7 @@
 		52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularityCellView.swift; sourceTree = "<group>"; };
 		5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.release.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.release.xcconfig"; sourceTree = "<group>"; };
 		EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTitleView.swift; sourceTree = "<group>"; };
+		EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileInfoView.swift; sourceTree = "<group>"; };
 		EB5EDEE12AEA4030002075F9 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		EB5EDEE32AEF3C9C002075F9 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		EB5EDEE52AEF484D002075F9 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */,
+				EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */,
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -559,6 +562,7 @@
 				5258C2712AE65C0F00E9FC2B /* RecommendationStore.swift in Sources */,
 				EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */,
 				52D998352AD6AB1800679B15 /* CalculatorViewController.swift in Sources */,
+				EB17F3E42AF492BF00971859 /* MyProfileInfoView.swift in Sources */,
 				4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */,
 				1FBA09922AE6732700A3B42C /* YouTubeTableViewCell.swift in Sources */,
 				4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */,
