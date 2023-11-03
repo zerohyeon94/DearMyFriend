@@ -14,31 +14,38 @@ class CommentInputView: UIView {
     let uploadCommentButtonSize: CGFloat = 30
     let uploadCommentButtonImage: String = "paperplane" // or arrow.up.circle
     let uploadCommentButtonColor: UIColor = .black
+    let buttonFrame: CGFloat = 50
+    let buttonSize: CGFloat = 28
+    let buttonPadding: CGFloat = 8
     
     var delegate: CommentInputViewDelegate?
     
-    lazy var commentTextField: UITextView = {
-       let textView = UITextView()
+    lazy var commentTextField: UITextField = {
+       let textField = UITextField()
         
-        textView.isEditable = true
-        textView.isSelectable = true
+//        textField.isEditable = true
+//        textField.isSelectable = true
         
-        textView.font = UIFont.systemFont(ofSize: textViewFont)
-        textView.text = "게시글 작성"
+        textField.font = UIFont.systemFont(ofSize: textViewFont)
+        textField.placeholder = "게시글 작성"
         
-        return textView
+        return textField
     }()
     
     lazy var uploadCommentButton: UIButton = {
         let button = UIButton()
         
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: uploadCommentButtonSize, weight: .light)
-        let image = UIImage(systemName: uploadCommentButtonImage, withConfiguration: imageConfig)
+        button.frame = CGRect(x: 0, y: 0, width: buttonFrame, height: buttonFrame)
         
-        button.setImage(image, for: .normal)
+        let resizedImage = FeedView().resizeUIImage(imageName: uploadCommentButtonImage, heightSize: buttonSize)
+        button.setImage(resizedImage, for: .normal)
         button.tintColor = uploadCommentButtonColor
         
         button.addTarget(self, action: #selector(uploadButtonTapped), for: .touchUpInside)
+        
+        // 패딩 설정
+        let padding = UIEdgeInsets(top: buttonPadding, left: buttonPadding, bottom: buttonPadding, right: buttonPadding)
+        button.contentEdgeInsets = padding
         
         return button
     }()
@@ -76,6 +83,7 @@ class CommentInputView: UIView {
         NSLayoutConstraint.activate([
             commentTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             commentTextField.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            commentTextField.trailingAnchor.constraint(equalTo: uploadCommentButton.leadingAnchor),
             commentTextField.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
     }
@@ -83,9 +91,11 @@ class CommentInputView: UIView {
     private func setCommentUploadButtonConstraint() {
         NSLayoutConstraint.activate([
             uploadCommentButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            uploadCommentButton.leadingAnchor.constraint(equalTo: commentTextField.trailingAnchor),
+//            uploadCommentButton.leadingAnchor.constraint(equalTo: commentTextField.trailingAnchor),
             uploadCommentButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            uploadCommentButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            uploadCommentButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            uploadCommentButton.widthAnchor.constraint(equalToConstant: uploadCommentButtonSize + (buttonPadding * 2))
+            
         ])
     }
     
