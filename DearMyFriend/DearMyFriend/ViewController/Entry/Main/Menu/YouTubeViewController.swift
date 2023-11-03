@@ -54,7 +54,7 @@ class YouTubeViewController: UIViewController {
         youtubeTableView.dataSource = self
         youtubeTableView.delegate = self
         youtubeTableView.register(YouTubeTableViewCell.self, forCellReuseIdentifier: "CellForYoutube")
-
+        
         referenceEnTemps(nomDePreCol: "고양이 유튜브", nomDeDeuCol: "강아지 유튜브") { _, _ in
             self.youtubeTableView.reloadData()
         }

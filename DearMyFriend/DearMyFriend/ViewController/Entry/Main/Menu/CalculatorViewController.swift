@@ -20,14 +20,7 @@ class CalculatorViewController: UIViewController {
         uiView.layer.borderWidth = 3
         return uiView
     } ()
-    private let 구분선 = {
-        let uiView = UIView()
-        uiView.backgroundColor = UIColor.black
-        uiView.layer.borderWidth = 3
-        uiView.layer.borderColor = UIColor.black.cgColor
-        
-        return uiView
-    }()
+    
     private let selectLabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "maintext")
@@ -71,6 +64,8 @@ class CalculatorViewController: UIViewController {
         textField.layer.borderWidth = 3
         textField.tintColor = .magenta
         textField.clearButtonMode = .always
+        textField.isUserInteractionEnabled = true
+
 
         return textField
     } ()
@@ -113,7 +108,7 @@ class CalculatorViewController: UIViewController {
         textField.layer.borderWidth = 3
         textField.tintColor = .magenta
         textField.clearButtonMode = .always
-        
+        textField.isUserInteractionEnabled = true
         return textField
     }()
     
@@ -254,11 +249,16 @@ class CalculatorViewController: UIViewController {
         칼로리.delegate = self
         몸무게입력.delegate = self
         clickEvent()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+           view.addGestureRecognizer(tapGesture)
     }
-    
+   
+    @objc func viewTapped() {
+        view.endEditing(true)
+    }
     func calculateFoodAmount(몸무게: String, 상태: 고양이상태) -> (칼로리: String, 대사량: String, 사료량: String) {
         guard let weightDouble = Double(몸무게) else {
-            return ("올바른 몸무게를 입력해주세요.", "", "")
+            return ("error", "error", "error")
         }
         
         let 기초대사량 = 30 * weightDouble + 70
@@ -428,6 +428,8 @@ extension CalculatorViewController: UITextFieldDelegate {
         if textField == 고양이상태선택 {
             showPickerView(pickerView: statePickerView, textField: 고양이상태선택)
         }
+        textField.becomeFirstResponder()
+
     }
     
     private func showPickerView(pickerView: UIPickerView, textField: UITextField) {
