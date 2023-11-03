@@ -41,6 +41,7 @@
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
 		52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */; };
 		52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */; };
+		EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */; };
 		EB5EDEE22AEA4030002075F9 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE12AEA4030002075F9 /* UserModel.swift */; };
 		EB5EDEE42AEF3C9C002075F9 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE32AEF3C9C002075F9 /* CommentView.swift */; };
 		EB5EDEE62AEF484D002075F9 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5EDEE52AEF484D002075F9 /* CommentTableViewCell.swift */; };
@@ -107,6 +108,7 @@
 		52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorCircle.swift; sourceTree = "<group>"; };
 		52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularityCellView.swift; sourceTree = "<group>"; };
 		5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.release.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.release.xcconfig"; sourceTree = "<group>"; };
+		EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTitleView.swift; sourceTree = "<group>"; };
 		EB5EDEE12AEA4030002075F9 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		EB5EDEE32AEF3C9C002075F9 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		EB5EDEE52AEF484D002075F9 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 		52D998412AD6AC7600679B15 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EB17F3E02AF48D4500971859 /* MyProfile */,
 				EBD2B7552AE23FCD007FD1DA /* Feed */,
 				526EB6702AE226430073C77D /* MainPage */,
 				52EFE7A72AE7ADBE00770F03 /* PopularityView */,
@@ -320,6 +323,14 @@
 				2F70DC412C4BA07AE6693545 /* libPods-DearMyFriend.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EB17F3E02AF48D4500971859 /* MyProfile */ = {
+			isa = PBXGroup;
+			children = (
+				EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */,
+			);
+			path = MyProfile;
 			sourceTree = "<group>";
 		};
 		EB5EDEE02AEA4013002075F9 /* User */ = {
@@ -541,6 +552,7 @@
 				EB5EDEE42AEF3C9C002075F9 /* CommentView.swift in Sources */,
 				EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */,
 				526EB6722AE263200073C77D /* RankeImageCellView.swift in Sources */,
+				EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
 				EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */,
 				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,
