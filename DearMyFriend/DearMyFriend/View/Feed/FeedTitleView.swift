@@ -49,7 +49,7 @@ class FeedTitleView: UIView {
     // MARK: Initalizers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .green
+
         configure()
     }
     
