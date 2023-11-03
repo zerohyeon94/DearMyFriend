@@ -17,6 +17,12 @@ class CommentViewController: UIViewController {
     
     // TableView
     private let commentTableView = UITableView()
+    // commentInputView의 위치
+    var commentInputVewYPosition: CGFloat = 0
+    // CommentViewController 클래스 내에서 필요한 변수 추가
+    var isKeyboardShown = false
+    var keyboardHeight: CGFloat = 0  // 클래스 레벨 변수로 선언
+    
     
     let index: Int
     
@@ -35,6 +41,38 @@ class CommentViewController: UIViewController {
         configure()
     }
     
+    // CommentViewController 클래스 내에서 viewWillAppear(_:) 함수 추가
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 키보드 관련 Notification 등록
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // CommentViewController 클래스 내에서 viewWillDisappear(_:) 함수 추가
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // 화면이 나갈 때 Notification 제거
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as NSDictionary?,
+              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
+            return
+        }
+        self.commentInputView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        print("hide")
+        self.commentInputView.transform = .identity
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
@@ -42,6 +80,9 @@ class CommentViewController: UIViewController {
         setupTableView()
         setupCommentInputView()
     }
+    
+    // MARK: - Constant
+    let commentInpuSideSpaceConstant: CGFloat = 20
     
     private func setupCommentTitleView() {
         view.addSubview(commentTitleView)
@@ -58,7 +99,12 @@ class CommentViewController: UIViewController {
     
     func setupTableView(){
         commentTableView.dataSource = self
-//        commentTableView.separatorStyle = .none // Cell 사이 줄 제거
+        //        commentTableView.separatorStyle = .none // Cell 사이 줄 제거
+        
+        // 테이블 뷰에 터치 제스처를 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        commentTableView.addGestureRecognizer(tapGesture)
+        
         print("CommentView().calCommentViewHeight(): \(CommentView().calCommentViewHeight())")
         let commentCellHeight: CGFloat = CommentView().calCommentViewHeight() + 10 // Cell의 여유분의 높이 10을 줌.
         print("commentCellHeight: \(commentCellHeight)")
@@ -66,6 +112,11 @@ class CommentViewController: UIViewController {
         commentTableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
         
         setTableViewConstraints()
+    }
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+        // 테이블 뷰를 터치했을 때 키보드를 숨깁니다.
+        view.endEditing(true)
     }
     
     func setTableViewConstraints() {
@@ -86,8 +137,8 @@ class CommentViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             commentInputView.topAnchor.constraint(equalTo: commentTableView.bottomAnchor),
-            commentInputView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            commentInputView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            commentInputView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: commentInpuSideSpaceConstant),
+            commentInputView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -commentInpuSideSpaceConstant),
             commentInputView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             commentInputView.heightAnchor.constraint(equalToConstant: commentInputViewHeight)
         ])
@@ -146,5 +197,23 @@ extension CommentViewController: UITableViewDataSource {
         cell.setComment(comment: feedDataValue)
         
         return cell
+    }
+}
+
+// 현재 응답받는 UI를 알아내기 위해 사용 (textfield, textview 등)
+extension UIResponder {
+    
+    private struct Static {
+        static weak var responder: UIResponder?
+    }
+    
+    static var currentResponder: UIResponder? {
+        Static.responder = nil
+        UIApplication.shared.sendAction(#selector(UIResponder._trap), to: nil, from: nil, for: nil)
+        return Static.responder
+    }
+    
+    @objc private func _trap() {
+        Static.responder = self
     }
 }
