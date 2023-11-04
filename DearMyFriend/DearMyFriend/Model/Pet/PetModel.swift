@@ -1,7 +1,7 @@
 import Foundation
 
 // 사용자 정보
-struct petData: Codable {
+struct PetData: Codable {
     let petProfile: String
     let petName: String
     let petAge: Int

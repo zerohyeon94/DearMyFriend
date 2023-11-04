@@ -69,6 +69,7 @@
 		EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */; };
 		EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */; };
 		EBD411AC2AF6675F00A942D6 /* PetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD411AB2AF6675F00A942D6 /* PetModel.swift */; };
+		EBD411AF2AF667F000A942D6 /* MyPetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD411AE2AF667F000A942D6 /* MyPetTableViewCell.swift */; };
 		EF93D8E598A9724059E59C52 /* libPods-DearMyFriend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F70DC412C4BA07AE6693545 /* libPods-DearMyFriend.a */; };
 /* End PBXBuildFile section */
 
@@ -133,6 +134,7 @@
 		EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebase.swift; sourceTree = "<group>"; };
 		EBD411AB2AF6675F00A942D6 /* PetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetModel.swift; sourceTree = "<group>"; };
+		EBD411AE2AF667F000A942D6 /* MyPetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPetTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,6 +338,7 @@
 		EB17F3E02AF48D4500971859 /* MyProfile */ = {
 			isa = PBXGroup;
 			children = (
+				EBD411AD2AF667D100A942D6 /* Cell */,
 				EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */,
 				EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */,
 				EB17F3E52AF4D39400971859 /* MyPetInfoView.swift */,
@@ -410,6 +413,14 @@
 				EBD411AB2AF6675F00A942D6 /* PetModel.swift */,
 			);
 			path = Pet;
+			sourceTree = "<group>";
+		};
+		EBD411AD2AF667D100A942D6 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				EBD411AE2AF667F000A942D6 /* MyPetTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -584,6 +595,7 @@
 				EB17F3E42AF492BF00971859 /* MyProfileInfoView.swift in Sources */,
 				EB17F3E82AF4D3A700971859 /* MyPostView.swift in Sources */,
 				4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */,
+				EBD411AF2AF667F000A942D6 /* MyPetTableViewCell.swift in Sources */,
 				1FBA09922AE6732700A3B42C /* YouTubeTableViewCell.swift in Sources */,
 				4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */,
 				52D998192AD6A89600679B15 /* SceneDelegate.swift in Sources */,
