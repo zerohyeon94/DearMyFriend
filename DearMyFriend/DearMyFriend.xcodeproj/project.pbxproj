@@ -68,6 +68,7 @@
 		EBD2B7622AE2410F007FD1DA /* AddPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7612AE2410F007FD1DA /* AddPostView.swift */; };
 		EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */; };
 		EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */; };
+		EBD411AC2AF6675F00A942D6 /* PetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD411AB2AF6675F00A942D6 /* PetModel.swift */; };
 		EF93D8E598A9724059E59C52 /* libPods-DearMyFriend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F70DC412C4BA07AE6693545 /* libPods-DearMyFriend.a */; };
 /* End PBXBuildFile section */
 
@@ -131,6 +132,7 @@
 		EBD2B7612AE2410F007FD1DA /* AddPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostView.swift; sourceTree = "<group>"; };
 		EBD2B7632AE241E7007FD1DA /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebase.swift; sourceTree = "<group>"; };
+		EBD411AB2AF6675F00A942D6 /* PetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -363,6 +365,7 @@
 		EBD2B7382AE21C4A007FD1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EBD411AA2AF6675200A942D6 /* Pet */,
 				EB5EDEE02AEA4013002075F9 /* User */,
 				5258C26F2AE65BDF00E9FC2B /* MainPage */,
 				EBD2B7392AE21C56007FD1DA /* Feed */,
@@ -399,6 +402,14 @@
 				EB5EDEE52AEF484D002075F9 /* CommentTableViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		EBD411AA2AF6675200A942D6 /* Pet */ = {
+			isa = PBXGroup;
+			children = (
+				EBD411AB2AF6675F00A942D6 /* PetModel.swift */,
+			);
+			path = Pet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -538,6 +549,7 @@
 			files = (
 				EB5EDEE82AEF4EA7002075F9 /* CommentViewController.swift in Sources */,
 				52D998312AD6AB0100679B15 /* LoginViewController.swift in Sources */,
+				EBD411AC2AF6675F00A942D6 /* PetModel.swift in Sources */,
 				52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */,
 				EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */,
 				52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */,
