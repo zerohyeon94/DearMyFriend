@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1FBA09922AE6732700A3B42C /* YouTubeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBA09912AE6732700A3B42C /* YouTubeTableViewCell.swift */; };
+		372923422AF3C191009993F8 /* CalculInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372923412AF3C191009993F8 /* CalculInfo.swift */; };
 		4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */; };
 		4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AB12AE27D39005146AA /* NaverSearchService.swift */; };
 		5258C2632AE6334600E9FC2B /* ReuseCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5258C2622AE6334600E9FC2B /* ReuseCollectionView.swift */; };
@@ -71,6 +72,7 @@
 		1FBA09912AE6732700A3B42C /* YouTubeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeTableViewCell.swift; sourceTree = "<group>"; };
 		211A4D9FC879324F15DA3B42 /* Pods-DearMyFriend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.debug.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.debug.xcconfig"; sourceTree = "<group>"; };
 		2F70DC412C4BA07AE6693545 /* libPods-DearMyFriend.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DearMyFriend.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		372923412AF3C191009993F8 /* CalculInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculInfo.swift; sourceTree = "<group>"; };
 		4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAPIManager.swift; sourceTree = "<group>"; };
 		4E275AB12AE27D39005146AA /* NaverSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchService.swift; sourceTree = "<group>"; };
 		5258C2622AE6334600E9FC2B /* ReuseCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseCollectionView.swift; sourceTree = "<group>"; };
@@ -282,14 +284,15 @@
 		52D998482AD6B01E00679B15 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				52D998322AD6AB0E00679B15 /* YouTubeViewController.swift */,
-				1FBA09912AE6732700A3B42C /* YouTubeTableViewCell.swift */,
 				52D9983A2AD6AB9B00679B15 /* MapViewController.swift */,
+				52D998322AD6AB0E00679B15 /* YouTubeViewController.swift */,
+				372923412AF3C191009993F8 /* CalculInfo.swift */,
+				52D998342AD6AB1800679B15 /* CalculatorViewController.swift */,
 				4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */,
+				1FBA09912AE6732700A3B42C /* YouTubeTableViewCell.swift */,
 				4E275AB12AE27D39005146AA /* NaverSearchService.swift */,
 				52D9983C2AD6ABA700679B15 /* WishViewController.swift */,
 				52D9983E2AD6ABB500679B15 /* StoreViewController.swift */,
-				52D998342AD6AB1800679B15 /* CalculatorViewController.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -526,6 +529,7 @@
 				EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */,
 				52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */,
 				52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */,
+				372923422AF3C191009993F8 /* CalculInfo.swift in Sources */,
 				52D9982F2AD6AAF800679B15 /* UserInfoViewController.swift in Sources */,
 				EB5EDEE22AEA4030002075F9 /* UserModel.swift in Sources */,
 				52D998392AD6AB6600679B15 /* PopularityViewController.swift in Sources */,
@@ -709,7 +713,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -741,7 +745,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
