@@ -70,6 +70,7 @@
 		EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */; };
 		EBD411AC2AF6675F00A942D6 /* PetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD411AB2AF6675F00A942D6 /* PetModel.swift */; };
 		EBD411AF2AF667F000A942D6 /* MyPetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD411AE2AF667F000A942D6 /* MyPetTableViewCell.swift */; };
+		EBD411B12AF66B2200A942D6 /* MyPostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD411B02AF66B2200A942D6 /* MyPostCollectionViewCell.swift */; };
 		EF93D8E598A9724059E59C52 /* libPods-DearMyFriend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F70DC412C4BA07AE6693545 /* libPods-DearMyFriend.a */; };
 /* End PBXBuildFile section */
 
@@ -135,6 +136,7 @@
 		EBD2B7652AE24210007FD1DA /* FeedFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFirebase.swift; sourceTree = "<group>"; };
 		EBD411AB2AF6675F00A942D6 /* PetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetModel.swift; sourceTree = "<group>"; };
 		EBD411AE2AF667F000A942D6 /* MyPetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPetTableViewCell.swift; sourceTree = "<group>"; };
+		EBD411B02AF66B2200A942D6 /* MyPostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPostCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -419,6 +421,7 @@
 			isa = PBXGroup;
 			children = (
 				EBD411AE2AF667F000A942D6 /* MyPetTableViewCell.swift */,
+				EBD411B02AF66B2200A942D6 /* MyPostCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -564,6 +567,7 @@
 				52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */,
 				EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */,
 				52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */,
+				EBD411B12AF66B2200A942D6 /* MyPostCollectionViewCell.swift in Sources */,
 				52D998332AD6AB0E00679B15 /* YouTubeViewController.swift in Sources */,
 				52D9984C2AD6B32F00679B15 /* Helper.swift in Sources */,
 				EBD2B7642AE241E7007FD1DA /* AddPostViewController.swift in Sources */,

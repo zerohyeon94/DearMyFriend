@@ -18,6 +18,7 @@ class MyPetInfoView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Configure & Constant
     func setupTableView(){
         petInfoTableView.dataSource = self
         
