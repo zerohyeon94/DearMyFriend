@@ -3,6 +3,8 @@ import Firebase
 import Lottie
 import SnapKit
 import UIKit
+
+
 class YouTubeViewController: UIViewController {
     let fireStoreDataBase = Firestore.firestore()
     var compterPremierColDocSec: Int = 0
@@ -27,7 +29,13 @@ class YouTubeViewController: UIViewController {
     }()
 
     
-
+    private var refreshControl: UIRefreshControl = {
+            let refreshControl = UIRefreshControl()
+            refreshControl.tintColor = UIColor(named: "주요텍스트컬러")
+            refreshControl.addTarget(self, action: #selector(refreshTableView), for: .valueChanged)
+            return refreshControl
+        }()
+    
     private var cellSelectAnime = {
         let animeView = LottieAnimationView(name: "loading")
 
@@ -58,7 +66,11 @@ class YouTubeViewController: UIViewController {
         referenceEnTemps(nomDePreCol: "고양이 유튜브", nomDeDeuCol: "강아지 유튜브") { _, _ in
             self.youtubeTableView.reloadData()
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+            self.refreshTableView()
+        }
     }
+    
 }
 
 extension YouTubeViewController {
@@ -75,18 +87,25 @@ extension YouTubeViewController {
     }
 
     private func layoutForTableView() {
+        refreshTableView()
         view.addSubview(youtubeTableView)
         youtubeTableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(100)
             make.bottom.equalToSuperview().offset(-100)
-            make.leading.equalToSuperview().offset(25)
-            make.trailing.equalToSuperview().offset(-25)
+            make.leading.equalToSuperview().offset(5)
+            make.trailing.equalToSuperview().offset(-5)
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
     }
 
-    
+    @objc private func refreshTableView() {
+           // 테이블 뷰 데이터를 새로고침하는 작업 수행
+           referenceEnTemps(nomDePreCol: "고양이 유튜브", nomDeDeuCol: "강아지 유튜브") { _, _ in
+               self.youtubeTableView.reloadData()
+               self.refreshControl.endRefreshing()
+           }
+       }
 
     func telechargerDesImg(from urlString: String, completion: @escaping (UIImage?) -> Void) {
         guard let url = URL(string: urlString) else {
@@ -130,6 +149,8 @@ extension YouTubeViewController {
                 let count = snapshot?.documents.count ?? 0
                 self.compterPremierColDocSec = count
                 completion(self.compterPremierColDocSec, self.compterDeuxiemeColDocSec)
+                self.youtubeTableView.reloadData()
+
             }
         }
 
@@ -140,6 +161,8 @@ extension YouTubeViewController {
                 let count = snapshot?.documents.count ?? 0
                 self.compterDeuxiemeColDocSec = count
                 completion(self.compterPremierColDocSec, self.compterDeuxiemeColDocSec)
+                self.youtubeTableView.reloadData()
+
             }
         }
     }
@@ -167,7 +190,7 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 145
     }
 
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
@@ -183,7 +206,10 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellForYoutube", for: indexPath) as! YouTubeTableViewCell
+            cell.prepareForReuse()
+
         let channelDocumentName = "채널\(indexPath.row + 1)"
         let channelImageName = "채널\(indexPath.row + 1)"
         if indexPath.section == 0 {
