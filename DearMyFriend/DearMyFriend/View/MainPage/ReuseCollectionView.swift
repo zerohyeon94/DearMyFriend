@@ -12,8 +12,8 @@ class ReuseCollectionView: UIView {
     let titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 20)
-        label.textColor = ThemeColor.deepTextColor
+        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 15)
+        label.textColor = ThemeColor.titleColor
         return label
     }()
     
@@ -21,11 +21,12 @@ class ReuseCollectionView: UIView {
         let flowLayout = UICollectionViewFlowLayout()
         
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = Collection.reuseSpacing
+        flowLayout.minimumLineSpacing = Collection.menuSpacing
 
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
+        collection.backgroundColor = .clear
         return collection
     }()
 
