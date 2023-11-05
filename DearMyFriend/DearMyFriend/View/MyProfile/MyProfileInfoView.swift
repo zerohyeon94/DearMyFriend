@@ -68,7 +68,7 @@ class MyProfileInfoView: UIView {
     // MARK: Initalizers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .blue
+        
         configure()
     }
     

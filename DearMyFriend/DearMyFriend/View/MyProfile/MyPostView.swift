@@ -17,7 +17,6 @@ class MyPostView: UIView {
     // MARK: Initalizers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .red
         
         setupCollectionView()
     }
