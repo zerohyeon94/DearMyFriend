@@ -7,15 +7,17 @@ class MainMenuCellView: UICollectionViewCell {
             guard let imageSet = iconSet else { return }
             guard let image = imageSet.values.first else { return }
             menuTitle.text = imageSet.keys.first
-            menuIcon.image = image
+//            menuIcon.image = image
         }
     }
     
     let menuIcon: UIImageView = {
        let view = UIImageView()
         view.tintColor = .white
-        view.backgroundColor = .clear
+        view.backgroundColor = ThemeColor.deepPink
         view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 10
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -23,15 +25,15 @@ class MainMenuCellView: UICollectionViewCell {
     var menuTitle: UILabel = {
        let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
-        title.textColor = .black
-        title.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 15)
+        title.textColor = ThemeColor.deepTextColor
+        title.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 10)
         return title
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .clear
         autoLayout()
-        makeBounds()
     }
     
     required init?(coder: NSCoder) {
@@ -44,17 +46,11 @@ class MainMenuCellView: UICollectionViewCell {
         NSLayoutConstraint.activate([
             menuIcon.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             menuIcon.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
-            menuIcon.widthAnchor.constraint(equalToConstant: 50),
+            menuIcon.widthAnchor.constraint(equalToConstant: Collection.menuSize),
+            menuIcon.heightAnchor.constraint(equalTo: self.menuIcon.widthAnchor),
             
-            menuTitle.topAnchor.constraint(equalTo: menuIcon.bottomAnchor),
-            menuTitle.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            menuTitle.heightAnchor.constraint(equalToConstant: 20),
-            menuTitle.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            menuTitle.topAnchor.constraint(equalTo: menuIcon.bottomAnchor, constant: 5),
+            menuTitle.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
-    }
-    
-    func makeBounds() {
-        self.clipsToBounds = true
-        self.layer.cornerRadius = 5
     }
 }
