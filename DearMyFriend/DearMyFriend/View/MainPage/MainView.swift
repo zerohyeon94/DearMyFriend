@@ -1,7 +1,7 @@
 import UIKit
 
 class MainView: UIView {
-    
+    //
     let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
