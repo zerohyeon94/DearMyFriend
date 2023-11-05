@@ -48,7 +48,8 @@ class TabBarController: UITabBarController {
         profileViewController.tabBarItem = self.setupTabBarAttributes("프로필", "pawprint.fill")
         
         UITabBar.clearShadow()
-        tabBar.layer.applyShadow(color: .gray, alpha: 0.9, x: 0, y: 0, blur: 12)
+        tabBar.layer.borderWidth = 1
+        tabBar.layer.borderColor = ThemeColor.borderLineColor.cgColor
 
         viewControllers = [feedViewController, mainViewController, profileViewController]
         selectedIndex = 1

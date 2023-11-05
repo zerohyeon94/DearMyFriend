@@ -2,11 +2,11 @@ import UIKit
 
 struct Collection {
     // MARK: - MainWidthOfPadding
-    static let mainWidthOfPadding = UIScreen.main.bounds.width-40
+    static let mainWidthOfPadding = UIScreen.main.bounds.width-20
     
     // MARK: - Main Bounds
     static let bannerWidth = Int(UIScreen.main.bounds.width)
-    static let bannerHeight = Int(bannerWidth/3)
+    static let bannerHeight = Int(bannerWidth/2)
     
     // MARK: - 컬렉션 뷰 식별자
     static let menuIdentifier = "mainCV"
@@ -16,22 +16,22 @@ struct Collection {
     static let rankStoryIdentifier = "rankStoryCV"
 
     // MARK: - 메뉴 컬렉션 뷰
-    static let menuSpacing: CGFloat = 25
+    static let menuSpacing: CGFloat = 20
     static let menuColumns: CGFloat = 4
-    static let menuSize = ((mainWidthOfPadding - (menuSpacing * (menuColumns-1))) / Collection.menuColumns)
-    static let cellHeightSize = ((mainWidthOfPadding - (menuSpacing * (menuColumns-1))) / Collection.menuColumns)+20
+    static let menuSize = Int((mainWidthOfPadding - (menuSpacing * menuColumns)) / Collection.menuColumns)+1
+    static let cellHeightSize = Int((mainWidthOfPadding - (menuSpacing * menuColumns)) / Collection.menuColumns)+17
     
     // MARK: - 추천 컬렉션 뷰
-    static let reuseSpacing: CGFloat = 10
+    static let reuseSpacing: CGFloat = 20
     
-    static let reuseStoreColumns: CGFloat = 2.5
-    static let reuseStoreWidtSize = (mainWidthOfPadding / Collection.reuseStoreColumns)
-    static let reuseStoreHeightSize:CGFloat = (mainWidthOfPadding / Collection.reuseStoreColumns)
+    static let reuseStoreColumns: CGFloat = 3.5
+    static let reuseStoreWidtSize = Int((mainWidthOfPadding - (reuseSpacing * reuseStoreColumns)) / Collection.reuseStoreColumns)
+    static let reuseStoreHeightSize = Int((mainWidthOfPadding - (reuseSpacing * reuseStoreColumns)) / Collection.reuseStoreColumns)+17
     
     
     static let reusePlaceColumns: CGFloat = 2
-    static let reusePlaceWidtSize = (mainWidthOfPadding / Collection.reusePlaceColumns)
-    static let reusePlaceHeightSize:CGFloat = 150
+    static let reusePlaceWidtSize = (reuseStoreWidtSize*2) + 20
+    static let reusePlaceHeightSize:CGFloat = 100
 }
 
 struct IndicatorInfo {
@@ -81,12 +81,14 @@ struct Rankbanner {
 }
 
 struct ThemeColor {
-    static let textColor = UIColor.init(hexCode: "6c757d")
-    static let deepTextColor = UIColor.init(hexCode: "212529")
+    static let textColor = UIColor.init(hexCode: "f4f4f4")
+    static let deepTextColor = UIColor.init(hexCode: "212529") // 515151
+    
+    static let titleColor = UIColor.init(hexCode: "282828")
     
     static let borderLineColor = UIColor.init(hexCode: "e9ecef")
     
-    static let deepPink = UIColor.init(hexCode: "fb6f92")
-    static let pink = UIColor.init(hexCode: "ffc2d1")
+    static let deepPink = UIColor.init(hexCode: "ff628f") //ff628f
+    static let pink = UIColor.init(hexCode: "FFE6ED") // FFE6ED
 }
 
