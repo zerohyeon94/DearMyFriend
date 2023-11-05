@@ -12,7 +12,7 @@ class ReuseCollectionView: UIView {
     let titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 20)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 20)
         label.textColor = .black
         return label
     }()

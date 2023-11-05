@@ -23,7 +23,7 @@ class RankImageCellView: UICollectionViewCell {
     let appTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 15)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 15)
         label.textColor = .black
         return label
     }()

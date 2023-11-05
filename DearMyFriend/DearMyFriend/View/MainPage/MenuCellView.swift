@@ -24,7 +24,7 @@ class MainMenuCellView: UICollectionViewCell {
        let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
         title.textColor = .black
-        title.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 15)
+        title.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 15)
         return title
     }()
     
