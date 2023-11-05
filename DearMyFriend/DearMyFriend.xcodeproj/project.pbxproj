@@ -238,6 +238,7 @@
 		52BDFA4F2AF7C17C00DFE970 /* LoginViews */ = {
 			isa = PBXGroup;
 			children = (
+				52BDFA502AF7C19F00DFE970 /* LoginView.swift */,
 				52BDFA522AF7C23600DFE970 /* CustomUI */,
 			);
 			path = LoginViews;
@@ -297,7 +298,6 @@
 			isa = PBXGroup;
 			children = (
 				52BDFA4F2AF7C17C00DFE970 /* LoginViews */,
-				52BDFA502AF7C19F00DFE970 /* LoginView.swift */,
 				EB17F3E02AF48D4500971859 /* MyProfile */,
 				EBD2B7552AE23FCD007FD1DA /* Feed */,
 				526EB6702AE226430073C77D /* MainPage */,
