@@ -36,7 +36,7 @@ class PopularityCellView: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 15)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 15)
         label.text = "ryusdb"
         return label
     }()

@@ -135,7 +135,7 @@ class MainView: UIView {
             rankCollectionView.widthAnchor.constraint(equalToConstant: CGFloat(Collection.bannerWidth)),
             rankCollectionView.heightAnchor.constraint(equalToConstant: CGFloat(Collection.bannerHeight)),
             
-            pageControl.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: rankCollectionView.bottomAnchor),
             pageControl.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
             pageControl.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
                     
