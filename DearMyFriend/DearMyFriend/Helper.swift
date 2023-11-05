@@ -1,9 +1,12 @@
 import UIKit
 
 struct Collection {
+    // MARK: - MainWidthOfPadding
+    static let mainWidthOfPadding = UIScreen.main.bounds.width-40
+    
     // MARK: - Main Bounds
     static let bannerWidth = Int(UIScreen.main.bounds.width)
-    static let bannerHeight = Int(bannerWidth/2)
+    static let bannerHeight = Int(bannerWidth/3)
     
     // MARK: - 컬렉션 뷰 식별자
     static let menuIdentifier = "mainCV"
@@ -13,19 +16,21 @@ struct Collection {
     static let rankStoryIdentifier = "rankStoryCV"
 
     // MARK: - 메뉴 컬렉션 뷰
+    static let menuSpacing: CGFloat = 25
     static let menuColumns: CGFloat = 4
-    static let menuSize = ((UIScreen.main.bounds.width-40) / Collection.menuColumns)
+    static let menuSize = ((mainWidthOfPadding - (menuSpacing * (menuColumns-1))) / Collection.menuColumns)
+    static let cellHeightSize = ((mainWidthOfPadding - (menuSpacing * (menuColumns-1))) / Collection.menuColumns)+20
     
     // MARK: - 추천 컬렉션 뷰
     static let reuseSpacing: CGFloat = 10
     
     static let reuseStoreColumns: CGFloat = 2.5
-    static let reuseStoreWidtSize = ((UIScreen.main.bounds.width-40) / Collection.reuseStoreColumns)
-    static let reuseStoreHeightSize:CGFloat = ((UIScreen.main.bounds.width-40) / Collection.reuseStoreColumns)
+    static let reuseStoreWidtSize = (mainWidthOfPadding / Collection.reuseStoreColumns)
+    static let reuseStoreHeightSize:CGFloat = (mainWidthOfPadding / Collection.reuseStoreColumns)
     
     
     static let reusePlaceColumns: CGFloat = 2
-    static let reusePlaceWidtSize = ((UIScreen.main.bounds.width-40) / Collection.reusePlaceColumns)
+    static let reusePlaceWidtSize = (mainWidthOfPadding / Collection.reusePlaceColumns)
     static let reusePlaceHeightSize:CGFloat = 150
 }
 
@@ -73,5 +78,15 @@ struct Rankbanner {
                         "three",
                         "four",
                         "five"]
+}
+
+struct ThemeColor {
+    static let textColor = UIColor.init(hexCode: "6c757d")
+    static let deepTextColor = UIColor.init(hexCode: "212529")
+    
+    static let borderLineColor = UIColor.init(hexCode: "e9ecef")
+    
+    static let deepPink = UIColor.init(hexCode: "fb6f92")
+    static let pink = UIColor.init(hexCode: "ffc2d1")
 }
 

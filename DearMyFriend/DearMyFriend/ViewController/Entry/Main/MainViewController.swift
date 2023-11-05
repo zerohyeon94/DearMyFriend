@@ -125,7 +125,7 @@ extension MainViewController: UICollectionViewDataSource {
         case 2:
             return appList.count
         case 3:
-            return MenuViewControllers.count
+            return 5
         default:
             return 0
         }
@@ -139,7 +139,7 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankIdentifier, for: indexPath) as! RankImageCellView
-            cell.myImageView.image = bannerImageList[indexPath.item]
+//            cell.myImageView.image = bannerImageList[indexPath.item]
             cell.bannerTouchesBegan = { [weak self] in
                 guard let self = self else { return }
                 self.bannerTime.invalidate()
@@ -148,8 +148,8 @@ extension MainViewController: UICollectionViewDataSource {
                 guard let self = self else { return }
                 self.setupTimer()
             }
-            cell.myImageView.backgroundColor = UIColor(hexCode: "fcbf49")
-            cell.myImageView.clipsToBounds = false
+            cell.myImageView.backgroundColor = ThemeColor.pink
+            cell.myImageView.layer.cornerRadius = 0
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.storeIdentifier, for: indexPath) as! RankImageCellView
@@ -157,12 +157,11 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.placeIdentifier, for: indexPath) as! RankImageCellView
-            cell.myImageView.image = bannerImageList[indexPath.item]
             return cell
         default:
             return UICollectionViewCell()
         }
-       
+        
     }
     
 }
@@ -193,12 +192,12 @@ extension MainViewController: UICollectionViewDelegate {
 }
 
 extension MainViewController: UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt                            indexPath: IndexPath) -> CGSize {
         
         switch collectionView.tag {
         case 0:
-            return CGSize(width: Collection.menuSize, height: Collection.menuSize)
+            return CGSize(width: Collection.menuSize, height: Collection.cellHeightSize)
         case 1:
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         case 2:
@@ -206,6 +205,19 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         default:
             return CGSize(width: Collection.reusePlaceWidtSize, height: collectionView.frame.height)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        switch collectionView.tag {
+        case 1:
+            return UIEdgeInsets()//UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        case 0, 2, 3:
+            return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
+        default:
+            return UIEdgeInsets()
+        }
+
     }
 }
 
@@ -244,7 +256,7 @@ extension MainViewController: UIScrollViewDelegate {
             bannerTime.invalidate()
         }
     }
-
+    
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if scrollView == mainView.rankCollectionView {
             setupTimer()
