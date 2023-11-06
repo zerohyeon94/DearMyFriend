@@ -33,7 +33,7 @@ class LoginView: UIView {
         activityIndicator.hidesWhenStopped = true
         return activityIndicator
     }()
-    
+        
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -73,7 +73,6 @@ class LoginView: UIView {
             passwordField.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             passwordField.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.85),
             passwordField.heightAnchor.constraint(equalToConstant: 55),
-            
             
             signInButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 22),
             signInButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),

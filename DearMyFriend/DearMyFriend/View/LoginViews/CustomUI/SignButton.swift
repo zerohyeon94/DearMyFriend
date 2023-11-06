@@ -2,8 +2,11 @@ import UIKit
 
 class SignButton: UIButton {
     
+    private var colorBool = false
+    
     enum FontSize {
         case big
+        case complete
         case med
         case small
         case thin
@@ -15,7 +18,7 @@ class SignButton: UIButton {
         self.layer.cornerRadius = 12
         self.layer.masksToBounds = true
         
-        self.backgroundColor = hasBackground ? ThemeColor.deepPink : .clear
+        self.backgroundColor = hasBackground ? ThemeColor.pink : .clear
         
         let titleColor: UIColor = hasBackground ? .white : .systemBlue
         self.setTitleColor(titleColor, for: .normal)
@@ -23,7 +26,9 @@ class SignButton: UIButton {
         switch fontSize {
         case .big:
             self.titleLabel?.font = .systemFont(ofSize: 22, weight: .bold)
-            
+        case .complete:
+            self.titleLabel?.font = .systemFont(ofSize: 22, weight: .bold)
+            self.isEnabled = false
         case .med:
             self.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
             
@@ -38,5 +43,19 @@ class SignButton: UIButton {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func validTrueColor() {
+        if !colorBool {
+            self.backgroundColor = ThemeColor.deepPink
+            colorBool.toggle()
+        }
+    }
+    
+    public func validFalseColor() {
+        if colorBool {
+            self.backgroundColor = ThemeColor.pink
+            colorBool.toggle()
+        }
     }
 }
