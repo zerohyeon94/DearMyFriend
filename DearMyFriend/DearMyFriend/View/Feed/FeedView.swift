@@ -17,6 +17,7 @@ class FeedView: UIView {
     var tableViewCellindex: Int = 0
     // ImageView
     let profileImageFrame: CGFloat = 40
+    let borderLineColor: CGColor = ThemeColor.borderLineColor.cgColor
     // Label
     let userNicknameLabelSize: CGFloat = 18
     // Image CollectionView & Page Control
@@ -24,11 +25,12 @@ class FeedView: UIView {
     // Like & Comment Button
     var isLikeButtonSelected = false
     let buttonFrame: CGFloat = 50
-    let buttonSize: CGFloat = 28
-    let buttonPadding: CGFloat = 8
+    let buttonSize: CGFloat = 30
+    let topBottomButtonPadding: CGFloat = 8
+    let leftRightButtonPadding: CGFloat = 0
     let likeButtonImage: String = "heart"
     let likeFillButtonImage: String = "heart.fill"
-    let likeButtonColor: UIColor = .black
+    let buttonColor: UIColor = ThemeColor.deepPink
     let commentButtonImage: String = "message"
     let commentButtonColor: UIColor = .black
     // like ImageView & Label
@@ -47,7 +49,7 @@ class FeedView: UIView {
         
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
-        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.borderColor = borderLineColor
         imageView.layer.borderWidth = 1.0
         
         return imageView
@@ -57,7 +59,7 @@ class FeedView: UIView {
         let label = UILabel()
         
         label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: userNicknameLabelSize)
-//        label.font = UIFont.systemFont(ofSize: userNicknameLabelSize)
+        //        label.font = UIFont.systemFont(ofSize: userNicknameLabelSize)
         label.text = "사용자 닉네임" // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
         label.textAlignment = .left
         
@@ -85,8 +87,8 @@ class FeedView: UIView {
     
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = .yellow
-        pageControl.pageIndicatorTintColor = .green
+        pageControl.currentPageIndicatorTintColor = ThemeColor.deepPink
+        pageControl.pageIndicatorTintColor = ThemeColor.pink
         
         return pageControl
     }()
@@ -96,15 +98,15 @@ class FeedView: UIView {
         
         button.frame = CGRect(x: 0, y: 0, width: buttonFrame, height: buttonFrame) // image Button 크기 지정.
         
-        let resizedLikeImage = resizeUIImage(imageName: likeButtonImage, heightSize: buttonSize)
+        let resizedLikeImage = resizeUIImage(imageName: likeButtonImage, heightSize: buttonSize, tintColor: buttonColor)
         button.setImage(resizedLikeImage, for: .normal)
-        let resizedLikeFillImage = resizeUIImage(imageName: likeFillButtonImage, heightSize: buttonSize)
+        let resizedLikeFillImage = resizeUIImage(imageName: likeFillButtonImage, heightSize: buttonSize, tintColor: buttonColor)
         button.setImage(resizedLikeFillImage, for: .selected)
         
         button.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
         
         // 패딩 설정
-        let padding = UIEdgeInsets(top: buttonPadding, left: buttonPadding, bottom: buttonPadding, right: buttonPadding)
+        let padding = UIEdgeInsets(top: topBottomButtonPadding, left: leftRightButtonPadding, bottom: topBottomButtonPadding, right: leftRightButtonPadding)
         button.contentEdgeInsets = padding
         
         return button
@@ -115,13 +117,15 @@ class FeedView: UIView {
         
         button.frame = CGRect(x: 0, y: 0, width: buttonFrame, height: buttonFrame)
         
-        let resizedImage = resizeUIImage(imageName: commentButtonImage, heightSize: buttonSize)
+        let resizedImage = resizeUIImage(imageName: commentButtonImage, heightSize: buttonSize, tintColor: buttonColor)
         button.setImage(resizedImage, for: .normal)
+        //        button.setImage(UIImage(systemName: commentButtonImage), for: .normal)
+        //        button.tintColor = buttonColor
         
         button.addTarget(self, action: #selector(commentButtonTapped), for: .touchUpInside)
         
         // 패딩 설정
-        let padding = UIEdgeInsets(top: buttonPadding, left: buttonPadding, bottom: buttonPadding, right: buttonPadding)
+        let padding = UIEdgeInsets(top: topBottomButtonPadding, left: leftRightButtonPadding, bottom: topBottomButtonPadding, right: leftRightButtonPadding)
         button.contentEdgeInsets = padding
         
         return button
@@ -137,7 +141,7 @@ class FeedView: UIView {
         
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = likeImageFrame / 2
-        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.borderColor = borderLineColor
         imageView.layer.borderWidth = 1.0
         
         return imageView
@@ -153,7 +157,7 @@ class FeedView: UIView {
         
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = likeImageFrame / 2
-        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.borderColor = borderLineColor
         imageView.layer.borderWidth = 1.0
         
         return imageView
@@ -169,7 +173,7 @@ class FeedView: UIView {
         
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = likeImageFrame / 2
-        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.borderColor = borderLineColor
         imageView.layer.borderWidth = 1.0
         
         return imageView
@@ -179,7 +183,7 @@ class FeedView: UIView {
         let label = UILabel()
         
         label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: likelabelSize)
-//        label.font = UIFont.systemFont(ofSize: likelabelSize, weight: .medium)
+        //        label.font = UIFont.systemFont(ofSize: likelabelSize, weight: .medium)
         label.text = "조영현님 외 5명이 좋아합니다." // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
         label.textAlignment = .left
         
@@ -191,9 +195,10 @@ class FeedView: UIView {
         
         textView.isEditable = false
         textView.isSelectable = true // TextView 내의 Text를 선택하고 복사 여부.
+        textView.isScrollEnabled = false // 스크롤 비활성화
         
         textView.font = UIFont(name: "SpoqaHanSansNeo-Regular", size: textViewFont)
-//        textView.font = UIFont.systemFont(ofSize: textViewFont)
+        //        textView.font = UIFont.systemFont(ofSize: textViewFont)
         textView.text = "게시글을 받아오는 경우"
         
         return textView
@@ -247,11 +252,13 @@ class FeedView: UIView {
     let userNicknameLeadingConstant: CGFloat = 12
     // Image Collection
     let imageCollectionTopConstant: CGFloat = 8
-    let imageCollectionSideSpaceConstant: CGFloat = 16
+    let imageCollectionSideSpaceConstant: CGFloat = 20
     let imageCollectionViewHeight: CGFloat = 300
     let pageControlHeight: CGFloat = 30
     // Like & Comment Button
     let likeLeadingConstant: CGFloat = 0
+    let buttonHeight: CGFloat = 50
+    let buttonWidth: CGFloat = 42
     // like ImageView & Label
     let likeImageViewLeadingConstant: CGFloat = 6
     let likeImageViewBetweenConstant: CGFloat = 4
@@ -260,7 +267,7 @@ class FeedView: UIView {
     let likeLabelLeadingConstant: CGFloat = 4
     // post TextView
     let postTextViewTopConstant: CGFloat = 8
-    let postTextViewHeight: CGFloat = 100
+    let postTextViewHeight: CGFloat = 50
     
     private func setProfileImageViewConstraint() {
         NSLayoutConstraint.activate([
@@ -302,6 +309,8 @@ class FeedView: UIView {
         NSLayoutConstraint.activate([
             likeButton.topAnchor.constraint(equalTo: imageCollectionView.bottomAnchor),
             likeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: likeLeadingConstant),
+            likeButton.heightAnchor.constraint(equalToConstant: buttonHeight),
+            likeButton.widthAnchor.constraint(equalToConstant: buttonWidth)
         ])
     }
     
@@ -309,6 +318,8 @@ class FeedView: UIView {
         NSLayoutConstraint.activate([
             commentButton.topAnchor.constraint(equalTo: imageCollectionView.bottomAnchor),
             commentButton.leadingAnchor.constraint(equalTo: likeButton.trailingAnchor),
+            commentButton.heightAnchor.constraint(equalToConstant: buttonHeight),
+            commentButton.widthAnchor.constraint(equalToConstant: buttonWidth)
         ])
     }
     
@@ -347,14 +358,14 @@ class FeedView: UIView {
             postTextView.heightAnchor.constraint(equalToConstant: postTextViewHeight)
         ])
     }
-
+    
     // MARK: - Action
     @objc private func likeButtonTapped(){
         print("like 클릭")
         isLikeButtonSelected.toggle()
         likeButton.isSelected = isLikeButtonSelected
         
-        let resizedImage = resizeUIImage(imageName: isLikeButtonSelected ? likeFillButtonImage : likeButtonImage, heightSize: buttonSize)
+        let resizedImage = resizeUIImage(imageName: isLikeButtonSelected ? likeFillButtonImage : likeButtonImage, heightSize: buttonSize, tintColor: buttonColor)
         likeButton.setImage(resizedImage, for: .selected)
         
         // index값을 얻어왔으니까, Feed 정보 중 몇번째인지 확인.
@@ -408,10 +419,35 @@ class FeedView: UIView {
     
     // MARK: - Helper
     // 이미지를 조절하고 싶었으나, SF Symbol이 각각 크기가 달라서 힘듬.
-    func resizeUIImage(imageName: String, heightSize: Double) -> UIImage {
+    //    func resizeUIImage(imageName: String, heightSize: Double, tintColor: UIColor) -> UIImage {
+    //        let image = UIImage(systemName: imageName)
+    //        // 원하는 높이를 설정
+    //        let targetHeight: CGFloat = heightSize
+    //
+    //        // 원래 이미지의 비율을 유지하면서 이미지 리사이즈
+    //        let originalAspectRatio = image!.size.width / image!.size.height
+    //        let targetWidth = targetHeight * originalAspectRatio
+    //
+    //        // 목표 크기 설정
+    //        let targetSize = CGSize(width: targetWidth, height: targetHeight)
+    //
+    //        // SF Symbol Configuration을 생성하고 weight를 변경
+    //        let configuration = UIImage.SymbolConfiguration(weight: .regular)
+    //
+    //        // 이미지를 다시 그리면서 색상 변경.
+    //        UIGraphicsBeginImageContextWithOptions(targetSize, false, 0.0)
+    //        tintColor.set() // 색상 설정
+    //        image?.withConfiguration(configuration).draw(in: CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height))
+    //        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+    //        UIGraphicsEndImageContext()
+    //
+    //        return resizedImage!
+    //    }
+    
+    func resizeUIImage(imageName: String, heightSize: Double, tintColor: UIColor) -> UIImage {
         let image = UIImage(systemName: imageName)
         // 원하는 높이를 설정
-        let targetHeight: CGFloat = heightSize
+        let targetHeight: CGFloat = CGFloat(heightSize)
         
         // 원래 이미지의 비율을 유지하면서 이미지 리사이즈
         let originalAspectRatio = image!.size.width / image!.size.height
@@ -420,11 +456,16 @@ class FeedView: UIView {
         // 목표 크기 설정
         let targetSize = CGSize(width: targetWidth, height: targetHeight)
         
-        // SF Symbol Configuration을 생성하고 weight를 변경
-        let configuration = UIImage.SymbolConfiguration(weight: .regular)
+        // 이미지를 색상 변경.
+        let tintedImage = image?.withRenderingMode(.alwaysTemplate)
         
         UIGraphicsBeginImageContextWithOptions(targetSize, false, 0.0)
-        image?.withConfiguration(configuration).draw(in: CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height))
+        
+        // 이미지를 그리고 색상 적용
+        tintColor.set()
+        
+        tintedImage?.draw(in: CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height))
+        
         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
@@ -441,8 +482,7 @@ class FeedView: UIView {
             viewHeight += $0
         }
         
+        print("viewHeight: \(viewHeight)")
         return viewHeight
     }
 }
-
-

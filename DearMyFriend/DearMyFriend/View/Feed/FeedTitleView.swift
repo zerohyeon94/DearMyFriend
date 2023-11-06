@@ -18,7 +18,7 @@ class FeedTitleView: UIView {
     // Button
     let addPostButtonSize: CGFloat = 30
     let addPostButtonImage: String = "note.text.badge.plus"
-    let addPostButtonColor: UIColor = .black
+    let addPostButtonColor: UIColor = ThemeColor.deepPink
     var delegate: FeadTitleViewDelegate?
     
     lazy var userNicknameLabel: UILabel = {
@@ -27,6 +27,7 @@ class FeedTitleView: UIView {
         label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: userNicknameLabelSize)
 //        label.font = UIFont.boldSystemFont(ofSize: userNicknameLabelSize)
         label.text = "피드 페이지" // 추후 파이어베이스로 받아온 사용자의 닉네임 표시
+        label.textColor = ThemeColor.deepPink
         label.textAlignment = .left
         
         return label
@@ -35,11 +36,8 @@ class FeedTitleView: UIView {
     lazy var addPostButton: UIButton = {
         let button = UIButton()
         
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: addPostButtonSize, weight: .light)
-        let image = UIImage(systemName: addPostButtonImage, withConfiguration: imageConfig)
-        
-        button.setImage(image, for: .normal)
-        button.tintColor = addPostButtonColor
+        let resizedImage = FeedView().resizeUIImage(imageName: addPostButtonImage, heightSize: addPostButtonSize, tintColor: addPostButtonColor)
+        button.setImage(resizedImage, for: .normal)
         
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
