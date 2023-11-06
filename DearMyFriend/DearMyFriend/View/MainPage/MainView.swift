@@ -23,7 +23,7 @@ class MainView: UIView {
         flowLayout.minimumInteritemSpacing = 0
         
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collection.backgroundColor = .white
+        collection.backgroundColor = .clear
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.isScrollEnabled = true
         collection.isPagingEnabled = true
@@ -67,6 +67,13 @@ class MainView: UIView {
         return storeCollection
     }()
     
+    let secondBorderView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor.borderLineColor
+        return view
+    }()
+    
     let recommendedPlace: ReuseCollectionView = {
         let storeCollection = ReuseCollectionView()
         storeCollection.translatesAutoresizingMaskIntoConstraints = false
@@ -79,6 +86,7 @@ class MainView: UIView {
         backgroundColor = .white
         autoLayout()
         setupContentView()
+        print("메뉴사이즈",Collection.menuSize)
     }
     
     required init?(coder: NSCoder) {
@@ -109,6 +117,7 @@ class MainView: UIView {
         contentView.addSubview(menuCollectionView)
         contentView.addSubview(borderView)
         contentView.addSubview(recommendedStore)
+        contentView.addSubview(secondBorderView)
         contentView.addSubview(recommendedPlace)
         print("asdf",UIScreen.main.bounds.width)
         NSLayoutConstraint.activate([
@@ -125,26 +134,33 @@ class MainView: UIView {
             pageControl.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
             pageControl.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
                     
-            menuCollectionView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 10),
+            menuCollectionView.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor, constant: 20),
             menuCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             menuCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            menuCollectionView.heightAnchor.constraint(equalToConstant: Collection.cellHeightSize),
+            menuCollectionView.heightAnchor.constraint(equalToConstant: CGFloat(Collection.cellHeightSize)),
             
             borderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             borderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            borderView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor, constant: 10),
+            borderView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor, constant: 20),
             borderView.heightAnchor.constraint(equalToConstant: 10),
             
-            recommendedStore.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 30),
-            recommendedStore.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            recommendedStore.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            recommendedStore.reuseCollection.heightAnchor.constraint(equalToConstant: Collection.reuseStoreHeightSize),
-            
-            recommendedPlace.topAnchor.constraint(equalTo: recommendedStore.bottomAnchor, constant: 30),
+            recommendedPlace.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 30),
             recommendedPlace.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             recommendedPlace.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             recommendedPlace.reuseCollection.heightAnchor.constraint(equalToConstant: Collection.reusePlaceHeightSize),
-            recommendedPlace.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50),
+            
+            secondBorderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            secondBorderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            secondBorderView.topAnchor.constraint(equalTo: recommendedPlace.bottomAnchor, constant: 15),
+            secondBorderView.heightAnchor.constraint(equalToConstant: 1),
+            
+            recommendedStore.topAnchor.constraint(equalTo: secondBorderView.bottomAnchor, constant: 15),
+            recommendedStore.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            recommendedStore.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            recommendedStore.reuseCollection.heightAnchor.constraint(equalToConstant: CGFloat(Collection.reuseStoreHeightSize)),
+            recommendedStore.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -150),
+            
+
             ])
     }
 }
