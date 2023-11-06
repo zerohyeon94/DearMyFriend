@@ -13,8 +13,7 @@ class RankImageCellView: UICollectionViewCell {
     let myImageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
-//        view.contentMode = .scaleAspectFill
+        view.backgroundColor = ThemeColor.pink
         view.clipsToBounds = true
         view.layer.cornerRadius = 10
         return view
@@ -23,8 +22,8 @@ class RankImageCellView: UICollectionViewCell {
     let appTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 15)
-        label.textColor = .black
+        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 10)
+        label.textColor = ThemeColor.deepTextColor
         return label
     }()
     

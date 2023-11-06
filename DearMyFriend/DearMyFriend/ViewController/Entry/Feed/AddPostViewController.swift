@@ -29,6 +29,38 @@ class AddPostViewController: UIViewController {
         configure()
     }
     
+    // CommentViewController 클래스 내에서 viewWillAppear(_:) 함수 추가
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 키보드 관련 Notification 등록
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // CommentViewController 클래스 내에서 viewWillDisappear(_:) 함수 추가
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // 화면이 나갈 때 Notification 제거
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as NSDictionary?,
+              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
+            return
+        }
+        self.addPostView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        print("hide")
+        self.addPostView.transform = .identity
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
@@ -39,6 +71,8 @@ class AddPostViewController: UIViewController {
         view.addSubview(addPostView)
         addPostView.translatesAutoresizingMaskIntoConstraints = false
         addPostView.delegate = self
+        // 추후 현재 로그인된 ID를 받아와서 닉네임 표시
+        addPostView.userNicknameLabel.text = "_zerohyeon"
         
         NSLayoutConstraint.activate([
             addPostView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -53,12 +87,7 @@ extension AddPostViewController: AddPostViewDelegate {
     func cancelButtonTapped() {
         dismiss(animated: true)
     }
-    //    let id: String
-    //    let image: [String]
-    //    let post: String
-    //    let like: [String]
-    //    let comment: [[String: String]]
-    
+
     func uploadButtonTapped() {
         print("_zerohyeon")
         print("selectedImages: \(selectedImages)")
@@ -72,10 +101,10 @@ extension AddPostViewController: AddPostViewDelegate {
         
         print("현재 시간: \(formattedDate)")
         
-        let feedId: String = "pikachu"
+        let feedId: String = "_zerohyeon"
         var feedImage: [String] = []
         let feedPost: String = addPostView.postTextView.text
-        let feedLike: [String] = ["_zerohyeon", "ironMan"] // 처음에 생성할 때는 좋아요 수가 없음.
+        let feedLike: [String] = ["pikachu", "ironMan"] // 처음에 생성할 때는 좋아요 수가 없음.
         let feedComment: [[String: String]] = [["A":"a"], ["B":"b"]] // 처음에 생성할 때는 댓글이 없음.
         
         // Firebase Storage에 이미지 업로드
@@ -129,7 +158,7 @@ extension AddPostViewController: AddPostViewDelegate {
     
     func imageViewTapped(){
         var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = 5 // 선택한 이미지 수 제한 (옵션)
+        configuration.selectionLimit = 10 // 선택한 이미지 수 제한 (옵션)
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self

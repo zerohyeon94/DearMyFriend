@@ -25,7 +25,9 @@ class MainViewController: UIViewController {
         setupBanner()
         autoLayout()
         setupCollectionView()
-        print(Collection.reusePlaceWidtSize)
+        print(Collection.reuseStoreWidtSize)
+        print(Collection.reuseStoreHeightSize)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +64,7 @@ class MainViewController: UIViewController {
         mainView.recommendedStore.reuseCollection.tag = 2
         mainView.recommendedStore.reuseCollection.dataSource = self
         mainView.recommendedStore.reuseCollection.delegate = self
-        mainView.recommendedStore.reuseCollection.register(RankImageCellView.self, forCellWithReuseIdentifier: Collection.storeIdentifier)
+        mainView.recommendedStore.reuseCollection.register(MainMenuCellView.self, forCellWithReuseIdentifier: Collection.storeIdentifier)
         
         mainView.recommendedPlace.reuseCollection.tag = 3
         mainView.recommendedPlace.reuseCollection.dataSource = self
@@ -125,7 +127,7 @@ extension MainViewController: UICollectionViewDataSource {
         case 2:
             return appList.count
         case 3:
-            return MenuViewControllers.count
+            return 5
         default:
             return 0
         }
@@ -139,7 +141,6 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankIdentifier, for: indexPath) as! RankImageCellView
-            cell.myImageView.image = bannerImageList[indexPath.item]
             cell.bannerTouchesBegan = { [weak self] in
                 guard let self = self else { return }
                 self.bannerTime.invalidate()
@@ -148,21 +149,20 @@ extension MainViewController: UICollectionViewDataSource {
                 guard let self = self else { return }
                 self.setupTimer()
             }
-            cell.myImageView.backgroundColor = UIColor(hexCode: "fcbf49")
-            cell.myImageView.clipsToBounds = false
+            cell.myImageView.backgroundColor = ThemeColor.pink
+            cell.myImageView.layer.cornerRadius = 0
             return cell
         case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.storeIdentifier, for: indexPath) as! RankImageCellView
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.storeIdentifier, for: indexPath) as! MainMenuCellView
             cell.appStore = appList[indexPath.item]
             return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.placeIdentifier, for: indexPath) as! RankImageCellView
-            cell.myImageView.image = bannerImageList[indexPath.item]
             return cell
         default:
             return UICollectionViewCell()
         }
-       
+        
     }
     
 }
@@ -193,19 +193,32 @@ extension MainViewController: UICollectionViewDelegate {
 }
 
 extension MainViewController: UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt                            indexPath: IndexPath) -> CGSize {
         
         switch collectionView.tag {
         case 0:
-            return CGSize(width: Collection.menuSize, height: Collection.menuSize)
+            return CGSize(width: Collection.menuSize, height: Collection.cellHeightSize)
         case 1:
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         case 2:
-            return CGSize(width: Collection.reuseStoreWidtSize, height: collectionView.frame.height)
+            return CGSize(width: Collection.reuseStoreWidtSize, height: Collection.reuseStoreHeightSize)
         default:
-            return CGSize(width: Collection.reusePlaceWidtSize, height: collectionView.frame.height)
+            return CGSize(width: CGFloat(Collection.reusePlaceWidtSize), height: collectionView.frame.height)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        switch collectionView.tag {
+        case 1:
+            return UIEdgeInsets()
+        case 0, 2, 3:
+            return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        default:
+            return UIEdgeInsets()
+        }
+
     }
 }
 
@@ -244,7 +257,7 @@ extension MainViewController: UIScrollViewDelegate {
             bannerTime.invalidate()
         }
     }
-
+    
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if scrollView == mainView.rankCollectionView {
             setupTimer()
