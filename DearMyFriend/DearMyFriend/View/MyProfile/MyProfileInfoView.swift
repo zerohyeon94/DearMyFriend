@@ -114,4 +114,22 @@ class MyProfileInfoView: UIView {
             postStackView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 20),
         ])
     }
+    
+    func setupUserProfile() {
+        let userData = MyViewController.myProfileData
+        
+        userNicknameLabel.text = userData.nickname
+        userEmailLabel.text = userData.id
+        
+        var petCount: String = ""
+        for petIndex in 0..<userData.petName.count {
+            if petIndex == 0 {
+                petCount = "\(userData.petName[petIndex])"
+            } else {
+                petCount = "\(petCount)와 \(userData.petName[petIndex])"
+            }
+        }
+        
+        userPetLabel.text = "\(petCount)의 친구"
+    }
 }

@@ -4,11 +4,12 @@ import UIKit
 class MyPetInfoView: UIView {
     // MARK: Properties
     // TableView
-    private let petInfoTableView = UITableView()
+    let petInfoTableView = UITableView()
     
     // MARK: Initalizers
     override init(frame: CGRect) {
         super.init(frame: frame)
+        print("MyPetInfoView 실행")
         
         setupTableView()
     }
@@ -19,7 +20,8 @@ class MyPetInfoView: UIView {
     
     // MARK: Configure & Constant
     func setupTableView(){
-        petInfoTableView.dataSource = self
+        print("setupTableView 실행")
+        
         
         petInfoTableView.separatorStyle = .none // Cell 사이 줄 제거
         let petInfoCellHeight: CGFloat = 150 // Cell의 여유분의 높이 10을 줌.
@@ -40,22 +42,38 @@ class MyPetInfoView: UIView {
             petInfoTableView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
+    
+    func reloadTableView() {
+        print("reloadTableView")
+        petInfoTableView.dataSource = self
+        
+        petInfoTableView.reloadData()
+    }
 }
 
 extension MyPetInfoView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5 // 추후 받는 데이터 보고 결정
+        let userPetData = MyViewController.myProfileData
+        print("userPetData.petName.count: \(userPetData.petName.count)")
+        return userPetData.petName.count // 추후 받는 데이터 보고 결정
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MyPetTableViewCell.identifier, for: indexPath) as! MyPetTableViewCell
         cell.selectionStyle = .none // cell 선택 효과 없애기
-        
         cell.cellIndex = indexPath.row
         
-        let petDummyData: PetData = PetData(petProfile: "one", petName: "pet Name", petAge: 1, petType: "pet Type")
-        cell.setPetInfo(petData: petDummyData, index: indexPath.row)
+        let userPetData = MyViewController.myProfileData
+        
+        let petProfile = userPetData.petProfile[indexPath.row]
+        let petName = userPetData.petName[indexPath.row]
+        let petAge = userPetData.petAge[indexPath.row]
+        let petType = userPetData.petType[indexPath.row]
+        
+        let petData: PetData = PetData(petProfile: petProfile, petName: petName, petAge: petAge, petType: petType)
+        print("petData: \(petData)")
+        cell.setPetInfo(petData: petData, index: indexPath.row)
         
         return cell
     }

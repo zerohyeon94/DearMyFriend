@@ -28,6 +28,8 @@ class MainViewController: UIViewController {
         print(Collection.reuseStoreWidtSize)
         print(Collection.reuseStoreHeightSize)
 
+        // MyViewController
+//        MyViewController().getUserFirestore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
