@@ -47,14 +47,13 @@ struct AppstoreSearchUrl {
     static let url = "https://itunes.apple.com/search?media=software&country=kr&limit=5"
 }
 
-enum ButtonIcon {
-    static let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .small)
-    static let playIcon = UIImage(systemName: "play.rectangle", withConfiguration: imageConfig)
-    static let mapIcon = UIImage(systemName: "map.fill", withConfiguration: imageConfig)
-    static let wishIcon = UIImage(systemName: "heart.fill", withConfiguration: imageConfig)
-    static let foodIcon = UIImage(systemName: "fork.knife", withConfiguration: imageConfig)
- 
-    static let allButton = [playIcon, mapIcon, wishIcon, foodIcon]
+enum ButtonConfig {
+    static let cameraImageConfig = UIImage.SymbolConfiguration(pointSize: 2, weight: .light, scale: .small)
+    static let cameraIcon = UIImage(systemName: "camera", withConfiguration: cameraImageConfig)
+    
+    static let checkIconConfig = UIImage.SymbolConfiguration(pointSize: 5, weight: .heavy, scale: .small)
+    static let checkIcon = UIImage(systemName: "checkmark.square", withConfiguration: cameraImageConfig)
+    static let checkFillIcon = UIImage(systemName: "checkmark.square.fill", withConfiguration: cameraImageConfig)
 }
 
 struct MenuTest {
@@ -92,3 +91,9 @@ struct ThemeColor {
     static let pink = UIColor.init(hexCode: "FFE6ED") // FFE6ED
 }
 
+struct textSize {
+    static let checkText = UIFont(name: "SpoqaHanSansNeo-Medium", size: 13) ?? .systemFont(ofSize: 13)
+    static let agreementText = UIFont(name: "SpoqaHanSansNeo-Medium", size: 15) ??
+        .systemFont(ofSize: 15)
+
+}
