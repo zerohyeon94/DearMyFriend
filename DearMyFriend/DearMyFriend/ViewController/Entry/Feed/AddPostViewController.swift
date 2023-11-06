@@ -29,6 +29,38 @@ class AddPostViewController: UIViewController {
         configure()
     }
     
+    // CommentViewController 클래스 내에서 viewWillAppear(_:) 함수 추가
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 키보드 관련 Notification 등록
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // CommentViewController 클래스 내에서 viewWillDisappear(_:) 함수 추가
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // 화면이 나갈 때 Notification 제거
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as NSDictionary?,
+              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
+            return
+        }
+        self.addPostView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        print("hide")
+        self.addPostView.transform = .identity
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
