@@ -45,7 +45,6 @@ class MyProfileTitleView: UIView {
     // MARK: Initalizers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .yellow
         
         configure()
     }

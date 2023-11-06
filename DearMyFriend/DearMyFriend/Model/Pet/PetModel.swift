@@ -13,19 +13,4 @@ struct PetData: Codable {
         self.petAge = petAge
         self.petType = petType
     }
-
-    private enum CodingKeys: CodingKey {
-        case petProfile
-        case petName
-        case petAge
-        case petType
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.petProfile = try container.decode(String.self, forKey: .petProfile)
-        self.petName = try container.decode(String.self, forKey: .petName)
-        self.petAge = try container.decode(Int.self, forKey: .petAge)
-        self.petType = try container.decode(String.self, forKey: .petType)
-    }
 }
