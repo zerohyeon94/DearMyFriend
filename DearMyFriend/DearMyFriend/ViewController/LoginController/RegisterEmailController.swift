@@ -41,15 +41,30 @@ class RegisterEmailController: UIViewController {
         self.navigationItem.leftBarButtonItem = backButton
     }
     
-   
+    
     
     // MARK: - Selectors
     @objc private func didTapSignIn() {
         let registerEmail = self.registerView.emailField.text ?? ""
-        let registerUser = RegisterUserRequest(email: registerEmail)
-        let vc = RegisterPasswordController()
-        vc.registerUser = registerUser
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+        
+        AuthService.shared.emailCheck(email: registerEmail) { [weak self] bool, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                AlertManager.registerCheckAlert(on: self)
+                return
+            }
+            
+            if bool {
+                let registerUser = RegisterUserRequest(email: registerEmail)
+                let vc = RegisterPasswordController()
+                vc.registerUser = registerUser
+                self.navigationController?.pushViewController(vc, animated: true)
+            } else {
+                AlertManager.emailCheckAlert(on: self)
+            }
+        }
     }
     
     @objc

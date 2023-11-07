@@ -11,7 +11,7 @@ class RegisterProfileView: UIView {
     
     public let pickerView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .center
+        view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
         view.image = UIImage(named: "camera")
         view.clipsToBounds = false

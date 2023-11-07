@@ -23,32 +23,16 @@ class MainViewController: UIViewController {
         setupBanner()
         autoLayout()
         setupCollectionView()
-        setupNavi()
         print(StorageService.shared.bannerUrl.count)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.isHidden = true
         self.setupTimer()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.bannerTime.invalidate()
-    }
-    
-    func setupNavi() {
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(logOutButtonTapper))
-        navigationItem.rightBarButtonItem = addButton
-    }
-    
-    @objc func logOutButtonTapper() {
-        AuthService.shared.signOut { error in
-            if let error = error {
-                print("로그아웃 실패", error)
-                return
-            }
-            AuthService.shared.changeController(self)
-        }
     }
     
     func autoLayout() {

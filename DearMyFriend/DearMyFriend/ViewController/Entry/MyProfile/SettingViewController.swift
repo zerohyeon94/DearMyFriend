@@ -83,9 +83,16 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func showLogoutAlert() {
         let alert = UIAlertController(title: "로그아웃", message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-            // 로그아웃 처리
-            // ...
+            AuthService.shared.signOut { error in
+                if let error = error {
+                    print("로그아웃 실패", error)
+                } else {
+                    print("로그아웃 성공")
+                    AuthService.shared.changeController(self)
+                }
+            }
         }
+        
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         alert.addAction(confirmAction)
         alert.addAction(cancelAction)
@@ -98,9 +105,18 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     //회원탈퇴
     func showWithdrawalAlert() {
+        // 🟡 추가했음
         let alert = UIAlertController(title: "회원탈퇴", message: "정말로 회원탈퇴 하시겠습니까?", preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "확인", style: .destructive) { _ in
-            
+            AuthService.shared.deleteAccount { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("탈퇴 실패", error)
+                } else {
+                    print("탈퇴 성공")
+                    AuthService.shared.changeController(self)
+                }
+            }
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         alert.addAction(confirmAction)

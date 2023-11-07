@@ -17,7 +17,6 @@ class SignButton: UIButton {
         self.setTitle(title, for: .normal)
         self.layer.cornerRadius = 12
         self.layer.masksToBounds = true
-        
         self.backgroundColor = hasBackground ? ThemeColor.pink : .clear
         
         let titleColor: UIColor = hasBackground ? .white : .systemBlue
@@ -25,18 +24,18 @@ class SignButton: UIButton {
         
         switch fontSize {
         case .big:
-            self.titleLabel?.font = .systemFont(ofSize: 22, weight: .bold)
+            self.titleLabel?.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 22)
         case .complete:
-            self.titleLabel?.font = .systemFont(ofSize: 22, weight: .bold)
+            self.titleLabel?.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 22)
             self.isEnabled = false
         case .med:
-            self.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+            self.titleLabel?.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 18)
             
         case .small:
-            self.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
+            self.titleLabel?.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 16)
             
         case .thin:
-            self.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+            self.titleLabel?.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 16)
             self.setTitleColor(.systemGray, for: .normal)
         }
     }
