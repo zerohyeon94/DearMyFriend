@@ -132,12 +132,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = .systemBackground
         makeUI()
         button()
+       
     }
     
-    private var joinbutton: UIButton = {
+    private lazy var joinbutton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .clear
         button.setTitle("회원가입", for: .normal)
+        button.addTarget(self, action: #selector(joinbuttonTapped), for: .touchUpInside)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitleColor(.gray, for: .normal)
         return button
@@ -165,7 +167,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordSecureButton.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         joinbutton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
+            
             mainLoginImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             mainLoginImage.bottomAnchor.constraint(equalTo: emailTextFieldView.topAnchor, constant: -50),
             mainLoginImage.widthAnchor.constraint(equalToConstant: 190),
@@ -176,7 +180,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             emailInfoLabel.centerYAnchor.constraint(equalTo: emailTextFieldView.centerYAnchor),
             emailTextField.leadingAnchor.constraint(equalTo: emailTextFieldView.leadingAnchor, constant: 8),
             emailTextField.trailingAnchor.constraint(equalTo: emailTextFieldView.trailingAnchor, constant: 8),
-            emailTextField.topAnchor.constraint(equalTo: emailTextFieldView.topAnchor, constant: 15),
+            emailTextField.topAnchor.constraint(equalTo: emailTextFieldView.topAnchor, constant: 2),
             emailTextField.bottomAnchor.constraint(equalTo: emailTextFieldView.bottomAnchor, constant: 2),
             
             passWordInfoLabel.leadingAnchor.constraint(equalTo: passWordTextFieldView.leadingAnchor, constant: 8),
@@ -185,7 +189,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             
             passWordTextField.leadingAnchor.constraint(equalTo: passWordTextFieldView.leadingAnchor, constant: 8),
             passWordTextField.trailingAnchor.constraint(equalTo: passWordTextFieldView.trailingAnchor, constant: 8),
-            passWordTextField.topAnchor.constraint(equalTo: passWordTextFieldView.topAnchor, constant: 15),
+            passWordTextField.topAnchor.constraint(equalTo: passWordTextFieldView.topAnchor, constant: 2),
             passWordTextField.bottomAnchor.constraint(equalTo: passWordTextFieldView.bottomAnchor, constant: 2),
             
             passwordSecureButton.topAnchor.constraint(equalTo: passWordTextFieldView.topAnchor, constant: 15),
@@ -203,6 +207,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             joinbutton.heightAnchor.constraint(equalToConstant: textViewHeight)
         ])
     }
+    
+    
     
     @objc func passwordSecureModeSetting() {
         passWordTextField.isSecureTextEntry.toggle()
@@ -229,4 +235,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @objc func joinbuttonTapped(_ sender: UIButton) {
+        
+    // UserInfoViewController 인스턴스를 생성합니다.
+    let userInfoVC = UserInfoViewController()
+        userInfoVC.modalPresentationStyle = .fullScreen
+        present(userInfoVC, animated: true)
+    // 네비게이션 컨트롤러를 사용하여 UserInfoViewController를 push합니다.
+    //self.navigationController?.pushViewController(userInfoVC, animated: true)
+        print("회원가입버튼 눌림")
+        
+    }
 }
+
