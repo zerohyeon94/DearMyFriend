@@ -38,6 +38,10 @@ extension AlertManager {
         self.showBasicAlert(on: vc, title: "계정센터", message: "서버와 통신이 불안정합니다.\n잠시 후 다시 시도해주세요.")
     }
     
+    public static func emailCheckAlert(on vc: UIViewController) {
+        self.showBasicAlert(on: vc, title: "이메일 체크", message: "중복된 이메일이 존재합니다.")
+    }
+    
     public static func bannerImageReadFail(on vc: UIViewController) {
         self.showBasicAlert(on: vc, title: "배너 이미지", message: "정보를 읽어오지 못했습니다.")
     }
