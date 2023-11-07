@@ -16,8 +16,6 @@ class MainViewController: UIViewController {
     }()
     let MenuViewControllers = [YouTubeViewController(), MapViewController(), WishViewController(), CalculatorViewController()]
     
-    let MenuIcons = ButtonIcon.allButton
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -25,18 +23,31 @@ class MainViewController: UIViewController {
         setupBanner()
         autoLayout()
         setupCollectionView()
-        print(Collection.reuseStoreWidtSize)
-        print(Collection.reuseStoreHeightSize)
-
+        setupNavi()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.navigationBar.isHidden = false
         self.setupTimer()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.bannerTime.invalidate()
+    }
+    
+    func setupNavi() {
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(logOutButtonTapper))
+        navigationItem.rightBarButtonItem = addButton
+    }
+    
+    @objc func logOutButtonTapper() {
+        AuthService.shared.signOut { error in
+            if let error = error {
+                print("로그아웃 실패", error)
+                return
+            }
+            AuthService.shared.changeController(self)
+        }
     }
     
     func autoLayout() {

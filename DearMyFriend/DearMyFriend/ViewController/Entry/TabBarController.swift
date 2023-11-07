@@ -9,23 +9,6 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupTabBar()
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if !login {
-            let vc = LoginViewController()
-            vc.mainViewController = self
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: false, completion: nil)
-        }
-        // !login과 !completionStatus가 모두 true이다 보니 두개의 뷰를 present시도발생(오류코드 발생) 그래서 login이 true인 경우에는 하위 조건문 실행
-        if login && !completionStatus {
-            let vc = UserInfoViewController()
-            vc.mainViewController = self
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true, completion: nil)
-        }
     }
     
     func setupTabBar() {

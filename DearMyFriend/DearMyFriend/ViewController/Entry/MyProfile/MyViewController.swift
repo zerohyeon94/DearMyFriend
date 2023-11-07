@@ -5,17 +5,33 @@ class MyViewController: UIViewController {
 
     let myProfileTitleView: MyProfileTitleView = .init(frame: .zero)
     let myProfileInfoView: MyProfileInfoView = .init(frame: .zero)
+    
+//    let myPetInfoView = MyPetInfoView()
+//    let myPostView = MyPostView()
+    
     let myPetInfoView: MyPetInfoView = .init(frame: .zero)
     let myPostView: MyPostView = .init(frame: .zero)
     
+
+
+    let myProfileFirestore = MyProfileFirestore() // Firebase
+    
+    static var myProfileData: UserData = UserData(profile: "", id: "", nickname: "", petProfile: [], petName: [], petAge: [], petType: [])
+    
+    // Height
+
     let myProfileTitleViewHeight: CGFloat = 50
     let myProfileInfoViewHeight: CGFloat = 150
     let topBottomConstant: CGFloat = 10
     let leftRightConstant: CGFloat = 10
     let segmentedHeight: CGFloat = 30
     
+
     private let feedTableView = UITableView()
     
+
+    // segment
+
     private let segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["myPetInfoView", "myPostView"])
         control.selectedSegmentIndex = 0
@@ -33,6 +49,11 @@ class MyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+
+
+        
+        getUserFirestore()
+
         configure()
     }
     
@@ -51,6 +72,11 @@ class MyViewController: UIViewController {
     private func setupMyProfileTitleView() {
         view.addSubview(myProfileTitleView)
         myProfileTitleView.translatesAutoresizingMaskIntoConstraints = false
+
+
+        myProfileTitleView.delegate = self
+        
+
         NSLayoutConstraint.activate([
             myProfileTitleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             myProfileTitleView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -104,6 +130,24 @@ class MyViewController: UIViewController {
     
     @objc private func didChangeValue(segment: UISegmentedControl) {
         shouldHideFirstView = segment.selectedSegmentIndex == 1
+    }
+    
+    func getUserFirestore() {
+        // 내 프로필 정보 표시
+        myProfileFirestore.getMyProfile { myProfile in
+            
+            MyViewController.myProfileData = myProfile
+            
+            self.myProfileInfoView.setupUserProfile()
+            self.myPetInfoView.setupTableView()
+            self.myPetInfoView.reloadTableView()
+        }
+    }
+}
+
+extension MyViewController: MyProfileTitleViewDelegate {
+    func settingButtonTapped() {
+        print("settingButtonTapped")
     }
 }
 
