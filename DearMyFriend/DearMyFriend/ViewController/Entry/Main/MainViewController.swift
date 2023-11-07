@@ -23,32 +23,16 @@ class MainViewController: UIViewController {
         setupBanner()
         autoLayout()
         setupCollectionView()
-        setupNavi()
         print(StorageService.shared.bannerUrl.count)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.isHidden = true
         self.setupTimer()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.bannerTime.invalidate()
-    }
-    
-    func setupNavi() {
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(logOutButtonTapper))
-        navigationItem.rightBarButtonItem = addButton
-    }
-    
-    @objc func logOutButtonTapper() {
-        AuthService.shared.signOut { error in
-            if let error = error {
-                print("로그아웃 실패", error)
-                return
-            }
-            AuthService.shared.changeController(self)
-        }
     }
     
     func autoLayout() {
@@ -87,8 +71,8 @@ class MainViewController: UIViewController {
     func setupBanner() {
         bannerImageList = StorageService.shared.bannerUrl
         if !bannerImageList.isEmpty {
-            bannerImageList.updateValue(bannerImageList[bannerImageList.count]!, forKey: 0)
-            bannerImageList.updateValue(bannerImageList[1]!, forKey: bannerImageList.count+1)
+            bannerImageList.updateValue(bannerImageList[bannerImageList.count-1]!, forKey: 0)
+            bannerImageList.updateValue(bannerImageList[1]!, forKey: bannerImageList.count)
         }
     }
     
@@ -194,7 +178,7 @@ extension MainViewController: UICollectionViewDelegate {
                 storyManager.uploadStory { [weak self] error in
                     guard let self = self else { return }
                     if let error = error {
-                        print(error) // 얼럿창
+                        print(error) 
                     } else {
                         let popularityView = PopularityViewController()
                         popularityView.mainPage = self

@@ -20,8 +20,24 @@ class AgreementView: UIView {
     
     public let checkAll = CheckPasswordView("모두 동의", textSize.agreementText)
     public let checkAge = CheckPasswordView("만 14세 이상입니다. (필수)", textSize.agreementText)
-    public let checkAgreement = CheckPasswordView("서비스 이용약관에 동의 (필수)", textSize.agreementText)
+    public let checkServiceAgreement = CheckPasswordView("서비스 이용약관에 동의 (필수)", textSize.agreementText)
     public let checkInformation = CheckPasswordView("개인정보 수집 및 이용에 동의 (필수)", textSize.agreementText)
+    
+    public let serviceButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(.systemGray, for: .normal)
+        button.titleLabel?.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 13)
+        button.setTitle("보기", for: .normal)
+        return button
+    }()
+    
+    public let informationButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(.systemGray, for: .normal)
+        button.titleLabel?.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 13)
+        button.setTitle("보기", for: .normal)
+        return button
+    }()
     
     public let signInButton = SignButton(title: "회원가입", hasBackground: true, fontSize: .complete)
     
@@ -59,10 +75,12 @@ class AgreementView: UIView {
             checkAll,
             borderView,
             checkAge,
-            checkAgreement,
+            checkServiceAgreement,
             checkInformation,
             signInButton,
-            activityIndicator
+            activityIndicator,
+            serviceButton,
+            informationButton
         ])
         
         NSLayoutConstraint.activate([
@@ -82,14 +100,22 @@ class AgreementView: UIView {
             checkAge.leadingAnchor.constraint(equalTo: self.agreementlabel.leadingAnchor),
             checkAge.heightAnchor.constraint(equalToConstant: 55),
             
-            checkAgreement.topAnchor.constraint(equalTo: self.checkAge.bottomAnchor, constant: 10),
-            checkAgreement.leadingAnchor.constraint(equalTo: self.agreementlabel.leadingAnchor),
-            checkAgreement.heightAnchor.constraint(equalToConstant: 55),
+            checkServiceAgreement.topAnchor.constraint(equalTo: self.checkAge.bottomAnchor, constant: 10),
+            checkServiceAgreement.leadingAnchor.constraint(equalTo: self.agreementlabel.leadingAnchor),
+            checkServiceAgreement.heightAnchor.constraint(equalToConstant: 55),
             
-            checkInformation.topAnchor.constraint(equalTo: self.checkAgreement.bottomAnchor, constant: 10),
+            serviceButton.topAnchor.constraint(equalTo: self.checkServiceAgreement.topAnchor),
+            serviceButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            serviceButton.heightAnchor.constraint(equalToConstant: 55),
+            
+            checkInformation.topAnchor.constraint(equalTo: self.checkServiceAgreement.bottomAnchor, constant: 10),
             checkInformation.leadingAnchor.constraint(equalTo: self.agreementlabel.leadingAnchor),
             checkInformation.heightAnchor.constraint(equalToConstant: 55),
             
+            informationButton.topAnchor.constraint(equalTo: self.checkInformation.topAnchor),
+            informationButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            informationButton.heightAnchor.constraint(equalToConstant: 55),
+
             signInButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             signInButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.85),
             signInButton.heightAnchor.constraint(equalToConstant: 55),
@@ -101,7 +127,7 @@ class AgreementView: UIView {
     }
     
     public func allCheck() {
-        let checkList = [checkAll, checkAge, checkAgreement, checkInformation]
+        let checkList = [checkAll, checkAge, checkServiceAgreement, checkInformation]
         
         checkList.forEach {
             $0.colorBool = allCheckBool

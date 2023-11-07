@@ -99,6 +99,37 @@ class AuthService {
             sceneDelegate.checkAuthentication()
         }
     }
+    
+    public func deleteAccount(completion: @escaping (Error?) -> Void) {
+        if let user = Auth.auth().currentUser {
+            user.delete { error in
+                if let error = error {
+                    completion(error)
+                } else {
+                    completion(nil)
+                }
+            }
+        }
+    }
+    
+    public func emailCheck(email: String, completion: @escaping (Bool, Error?) -> Void) {
+        let emailDB = Firestore.firestore().collection("users")
+        
+        let query = emailDB.whereField("email", isEqualTo: email)
+        query.getDocuments { qs, error in
+            if let error = error {
+                completion(false, error)
+            }
+            
+            guard let qs = qs else { return completion(false, error) }
+            
+            if qs.documents.isEmpty {
+                completion(true, nil)
+            } else {
+                completion(false, nil)
+            }
+        }
+    }
 }
 
 

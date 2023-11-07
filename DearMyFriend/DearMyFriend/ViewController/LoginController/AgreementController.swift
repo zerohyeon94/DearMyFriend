@@ -17,7 +17,7 @@ class AgreementController: UIViewController {
     
     lazy var checkList = [self.registerView.checkAll,
                           self.registerView.checkAge,
-                          self.registerView.checkAgreement,
+                          self.registerView.checkServiceAgreement,
                           self.registerView.checkInformation]
     
     override func viewDidLoad() {
@@ -32,6 +32,8 @@ class AgreementController: UIViewController {
     // MARK: - Action Setup
     private func setupAction() {
         registerView.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
+        registerView.serviceButton.addTarget(self, action: #selector(didTapServiceButton), for: .touchUpInside)
+        registerView.informationButton.addTarget(self, action: #selector(didTapInformationButton), for: .touchUpInside)
     }
     
     private func setupNavi() {
@@ -134,5 +136,23 @@ class AgreementController: UIViewController {
             self.registerView.signInButton.isEnabled = false
 
         }
+    }
+    
+    @objc
+    func didTapServiceButton() {
+        let urlString = "https://far-octagon-170.notion.site/1396d8caf91041a08ba6e505045656af?pvs=4"
+        self.showWebViewController(with: urlString)
+    }
+    
+    @objc
+    func didTapInformationButton() {
+        let urlString = "https://www.notion.so/dcab8c95d6c848288127665f397e09ad?pvs=4"
+        self.showWebViewController(with: urlString)
+    }
+    
+    private func showWebViewController(with urlString: String) {
+        let vc = WebViewerController(with: urlString)
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true)
     }
 }
