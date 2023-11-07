@@ -102,7 +102,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func timerCounter() {
-        if pageOfNumber < 5 {
+        if pageOfNumber < bannerImageList.count-2 {
             pageOfNumber += 1
             mainView.rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
         } else {
@@ -160,6 +160,7 @@ extension MainViewController: UICollectionViewDataSource {
                 guard let self = self else { return }
                 self.setupTimer()
             }
+            cell.myImageView.image = bannerImageList[indexPath.item]
             cell.myImageView.backgroundColor = ThemeColor.pink
             cell.myImageView.layer.cornerRadius = 0
             return cell
@@ -185,12 +186,14 @@ extension MainViewController: UICollectionViewDelegate {
             self.navigationController?.navigationBar.isHidden = false
             self.navigationController?.pushViewController(MenuViewControllers[indexPath.row], animated: false)
         case 1:
-            let popularityView = PopularityViewController()
-            popularityView.mainPage = self
-            popularityView.modalTransitionStyle = .crossDissolve
-            popularityView.modalPresentationStyle = .fullScreen
-            present(popularityView, animated: true) {
-                self.bannerTime.invalidate()
+            if indexPath.item == 2 {
+                let popularityView = PopularityViewController()
+                popularityView.mainPage = self
+                popularityView.modalTransitionStyle = .crossDissolve
+                popularityView.modalPresentationStyle = .fullScreen
+                present(popularityView, animated: true) {
+                    self.bannerTime.invalidate()
+                }
             }
         case 2:
             guard let appStore = appList[indexPath.item].appUrl else { return }

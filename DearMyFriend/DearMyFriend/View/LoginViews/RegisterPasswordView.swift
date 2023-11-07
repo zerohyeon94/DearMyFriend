@@ -42,7 +42,7 @@ class RegisterPasswordView: UIView {
     
     // MARK: - UI Setup
     private func setupUI() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = .white
         
         self.addSubviews([
             passwordField,

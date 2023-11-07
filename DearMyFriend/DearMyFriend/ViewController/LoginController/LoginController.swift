@@ -1,10 +1,3 @@
-//
-//  LoginController.swift
-//  DearMyFriend
-//
-//  Created by Macbook on 11/5/23.
-//
-
 import UIKit
 
 class LoginController: UIViewController {
@@ -12,8 +5,9 @@ class LoginController: UIViewController {
     private let authManager = AuthService.shared
     private var emailText:String?
     private var passwordText:String?
+    private var keyBoardHeight:CGFloat?
     
-    public let loginView = LoginView()
+    private let loginView = LoginView()
     private var isKeyboardUp = false
     
     override func viewDidLoad() {
@@ -22,6 +16,7 @@ class LoginController: UIViewController {
         self.setupAction()
         self.setupTextfield()
         setupUI()
+        title = "로그인"
     }
     
     private func setupUI() {
@@ -36,7 +31,7 @@ class LoginController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print(#function)
+        self.navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -91,13 +86,19 @@ class LoginController: UIViewController {
     
     
     @objc private func didTapNewUser() {
+        self.view.endEditing(true)
         let vc = RegisterEmailController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     @objc private func didTapForgotPassword() {
-        let vc = FotgotPasswordController()
+        self.view.endEditing(true)
+        let vc = ForgotPasswordController()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
         self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     @objc func keyboardUp(notification:NSNotification) {
@@ -105,14 +106,18 @@ class LoginController: UIViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue.origin.y // 키보드의 상단 Y좌표
             let buttonMaxY = self.loginView.newUserAndForgotButton.frame.maxY // 가장 하단의 UI의 하단 Y좌표
             
-            let distance = keyboardRectangle - buttonMaxY // 키보드(Y)에서 하단UI(Y)를 뺀다 (음수가 나와야 함)
+            if keyBoardHeight == nil {
+                keyBoardHeight = keyboardRectangle - buttonMaxY // 키보드(Y)에서 하단UI(Y)를 뺀다 (음수가 나와야 함)
+            }
+            
+            guard let distance = keyBoardHeight else { return }
             
             if distance < 0 { // 음수가 나왔을 때만 y: -distance 올려준다.
                 isKeyboardUp = true
                 UIView.animate(
                     withDuration: 0.3
                     , animations: {
-                        self.view.transform = CGAffineTransform(translationX: 0, y: distance)
+                        self.view.transform = CGAffineTransform(translationX: 0, y: distance-25)
                     }
                 )
             }
@@ -120,11 +125,13 @@ class LoginController: UIViewController {
     }
     
     @objc func keyboardDown() {
+        print("test")
         isKeyboardUp = false
         UIView.animate(
             withDuration: 0.3,
             animations: {
                 self.view.transform = .identity
+                print(self.view.transform)
             }
         )
     }
