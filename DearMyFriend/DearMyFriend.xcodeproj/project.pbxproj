@@ -120,7 +120,12 @@
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
 		52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */; };
 		52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */; };
+
+		7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95703E2AEA452E00F657FF /* joinFirebase.swift */; };
+		7DFCD0142AF8E166000644DC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCD0132AF8E166000644DC /* SettingViewController.swift */; };
+
 		EB16BA3F2AF8CEE60036CFE8 /* MyProfileFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */; };
+
 		EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */; };
 		EB17F3E42AF492BF00971859 /* MyProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */; };
 		EB17F3E62AF4D39400971859 /* MyPetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E52AF4D39400971859 /* MyPetInfoView.swift */; };
@@ -220,7 +225,12 @@
 		52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorCircle.swift; sourceTree = "<group>"; };
 		52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularityCellView.swift; sourceTree = "<group>"; };
 		5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.release.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.release.xcconfig"; sourceTree = "<group>"; };
+
+		7D95703E2AEA452E00F657FF /* joinFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = joinFirebase.swift; sourceTree = "<group>"; };
+		7DFCD0132AF8E166000644DC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+
 		EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileFirebase.swift; sourceTree = "<group>"; };
+
 		EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTitleView.swift; sourceTree = "<group>"; };
 		EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileInfoView.swift; sourceTree = "<group>"; };
 		EB17F3E52AF4D39400971859 /* MyPetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPetInfoView.swift; sourceTree = "<group>"; };
@@ -502,6 +512,7 @@
 			children = (
 				52D998302AD6AB0100679B15 /* LoginViewController.swift */,
 				52D9982E2AD6AAF800679B15 /* UserInfoViewController.swift */,
+				7D95703E2AEA452E00F657FF /* joinFirebase.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -520,7 +531,11 @@
 			isa = PBXGroup;
 			children = (
 				52D9982C2AD6AAF000679B15 /* MyViewController.swift */,
+
+				7DFCD0132AF8E166000644DC /* SettingViewController.swift */,
+
 				EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */,
+
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -903,8 +918,10 @@
 				EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */,
 				528DDA9E2AF84AE400E08DEC /* AgreementlView.swift in Sources */,
 				526EB6722AE263200073C77D /* RankeImageCellView.swift in Sources */,
+				7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */,
 				EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
+				7DFCD0142AF8E166000644DC /* SettingViewController.swift in Sources */,
 				EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */,
 				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,
 				5258C2712AE65C0F00E9FC2B /* RecommendationStore.swift in Sources */,
