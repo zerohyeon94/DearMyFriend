@@ -120,12 +120,10 @@
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
 		52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */; };
 		52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */; };
-
 		7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95703E2AEA452E00F657FF /* joinFirebase.swift */; };
 		7DFCD0142AF8E166000644DC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCD0132AF8E166000644DC /* SettingViewController.swift */; };
-
 		EB16BA3F2AF8CEE60036CFE8 /* MyProfileFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */; };
-
+		EB16BA422AF9F0F10036CFE8 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EB16BA412AF9F0F10036CFE8 /* Kingfisher */; };
 		EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */; };
 		EB17F3E42AF492BF00971859 /* MyProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */; };
 		EB17F3E62AF4D39400971859 /* MyPetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E52AF4D39400971859 /* MyPetInfoView.swift */; };
@@ -225,12 +223,9 @@
 		52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorCircle.swift; sourceTree = "<group>"; };
 		52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularityCellView.swift; sourceTree = "<group>"; };
 		5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.release.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.release.xcconfig"; sourceTree = "<group>"; };
-
 		7D95703E2AEA452E00F657FF /* joinFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = joinFirebase.swift; sourceTree = "<group>"; };
 		7DFCD0132AF8E166000644DC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
-
 		EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileFirebase.swift; sourceTree = "<group>"; };
-
 		EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTitleView.swift; sourceTree = "<group>"; };
 		EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileInfoView.swift; sourceTree = "<group>"; };
 		EB17F3E52AF4D39400971859 /* MyPetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPetInfoView.swift; sourceTree = "<group>"; };
@@ -291,6 +286,7 @@
 				525C368B2AF8BFCA001F76AB /* FirebasePerformance in Frameworks */,
 				525C36BF2AF8C072001F76AB /* FirebaseMessaging in Frameworks */,
 				525C36BD2AF8C072001F76AB /* FirebaseMLModelDownloader in Frameworks */,
+				EB16BA422AF9F0F10036CFE8 /* Kingfisher in Frameworks */,
 				525C36A12AF8C072001F76AB /* FirebaseAuth in Frameworks */,
 				EBD2B74D2AE22232007FD1DA /* Moya in Frameworks */,
 				525C36812AF8BFCA001F76AB /* FirebaseInAppMessaging-Beta in Frameworks */,
@@ -531,11 +527,8 @@
 			isa = PBXGroup;
 			children = (
 				52D9982C2AD6AAF000679B15 /* MyViewController.swift */,
-
 				7DFCD0132AF8E166000644DC /* SettingViewController.swift */,
-
 				EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */,
-
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -765,6 +758,7 @@
 				525C36C42AF8C072001F76AB /* FirebaseRemoteConfigSwift */,
 				525C36C62AF8C072001F76AB /* FirebaseStorage */,
 				525C36C82AF8C072001F76AB /* FirebaseStorageCombine-Community */,
+				EB16BA412AF9F0F10036CFE8 /* Kingfisher */,
 			);
 			productName = DearMyFriend;
 			productReference = 52D998132AD6A89600679B15 /* DearMyFriend.app */;
@@ -799,6 +793,7 @@
 				EBD2B7482AE2221B007FD1DA /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				EBD2B74B2AE22232007FD1DA /* XCRemoteSwiftPackageReference "Moya" */,
 				EBD2B74E2AE22241007FD1DA /* XCRemoteSwiftPackageReference "SnapKit" */,
+				EB16BA402AF9F0F10036CFE8 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 52D998142AD6A89600679B15 /* Products */;
 			projectDirPath = "";
@@ -1179,6 +1174,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		EB16BA402AF9F0F10036CFE8 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		EBD2B73C2AE221F5007FD1DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -1429,6 +1432,11 @@
 		525C36C82AF8C072001F76AB /* FirebaseStorageCombine-Community */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		EB16BA412AF9F0F10036CFE8 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EB16BA402AF9F0F10036CFE8 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		EBD2B73D2AE221F5007FD1DA /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
