@@ -76,5 +76,56 @@ final class MyProfileFirestore {
             }
         }
     }
-
+    
+    func getMyFeed(completion: @escaping ([[String: FeedData]]) -> Void) { //} -> [[String: FeedData]] {
+        var myFeedData: [[String: FeedData]] = [] // key : 업로드 날짜, value : 데이터
+        
+        // 'Users' collection & 해당되는 User ID
+        let documentID: String = "_zerohyeon"
+        let collectionListener = Firestore.firestore().collection(collectionUsers).document(documentID).collection(collectionFeed)
+        
+        collectionListener.getDocuments() { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                
+                for document in querySnapshot!.documents{
+                    
+                    // Firestore 문서의 데이터를 딕셔너리로 가져옴
+                    var userFeedId: String = ""
+                    var userFeedImage: [String] = []
+                    var userFeedPost: String = ""
+                    var userFeedLike: [String] = []
+                    var userFeedComment: [[String: String]] = []
+                    
+                    let data = document.data()
+                    if let id = data["id"] as? String {
+                        userFeedId = id
+                    }
+                    
+                    if let image = data["image"] as? [String] {
+                        userFeedImage = image
+                    }
+                    
+                    if let post = data["post"] as? String {
+                        userFeedPost = post
+                    }
+                    
+                    if let like = data["like"] as? [String] {
+                        userFeedLike = like
+                    }
+                    
+                    if let comment = data["comment"] as? [[String: String]] {
+                        userFeedComment = comment
+                    }
+                    
+                    let userFeedData = FeedData(id: userFeedId, image: userFeedImage, post: userFeedPost, like: userFeedLike, comment: userFeedComment)
+                    myFeedData.append([document.documentID : userFeedData])
+                }
+                
+                completion(myFeedData)
+            }
+        }
+    }
+    
 }

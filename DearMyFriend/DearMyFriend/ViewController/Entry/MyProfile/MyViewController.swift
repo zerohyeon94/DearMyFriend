@@ -11,12 +11,11 @@ class MyViewController: UIViewController {
     
     let myPetInfoView: MyPetInfoView = .init(frame: .zero)
     let myPostView: MyPostView = .init(frame: .zero)
-    
-
 
     let myProfileFirestore = MyProfileFirestore() // Firebase
     
     static var myProfileData: UserData = UserData(profile: "", id: "", nickname: "", petProfile: [], petName: [], petAge: [], petType: [])
+    static var myFeedData: [[String: FeedData]] = [] // key : 업로드 날짜, value : 데이터
     
     // Height
 
@@ -33,7 +32,7 @@ class MyViewController: UIViewController {
     // segment
 
     private let segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["myPetInfoView", "myPostView"])
+        let control = UISegmentedControl(items: ["마이프렌드", "내 게시물"])
         control.selectedSegmentIndex = 0
         return control
     }()
@@ -49,9 +48,6 @@ class MyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
-
-        
         getUserFirestore()
 
         configure()
@@ -142,12 +138,12 @@ class MyViewController: UIViewController {
             self.myPetInfoView.setupTableView()
             self.myPetInfoView.reloadTableView()
         }
-    }
-}
-
-extension MyViewController: MyProfileTitleViewDelegate {
-    func settingButtonTapped() {
-        print("settingButtonTapped")
+        
+        myProfileFirestore.getMyFeed { myFeed in
+            MyViewController.myFeedData = myFeed
+            
+            self.myPostView.reloadCollectionView()
+        }
     }
 }
 

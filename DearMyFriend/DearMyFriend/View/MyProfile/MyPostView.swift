@@ -46,12 +46,22 @@ class MyPostView: UIView {
             postCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
+    
+    func reloadCollectionView() {
+        print("reloadCollectionView")
+        postCollectionView.delegate = self
+        postCollectionView.dataSource = self
+        
+        postCollectionView.reloadData()
+    }
 }
 
 extension MyPostView: UICollectionViewDataSource {
     // collection view의 item 갯수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionViewDummyData.count
+        let userFeedData = MyViewController.myFeedData
+        print("userFeedData.count: \(userFeedData.count)")
+        return userFeedData.count
     }
     
     // Collection View의 cell 표시 방법
@@ -59,7 +69,12 @@ extension MyPostView: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyPostCollectionViewCell.identifier, for: indexPath) as? MyPostCollectionViewCell else { return UICollectionViewCell()
         }
         cell.backgroundColor = .white
-        cell.setPostImageView(with: collectionViewDummyData[indexPath.row])
+        
+        let userFeedData = MyViewController.myFeedData[indexPath.row]
+
+        print("image: \(userFeedData.values.first?.image.first)")
+        
+        cell.setPostImageView(with: userFeedData.values.first?.image.first ?? "image upload fail")
         return cell
     }
 }
