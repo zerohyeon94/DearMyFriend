@@ -56,7 +56,7 @@ extension MyPetInfoView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let userPetData = MyViewController.myProfileData
         print("userPetData.petName.count: \(userPetData.petName.count)")
-        return userPetData.petName.count // 추후 받는 데이터 보고 결정
+        return userPetData.petName.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
