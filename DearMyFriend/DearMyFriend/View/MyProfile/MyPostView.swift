@@ -86,7 +86,7 @@ extension MyPostView: UICollectionViewDataSource {
 
 extension MyPostView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("click index=\(indexPath.row)")
+        print("click index : \(indexPath.row)")
         let selectedCell = collectionView.cellForItem(at: indexPath) as! MyPostCollectionViewCell
         
         delegate?.displayFeedView(index: indexPath.row)
