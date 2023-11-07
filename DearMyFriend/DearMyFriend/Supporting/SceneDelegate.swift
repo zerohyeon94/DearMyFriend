@@ -23,7 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     public func checkAuthentication() {
         if Auth.auth().currentUser?.isEmailVerified == true {
-            self.goToController(with: TabBarController(), navi: false)
+            StorageService.shared.uploadBanner { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    self.goToController(with: TabBarController(), navi: false)
+                } else {
+                    self.goToController(with: TabBarController(), navi: false)
+                }
+            }
         } else {
             self.goToController(with: LoginController(), navi: true)
         }

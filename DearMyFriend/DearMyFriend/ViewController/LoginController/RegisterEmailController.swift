@@ -12,11 +12,13 @@ class RegisterEmailController: UIViewController {
         setupUI()
         setupAction()
         setupTextField()
-        title = "회원가입"
+        setupNavi()
+        title = "이메일 생성"
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
         self.registerView.emailField.becomeFirstResponder()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -33,6 +35,14 @@ class RegisterEmailController: UIViewController {
         registerView.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
     }
     
+    private func setupNavi() {
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = ThemeColor.deepPink
+        self.navigationItem.leftBarButtonItem = backButton
+    }
+    
+   
+    
     // MARK: - Selectors
     @objc private func didTapSignIn() {
         let registerEmail = self.registerView.emailField.text ?? ""
@@ -42,6 +52,13 @@ class RegisterEmailController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    @objc
+    private func backButtonTapped() {
+        self.view.endEditing(true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
     
     private func setupUI() {
         self.view.addSubviews([registerView])

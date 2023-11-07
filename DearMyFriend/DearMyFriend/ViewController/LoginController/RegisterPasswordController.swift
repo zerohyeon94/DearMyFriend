@@ -20,7 +20,8 @@ class RegisterPasswordController: UIViewController {
         setupUI()
         setupAction()
         setupTextField()
-        title = "회원가입"
+        setupNavi()
+        title = "비밀번호 생성"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,6 +38,12 @@ class RegisterPasswordController: UIViewController {
     }
     
     // MARK: - Action Setup
+    private func setupNavi() {
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = ThemeColor.deepPink
+        self.navigationItem.leftBarButtonItem = backButton
+    }
+    
     private func setupAction() {
         registerView.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
     }
@@ -48,6 +55,11 @@ class RegisterPasswordController: UIViewController {
         let vc = RegisterProfileController()
         vc.registerUser = self.registerUser
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc
+    private func backButtonTapped() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     

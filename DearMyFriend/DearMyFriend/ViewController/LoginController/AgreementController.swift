@@ -25,12 +25,19 @@ class AgreementController: UIViewController {
         setupUI()
         setupAction()
         setupTapGestures()
-        title = "회원가입"
+        setupNavi()
+        title = "약관동의"
     }
     
     // MARK: - Action Setup
     private func setupAction() {
         registerView.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
+    }
+    
+    private func setupNavi() {
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = ThemeColor.deepPink
+        self.navigationItem.leftBarButtonItem = backButton
     }
     
     private func setupTapGestures() {
@@ -70,12 +77,14 @@ class AgreementController: UIViewController {
             }
         }
     }
-//    
-//    let registerUsername = self.registerView.usernameField.text ?? ""
-//    registerUser?.username = registerUsername
-//    let vc = AgreementController()
-//    vc.registerUser = self.registerUser
-//    self.navigationController?.pushViewController(vc, animated: true)
+    
+    @objc
+    private func backButtonTapped() {
+        self.view.endEditing(true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
     
     private func setupUI() {
         self.view.addSubviews([registerView])

@@ -3,7 +3,7 @@ import UIKit
 class MainViewController: UIViewController {
     
     let appManager = AppNetworking.shared
-    var bannerImageList: [UIImage?] = []
+    var bannerImageList: [Int:String] = [:]
     var appList: [SearchResult] = []
     var searchKeyword = "펫용품"
     var pageOfNumber = 1
@@ -24,6 +24,7 @@ class MainViewController: UIViewController {
         autoLayout()
         setupCollectionView()
         setupNavi()
+        print(StorageService.shared.bannerUrl.count)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -84,9 +85,11 @@ class MainViewController: UIViewController {
     }
     
     func setupBanner() {
-        bannerImageList = Rankbanner.image
-        bannerImageList.insert(bannerImageList[bannerImageList.count-1], at: 0)
-        bannerImageList.append(bannerImageList[1])
+        bannerImageList = StorageService.shared.bannerUrl
+        if !bannerImageList.isEmpty {
+            bannerImageList.updateValue(bannerImageList[bannerImageList.count]!, forKey: 0)
+            bannerImageList.updateValue(bannerImageList[1]!, forKey: bannerImageList.count+1)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -102,7 +105,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func timerCounter() {
-        if pageOfNumber < 5 {
+        if pageOfNumber < bannerImageList.count-2 {
             pageOfNumber += 1
             mainView.rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
         } else {
@@ -160,6 +163,7 @@ extension MainViewController: UICollectionViewDataSource {
                 guard let self = self else { return }
                 self.setupTimer()
             }
+            cell.bannerImage = bannerImageList[indexPath.item]
             cell.myImageView.backgroundColor = ThemeColor.pink
             cell.myImageView.layer.cornerRadius = 0
             return cell
@@ -185,13 +189,24 @@ extension MainViewController: UICollectionViewDelegate {
             self.navigationController?.navigationBar.isHidden = false
             self.navigationController?.pushViewController(MenuViewControllers[indexPath.row], animated: false)
         case 1:
-            let popularityView = PopularityViewController()
-            popularityView.mainPage = self
-            popularityView.modalTransitionStyle = .crossDissolve
-            popularityView.modalPresentationStyle = .fullScreen
-            present(popularityView, animated: true) {
-                self.bannerTime.invalidate()
+            if indexPath.item == 2 {
+                let storyManager = StorageService.shared
+                storyManager.uploadStory { [weak self] error in
+                    guard let self = self else { return }
+                    if let error = error {
+                        print(error) // 얼럿창
+                    } else {
+                        let popularityView = PopularityViewController()
+                        popularityView.mainPage = self
+                        popularityView.modalTransitionStyle = .crossDissolve
+                        popularityView.modalPresentationStyle = .fullScreen
+                        present(popularityView, animated: true) {
+                            self.bannerTime.invalidate()
+                        }
+                    }
+                }
             }
+            
         case 2:
             guard let appStore = appList[indexPath.item].appUrl else { return }
             if let url = URL(string: appStore) {
@@ -229,7 +244,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         default:
             return UIEdgeInsets()
         }
-
+        
     }
 }
 

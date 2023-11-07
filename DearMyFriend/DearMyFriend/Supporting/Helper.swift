@@ -68,9 +68,10 @@ struct MenuTest {
 struct Rankbanner {
     static var image = [UIImage(named: "banner_01"),
                         UIImage(named: "banner_02"),
-                        UIImage(named: "banner_03"),
-                        UIImage(named: "four"),
-                        UIImage(named: "five")]
+//                        UIImage(named: "banner_01"),
+//                        UIImage(named: "banner_02"),
+//                        UIImage(named: "banner_01")
+                        ]
     
     static var testImage = ["one",
                         "two",

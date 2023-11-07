@@ -2,11 +2,10 @@ import UIKit
 
 class RankImageCellView: UICollectionViewCell {
     
-    var appStore: SearchResult? {
+    var bannerImage: String? {
         didSet {
-            guard let appStore = appStore else { return }
-            loadImage(appStore)
-            appTitle.text = appStore.appName
+            guard let bannerImage = bannerImage else { return }
+            loadImage(bannerImage)
         }
     }
     
@@ -17,14 +16,6 @@ class RankImageCellView: UICollectionViewCell {
         view.clipsToBounds = true
         view.layer.cornerRadius = 10
         return view
-    }()
-    
-    let appTitle: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 10)
-        label.textColor = ThemeColor.deepTextColor
-        return label
     }()
     
     override init(frame: CGRect) {
@@ -38,18 +29,14 @@ class RankImageCellView: UICollectionViewCell {
     
     private func setupUI() {
         self.contentView.addSubview(myImageView)
-        self.contentView.addSubview(appTitle)
         
         
         NSLayoutConstraint.activate([
             myImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             myImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             myImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            myImageView.bottomAnchor.constraint(equalTo: appTitle.topAnchor),
-            
-            appTitle.topAnchor.constraint(equalTo: myImageView.bottomAnchor),
-            appTitle.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
-            appTitle.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
+            myImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+
         ])
     }
     
@@ -66,21 +53,14 @@ class RankImageCellView: UICollectionViewCell {
         bannerTouchesEnded()
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.myImageView.image = nil
-    }
-    
-    private func loadImage(_ myApp: SearchResult) {
-        guard let myAppImage = myApp.appImage else { return }
-        guard let url = URL(string: myAppImage)  else { return }
-
+    private func loadImage(_ url: String?) {
+        guard let imageUrl = url else { return }
+        guard let url = URL(string: imageUrl)  else { return }
         DispatchQueue.global().async {
             guard let data = try? Data(contentsOf: url) else {
                 self.myImageView.image = UIImage()
                 return
             }
-            guard self.appStore?.appImage == url.absoluteString else { return }
             DispatchQueue.main.async {
                 self.myImageView.image = UIImage(data: data)
             }

@@ -2,10 +2,10 @@ import UIKit
 
 class PopularityCellView: UICollectionViewCell {
     
-    var petPhotoImage: String? {
-        didSet{
-            guard let petPhotoImage = petPhotoImage else { return }
-            findAverageColor(petPhotoImage)
+    var storyUrl: String? {
+        didSet {
+            guard let storyUrl = storyUrl else { return }
+            loadImage(storyUrl)
         }
     }
     
@@ -78,6 +78,10 @@ class PopularityCellView: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        self.petPhoto.image = nil
+    }
+    
     func autoLayout() {
         self.contentView.addSubviews([
             petPhoto,
@@ -122,13 +126,19 @@ class PopularityCellView: UICollectionViewCell {
         self.toucheOfImage(self)
     }
     
-    func findAverageColor(_ imageUrl: String) {
-        let petImage = UIImage(named: imageUrl)
+    private func loadImage(_ url: String?) {
+        guard let imageUrl = url else { return }
+        guard let url = URL(string: imageUrl)  else { return }
         DispatchQueue.global().async {
-            let averageColor = petImage?.findAverageColor() ?? UIColor.black
+            guard let data = try? Data(contentsOf: url) else {
+                self.petPhoto.image = UIImage()
+                return
+            }
+            guard let storyIamge = UIImage(data: data) else { return }
+            let averageColor = storyIamge.findAverageColor() ?? UIColor.black
             DispatchQueue.main.async {
+                self.petPhoto.image = UIImage(data: data)
                 self.petPhoto.backgroundColor = averageColor
-                self.petPhoto.image = petImage
             }
         }
     }

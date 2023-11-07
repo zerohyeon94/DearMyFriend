@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FotgotPasswordController: UIViewController {
+class ForgotPasswordController: UIViewController {
     
     private var isKeyboardUp = false
     
@@ -19,11 +19,13 @@ class FotgotPasswordController: UIViewController {
         setupUI()
         setupAction()
         setupTextField()
+        setupNavi()
         title = "비밀번호 찾기"
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
         self.passwordResetView.emailField.becomeFirstResponder()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -33,6 +35,12 @@ class FotgotPasswordController: UIViewController {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func setupNavi() {
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = ThemeColor.deepPink
+        self.navigationItem.leftBarButtonItem = backButton
     }
     
     // MARK: - Action Setup
@@ -57,6 +65,14 @@ class FotgotPasswordController: UIViewController {
         }
     }
     
+    @objc
+    private func backButtonTapped() {
+        self.view.endEditing(true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
     
     private func setupUI() {
         self.view.addSubviews([passwordResetView])
@@ -74,7 +90,7 @@ class FotgotPasswordController: UIViewController {
     }
 }
 
-extension FotgotPasswordController {
+extension ForgotPasswordController {
     
     @objc func keyboardUp(notification:NSNotification) {
         if !isKeyboardUp, let keyboardFrame:NSValue =
@@ -100,7 +116,7 @@ extension FotgotPasswordController {
     }
 }
 
-extension FotgotPasswordController : UITextFieldDelegate {
+extension ForgotPasswordController : UITextFieldDelegate {
     
     func setupTextField() {
         self.passwordResetView.emailField.delegate = self

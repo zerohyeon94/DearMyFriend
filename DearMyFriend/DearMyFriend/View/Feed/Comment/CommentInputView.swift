@@ -13,7 +13,7 @@ class CommentInputView: UIView {
     // Button
     let uploadCommentButtonSize: CGFloat = 30
     let uploadCommentButtonImage: String = "paperplane" // or arrow.up.circle
-    let uploadCommentButtonColor: UIColor = .black
+    let buttonColor: UIColor = ThemeColor.deepPink
     let buttonFrame: CGFloat = 50
     let buttonSize: CGFloat = 28
     let buttonPadding: CGFloat = 8
@@ -37,9 +37,8 @@ class CommentInputView: UIView {
         
         button.frame = CGRect(x: 0, y: 0, width: buttonFrame, height: buttonFrame)
         
-        let resizedImage = FeedView().resizeUIImage(imageName: uploadCommentButtonImage, heightSize: buttonSize)
+        let resizedImage = FeedView().resizeUIImage(imageName: uploadCommentButtonImage, heightSize: buttonSize, tintColor: buttonColor)
         button.setImage(resizedImage, for: .normal)
-        button.tintColor = uploadCommentButtonColor
         
         button.addTarget(self, action: #selector(uploadButtonTapped), for: .touchUpInside)
         
