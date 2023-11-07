@@ -140,7 +140,6 @@ class AgreementController: UIViewController {
     
     @objc
     func didTapServiceButton() {
-        
         let urlString = "https://far-octagon-170.notion.site/1396d8caf91041a08ba6e505045656af?pvs=4"
         self.showWebViewController(with: urlString)
     }

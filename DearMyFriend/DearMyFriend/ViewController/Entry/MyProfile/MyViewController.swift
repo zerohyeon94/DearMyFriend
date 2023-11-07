@@ -151,6 +151,6 @@ extension MyViewController: MyProfileTitleViewDelegate {
     func settingButtonTapped() {
         let settingsVC = SettingsViewController()
         navigationController?.isNavigationBarHidden = false
-        navigationController?.pushViewController(settingsVC, animated: true)
+        navigationController?.pushViewController(settingsVC, animated: false)
     }
 }

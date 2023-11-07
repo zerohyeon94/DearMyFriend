@@ -71,8 +71,8 @@ class MainViewController: UIViewController {
     func setupBanner() {
         bannerImageList = StorageService.shared.bannerUrl
         if !bannerImageList.isEmpty {
-            bannerImageList.updateValue(bannerImageList[bannerImageList.count]!, forKey: 0)
-            bannerImageList.updateValue(bannerImageList[1]!, forKey: bannerImageList.count+1)
+            bannerImageList.updateValue(bannerImageList[bannerImageList.count-1]!, forKey: 0)
+            bannerImageList.updateValue(bannerImageList[1]!, forKey: bannerImageList.count)
         }
     }
     
@@ -178,7 +178,7 @@ extension MainViewController: UICollectionViewDelegate {
                 storyManager.uploadStory { [weak self] error in
                     guard let self = self else { return }
                     if let error = error {
-                        print(error) // 얼럿창
+                        print(error) 
                     } else {
                         let popularityView = PopularityViewController()
                         popularityView.mainPage = self
