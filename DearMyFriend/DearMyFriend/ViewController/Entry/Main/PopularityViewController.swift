@@ -3,6 +3,8 @@ import UIKit
 class PopularityViewController: UIViewController {
     
     var mainPage: MainViewController?
+    
+    private var storyImageList: [Int:String] = [:]
     private var startSeting: Bool = false
     private var storyTime = Timer()
     private var pageOfNumber = 0
@@ -34,7 +36,9 @@ class PopularityViewController: UIViewController {
         view.backgroundColor = .black
         autoLayout()
         setupCollectionView()
+        setupBanner()
         setupTimer()
+        print(storyImageList.count)
     }
     
     func autoLayout() {
@@ -76,6 +80,12 @@ class PopularityViewController: UIViewController {
         }
     }
     
+    func setupBanner() {
+        print("넣은 시점에 스토리뷰 갯수: \(storyImageList.count)")
+        print("넣은 시점에 스토리지 갯수: \(StorageService.shared.storyUrl.count)")
+        storyImageList = StorageService.shared.storyUrl
+    }
+    
     func setupTimer() {
         if !storyTime.isValid {
             storyTime = Timer.scheduledTimer(timeInterval: storyDuration , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: false)
@@ -83,12 +93,15 @@ class PopularityViewController: UIViewController {
     }
     
     @objc func timerCounter() {
+        print("pageNumber: ", pageOfNumber)
+        print("storyImageCount:", storyImageList.count)
 
-        if pageOfNumber < 4 {
+        if pageOfNumber < storyImageList.count-1 {
             pageOfNumber += 1
             storyDuration = IndicatorInfo.duration
             rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
             setupTimer()
+            
         } else {
             self.storyTime.invalidate()
             self.mainPage?.setupTimer()
@@ -134,7 +147,7 @@ class PopularityViewController: UIViewController {
 extension PopularityViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Rankbanner.image.count
+        return storyImageList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -144,11 +157,11 @@ extension PopularityViewController: UICollectionViewDataSource {
             self.nowCell = cell
             self.nowCell?.indicatorCircle.resetTime()
         }
+        cell.storyUrl = storyImageList[indexPath.item]
         
         cell.toucheOfImage = { [weak self] (senderCell) in
             self?.indicatorControl(senderCell.indicatorCircle, PopularityTouch.touch)
         }
-        cell.petPhotoImage = Rankbanner.testImage[indexPath.item]
         return cell
     }
     

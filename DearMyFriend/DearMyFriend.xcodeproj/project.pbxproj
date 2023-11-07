@@ -14,6 +14,7 @@
 		523A7B252AF8E51200EA4D5F /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523A7B242AF8E51200EA4D5F /* ForgotPasswordView.swift */; };
 		523A7B272AF8E6F500EA4D5F /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523A7B262AF8E6F500EA4D5F /* ResetPasswordView.swift */; };
 		523A7B292AF8F01800EA4D5F /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523A7B282AF8F01800EA4D5F /* AlertManager.swift */; };
+		523A7B2C2AF9E3E300EA4D5F /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523A7B2B2AF9E3E300EA4D5F /* StorageService.swift */; };
 		5258C2632AE6334600E9FC2B /* ReuseCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5258C2622AE6334600E9FC2B /* ReuseCollectionView.swift */; };
 		5258C26A2AE648AF00E9FC2B /* SpoqaHanSansNeo-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5258C2652AE648AE00E9FC2B /* SpoqaHanSansNeo-Bold.ttf */; };
 		5258C26B2AE648AF00E9FC2B /* SpoqaHanSansNeo-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5258C2662AE648AE00E9FC2B /* SpoqaHanSansNeo-Medium.ttf */; };
@@ -164,6 +165,7 @@
 		523A7B242AF8E51200EA4D5F /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		523A7B262AF8E6F500EA4D5F /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		523A7B282AF8F01800EA4D5F /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		523A7B2B2AF9E3E300EA4D5F /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		5258C2622AE6334600E9FC2B /* ReuseCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseCollectionView.swift; sourceTree = "<group>"; };
 		5258C2652AE648AE00E9FC2B /* SpoqaHanSansNeo-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpoqaHanSansNeo-Bold.ttf"; sourceTree = "<group>"; };
 		5258C2662AE648AE00E9FC2B /* SpoqaHanSansNeo-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpoqaHanSansNeo-Medium.ttf"; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 			children = (
 				5258C2702AE65C0F00E9FC2B /* RecommendationStore.swift */,
 				5258C2722AE6651000E9FC2B /* AppStoreNetworking.swift */,
+				523A7B2B2AF9E3E300EA4D5F /* StorageService.swift */,
 			);
 			path = MainPage;
 			sourceTree = "<group>";
@@ -860,6 +863,7 @@
 				EB5EDEE82AEF4EA7002075F9 /* CommentViewController.swift in Sources */,
 				52D998312AD6AB0100679B15 /* LoginViewController.swift in Sources */,
 				EBD411AC2AF6675F00A942D6 /* PetModel.swift in Sources */,
+				523A7B2C2AF9E3E300EA4D5F /* StorageService.swift in Sources */,
 				523A7B272AF8E6F500EA4D5F /* ResetPasswordView.swift in Sources */,
 				52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */,
 				52BDFA512AF7C19F00DFE970 /* LoginView.swift in Sources */,

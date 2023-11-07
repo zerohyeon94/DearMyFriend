@@ -16,6 +16,7 @@ class LoginController: UIViewController {
         self.setupAction()
         self.setupTextfield()
         setupUI()
+        print("로그인뷰",StorageService.shared.bannerUrl)
         title = "로그인"
     }
     

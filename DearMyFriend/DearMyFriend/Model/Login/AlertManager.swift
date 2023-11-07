@@ -37,5 +37,9 @@ extension AlertManager {
     public static func registerCheckAlert(on vc: UIViewController) {
         self.showBasicAlert(on: vc, title: "계정센터", message: "서버와 통신이 불안정합니다.\n잠시 후 다시 시도해주세요.")
     }
+    
+    public static func bannerImageReadFail(on vc: UIViewController) {
+        self.showBasicAlert(on: vc, title: "배너 이미지", message: "정보를 읽어오지 못했습니다.")
+    }
 
 }
