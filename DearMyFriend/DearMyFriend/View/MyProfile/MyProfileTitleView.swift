@@ -8,29 +8,23 @@ protocol MyProfileTitleViewDelegate: AnyObject {
 class MyProfileTitleView: UIView {
     
     // MARK: Properties
-    // Label
     let titleLabelSize: CGFloat = 20
-    
-    // Button
     let buttonSize: CGFloat = 30
     let buttonImage: String = "gearshape"
     let buttonColor: UIColor = .black
     
-    var delegate: MyProfileTitleViewDelegate?
+    weak var delegate: MyProfileTitleViewDelegate?
     
     lazy var myPageTitleLabel: UILabel = {
         let label = UILabel()
-        
         label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: titleLabelSize)
         label.text = "Me & My Friend"
         label.textAlignment = .center
-        
         return label
     }()
     
     lazy var settingButton: UIButton = {
         let button = UIButton()
-        
         let imageConfig = UIImage.SymbolConfiguration(pointSize: buttonSize, weight: .light)
         let image = UIImage(systemName: buttonImage, withConfiguration: imageConfig)
         
@@ -42,11 +36,9 @@ class MyProfileTitleView: UIView {
         return button
     }()
     
-    // MARK: Initalizers
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .yellow
-        
         configure()
     }
     
@@ -54,7 +46,6 @@ class MyProfileTitleView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Configure
     private func configure() {
         setUI()
         setConstraint()
@@ -89,7 +80,6 @@ class MyProfileTitleView: UIView {
         ])
     }
     
-    // MARK: Action
     @objc func settingButtonTapped() {
         print("설정 창 실행")
         delegate?.settingButtonTapped()

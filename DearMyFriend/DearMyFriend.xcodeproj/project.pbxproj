@@ -46,9 +46,10 @@
 		52D9984E2AD6B88600679B15 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984D2AD6B88600679B15 /* MainView.swift */; };
 		52D998502AD6BAC000679B15 /* MenuCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D9984F2AD6BAC000679B15 /* MenuCellView.swift */; };
 		52D998562AD6CDF900679B15 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D998552AD6CDF900679B15 /* TabBarController.swift */; };
-		7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95703E2AEA452E00F657FF /* joinFirebase.swift */; };
 		52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */; };
 		52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */; };
+		7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95703E2AEA452E00F657FF /* joinFirebase.swift */; };
+		7DFCD0142AF8E166000644DC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCD0132AF8E166000644DC /* SettingViewController.swift */; };
 		EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */; };
 		EB17F3E42AF492BF00971859 /* MyProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */; };
 		EB17F3E62AF4D39400971859 /* MyPetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E52AF4D39400971859 /* MyPetInfoView.swift */; };
@@ -126,10 +127,11 @@
 		52D9984D2AD6B88600679B15 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		52D9984F2AD6BAC000679B15 /* MenuCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellView.swift; sourceTree = "<group>"; };
 		52D998552AD6CDF900679B15 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		7D95703E2AEA452E00F657FF /* joinFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = joinFirebase.swift; sourceTree = "<group>"; };
 		52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorCircle.swift; sourceTree = "<group>"; };
 		52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularityCellView.swift; sourceTree = "<group>"; };
 		5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.release.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.release.xcconfig"; sourceTree = "<group>"; };
+		7D95703E2AEA452E00F657FF /* joinFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = joinFirebase.swift; sourceTree = "<group>"; };
+		7DFCD0132AF8E166000644DC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTitleView.swift; sourceTree = "<group>"; };
 		EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileInfoView.swift; sourceTree = "<group>"; };
 		EB17F3E52AF4D39400971859 /* MyPetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPetInfoView.swift; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 			isa = PBXGroup;
 			children = (
 				52D9982C2AD6AAF000679B15 /* MyViewController.swift */,
+				7DFCD0132AF8E166000644DC /* SettingViewController.swift */,
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -661,6 +664,7 @@
 				7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */,
 				EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */,
 				52D9984A2AD6B0B900679B15 /* Extension.swift in Sources */,
+				7DFCD0142AF8E166000644DC /* SettingViewController.swift in Sources */,
 				EBD2B7662AE24210007FD1DA /* FeedFirebase.swift in Sources */,
 				EBD2B7582AE23FEE007FD1DA /* FeedTableViewCell.swift in Sources */,
 				5258C2712AE65C0F00E9FC2B /* RecommendationStore.swift in Sources */,

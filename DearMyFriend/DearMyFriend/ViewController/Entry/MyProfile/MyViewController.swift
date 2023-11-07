@@ -1,29 +1,24 @@
+import Foundation
 import UIKit
 
 class MyViewController: UIViewController {
-    
-    // MARK: Properties
+
     let myProfileTitleView: MyProfileTitleView = .init(frame: .zero)
     let myProfileInfoView: MyProfileInfoView = .init(frame: .zero)
     let myPetInfoView: MyPetInfoView = .init(frame: .zero)
     let myPostView: MyPostView = .init(frame: .zero)
-    // Height
+    
     let myProfileTitleViewHeight: CGFloat = 50
     let myProfileInfoViewHeight: CGFloat = 150
-    // Segmented Control
     let topBottomConstant: CGFloat = 10
     let leftRightConstant: CGFloat = 10
     let segmentedHeight: CGFloat = 30
     
-    // TableView
     private let feedTableView = UITableView()
     
-    // segment
     private let segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["myPetInfoView", "myPostView"])
-        
         control.selectedSegmentIndex = 0
-        
         return control
     }()
     
@@ -38,19 +33,15 @@ class MyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
         configure()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // NavigationBar 숨김.
         navigationController?.isNavigationBarHidden = true
     }
     
-    // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
-        
         setupMyProfileTitleView()
         setupMyProfileInfoView()
         setupSegmentedControl()
@@ -60,19 +51,18 @@ class MyViewController: UIViewController {
     private func setupMyProfileTitleView() {
         view.addSubview(myProfileTitleView)
         myProfileTitleView.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             myProfileTitleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             myProfileTitleView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             myProfileTitleView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             myProfileTitleView.heightAnchor.constraint(equalToConstant: myProfileTitleViewHeight)
         ])
+        myProfileTitleView.delegate = self
     }
     
     private func setupMyProfileInfoView() {
         view.addSubview(myProfileInfoView)
         myProfileInfoView.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             myProfileInfoView.topAnchor.constraint(equalTo: myProfileTitleView.bottomAnchor),
             myProfileInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -84,9 +74,7 @@ class MyViewController: UIViewController {
     private func setupSegmentedControl() {
         view.addSubview(segmentedControl)
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        
         segmentedControl.addTarget(self, action: #selector(didChangeValue(segment:)), for: .valueChanged)
-        
         NSLayoutConstraint.activate([
             segmentedControl.topAnchor.constraint(equalTo: myProfileInfoView.bottomAnchor, constant: 10),
             segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -100,7 +88,6 @@ class MyViewController: UIViewController {
         view.addSubview(myPostView)
         myPetInfoView.translatesAutoresizingMaskIntoConstraints = false
         myPostView.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             myPetInfoView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10),
             myPetInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -112,12 +99,18 @@ class MyViewController: UIViewController {
             myPostView.trailingAnchor.constraint(equalTo: myPetInfoView.trailingAnchor),
             myPostView.bottomAnchor.constraint(equalTo: myPetInfoView.bottomAnchor),
         ])
-        
-        shouldHideFirstView = false // 초기 View 설정
+        shouldHideFirstView = false
     }
     
-    // MARK: Action
     @objc private func didChangeValue(segment: UISegmentedControl) {
         shouldHideFirstView = segment.selectedSegmentIndex == 1
+    }
+}
+
+extension MyViewController: MyProfileTitleViewDelegate {
+    func settingButtonTapped() {
+        let settingsVC = SettingsViewController()
+        navigationController?.isNavigationBarHidden = false
+        navigationController?.pushViewController(settingsVC, animated: true)
     }
 }
