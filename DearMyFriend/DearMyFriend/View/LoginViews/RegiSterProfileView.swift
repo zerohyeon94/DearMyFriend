@@ -11,11 +11,11 @@ class RegisterProfileView: UIView {
     
     public let pickerView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        view.backgroundColor = ThemeColor.pink
-        view.image = UIImage(named: "map")
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 55/2
+        view.contentMode = .center
+        view.backgroundColor = .clear
+        view.image = UIImage(named: "camera")
+        view.clipsToBounds = false
+        view.layer.cornerRadius = 50
         return view
     }()
     
@@ -64,29 +64,27 @@ class RegisterProfileView: UIView {
     
     // MARK: - UI Setup
     private func setupUI() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = .white
         
         self.addSubviews([
-            profileStackView,
-            cameraImageView,
+            pickerView,
+            usernameField,
             informationText,
             signInButton,
         ])
         
         NSLayoutConstraint.activate([
-            profileStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 50),
-            profileStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            profileStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.85),
-            profileStackView.heightAnchor.constraint(equalToConstant: 55),
+            pickerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 50),
+            pickerView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            pickerView.widthAnchor.constraint(equalToConstant: 100),
+            pickerView.heightAnchor.constraint(equalTo: self.pickerView.widthAnchor),
             
-            pickerView.widthAnchor.constraint(equalTo: self.profileStackView.heightAnchor),
+            usernameField.centerYAnchor.constraint(equalTo: self.pickerView.centerYAnchor),
+            usernameField.leadingAnchor.constraint(equalTo: self.pickerView.trailingAnchor, constant: 10),
+            usernameField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            usernameField.heightAnchor.constraint(equalToConstant: 55),
             
-            cameraImageView.trailingAnchor.constraint(equalTo: self.pickerView.trailingAnchor),
-            cameraImageView.bottomAnchor.constraint(equalTo: self.pickerView.bottomAnchor),
-            cameraImageView.widthAnchor.constraint(equalToConstant: 20),
-            cameraImageView.heightAnchor.constraint(equalToConstant: 20),
-            
-            informationText.topAnchor.constraint(equalTo: self.profileStackView.bottomAnchor, constant: 10),
+            informationText.topAnchor.constraint(equalTo: self.usernameField.bottomAnchor, constant: 10),
             informationText.leadingAnchor.constraint(equalTo: self.usernameField.leadingAnchor, constant: 10),
             
             signInButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),

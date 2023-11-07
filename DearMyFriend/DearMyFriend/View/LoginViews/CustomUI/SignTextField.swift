@@ -11,7 +11,9 @@ class SignTextField: UITextField {
     init(fieldType: CustomTextFieldType) {
         super.init(frame: .zero)
         
-        self.backgroundColor = .secondarySystemBackground
+        self.backgroundColor = ThemeColor.textColor
+        self.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 18)
+        self.textColor = ThemeColor.titleColor
         self.layer.cornerRadius = 10
         
         self.returnKeyType = .done

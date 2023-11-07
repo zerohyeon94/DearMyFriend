@@ -15,7 +15,8 @@ class RegisterProfileController: UIViewController {
         setupAction()
         setupTapGestures()
         setupTextField()
-        title = "회원가입"
+        setupNavi()
+        title = "프로필 생성"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,6 +37,12 @@ class RegisterProfileController: UIViewController {
         registerView.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
     }
     
+    private func setupNavi() {
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = ThemeColor.deepPink
+        self.navigationItem.leftBarButtonItem = backButton
+    }
+    
     // MARK: - Selectors
     @objc private func didTapSignIn() {
         let registerUsername = self.registerView.usernameField.text ?? ""
@@ -43,6 +50,14 @@ class RegisterProfileController: UIViewController {
         let vc = AgreementController()
         vc.registerUser = self.registerUser
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc
+    private func backButtonTapped() {
+        self.view.endEditing(true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     private func setupUI() {
@@ -114,6 +129,7 @@ extension RegisterProfileController: PHPickerViewControllerDelegate {
         if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
             itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
                 DispatchQueue.main.async {
+                    self.registerView.pickerView.clipsToBounds = true
                     self.registerView.pickerView.image = image as? UIImage
                     self.registerView.cameraImageView.isHidden = true
                 }
