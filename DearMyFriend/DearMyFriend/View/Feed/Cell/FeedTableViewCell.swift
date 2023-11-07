@@ -11,7 +11,7 @@ class FeedTableViewCell: UITableViewCell {
     var cellIndex: Int = 0
     
     let feedView: FeedView = .init(frame: .zero)
-    let sideSpaceConstant: CGFloat = 16
+    let sideSpaceConstant: CGFloat = 20
     
     // TableView Cell 내 CollectionView
     var imageNames: [String] = []
@@ -21,16 +21,32 @@ class FeedTableViewCell: UITableViewCell {
         feedView.imageCollectionView.dataSource = self
     }
     
+    let separatorLine: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = ThemeColor.deepPink
+        return view
+    }()
+    
     // MARK: Initalizers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
-//        self.contentView.backgroundColor = .yellow
+        //        self.contentView.backgroundColor = .yellow
         
         configure()
+        
+        addSubview(separatorLine)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let separatorHeight: CGFloat = 1.0 // 원하는 구분선 두께로 설정
+        print("frame.size.height: \(frame.size.height)")
+        separatorLine.frame = CGRect(x: 0, y: frame.size.height - 10, width: frame.size.width, height: separatorHeight)
     }
     
     override func prepareForReuse() {
@@ -48,6 +64,8 @@ class FeedTableViewCell: UITableViewCell {
     private func setUI(){
         self.contentView.addSubview(feedView)
         feedView.translatesAutoresizingMaskIntoConstraints = false
+        
+        feedView.postTextView.delegate = self
         feedView.tableViewCellindex = cellIndex
     }
     
@@ -73,7 +91,7 @@ class FeedTableViewCell: UITableViewCell {
         } else {
             feedView.likeButton.isSelected = false
         }
-
+        
         // CollectionView를 다시 로드
         feedView.imageCollectionView.reloadData()
         
@@ -94,14 +112,14 @@ extension FeedTableViewCell: UIScrollViewDelegate {
 extension FeedTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         feedView.pageControl.numberOfPages = imageNames.count
-//        print("imageNames.count: \(imageNames.count)")
+        //        print("imageNames.count: \(imageNames.count)")
         return self.imageNames.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as! ImageCollectionViewCell
         
-//        print("cell에서 확인 imageNames: \(imageNames)")
+        //        print("cell에서 확인 imageNames: \(imageNames)")
         cell.configureURL(imageURL: imageNames[indexPath.item])
         
         return cell
@@ -109,5 +127,29 @@ extension FeedTableViewCell: UICollectionViewDataSource, UICollectionViewDelegat
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+    }
+}
+
+extension FeedTableViewCell: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        updateTextViewHeight(for: textView)
+    }
+    
+    func updateTextViewHeight(for textView: UITextView) {
+        let fixedWidth = textView.frame.size.width
+        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        
+        // 최소 높이 및 최대 높이 설정 (원하는 값으로 변경)
+        let minHeight: CGFloat = 50
+        let maxHeight: CGFloat = 200
+        
+        if newSize.height < minHeight {
+            textView.frame.size.height = minHeight
+        } else if newSize.height > maxHeight {
+            textView.isScrollEnabled = true
+        } else {
+            textView.isScrollEnabled = false
+            textView.frame.size.height = newSize.height
+        }
     }
 }
