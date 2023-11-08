@@ -18,6 +18,7 @@ class AddPostView: UIView {
     let userNicknameLabelSize: CGFloat = 20
     let buttonSize: CGFloat = 20
     let buttonImage: String = "xmark"
+    let uploadButtonImage: String = "square.and.arrow.up"
     let buttonColor: UIColor = .black
     var delegate: AddPostViewDelegate?
     // Image View
@@ -40,10 +41,12 @@ class AddPostView: UIView {
     lazy var uploadPostButton: UIButton = {
         let button = UIButton()
         
-        button.setTitle("공유", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: buttonSize)
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: buttonSize, weight: .light)
+        let image = UIImage(systemName: uploadButtonImage, withConfiguration: imageConfig)
         
-        button.setTitleColor(buttonColor, for: .normal)
+        button.setImage(image, for: .normal)
+        button.tintColor = buttonColor
+        
         button.addTarget(self, action: #selector(uploadButtonTapped), for: .touchUpInside)
         
         return button
@@ -70,6 +73,7 @@ class AddPostView: UIView {
         postImageStackView.translatesAutoresizingMaskIntoConstraints = false
         postImageStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         postImageStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        view.backgroundColor = UIColor(hexCode: "dee2e6", alpha: 1)
         
         return view
     }()
@@ -94,7 +98,7 @@ class AddPostView: UIView {
     }()
     
     lazy var postImageStackView: UIStackView = {
-       let stackView = UIStackView()
+        let stackView = UIStackView()
         
         stackView.spacing = 1
         stackView.axis = .vertical
@@ -163,14 +167,22 @@ class AddPostView: UIView {
         textView.isEditable = true
         textView.isSelectable = true
         
-//        textView.layer.borderWidth = 1.0
-//        textView.layer.borderColor = UIColor.gray.cgColor
-//        textView.layer.cornerRadius = 5.0
+        //        textView.layer.borderWidth = 1.0
+        //        textView.layer.borderColor = UIColor.gray.cgColor
+        //        textView.layer.cornerRadius = 5.0
         
         textView.font = UIFont.systemFont(ofSize: textViewFont)
-        textView.text = "게시글 작성"
+//        textView.text = "게시글 작성"
         
         return textView
+    }()
+    
+    lazy var placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "게시글 작성"
+        label.textColor = .lightGray
+        
+        return label
     }()
     
     // MARK: Initalizers
@@ -191,7 +203,7 @@ class AddPostView: UIView {
     }
     
     private func setUI(){
-        [userNicknameLabel, uploadPostButton, cancelPostButton, imagePlusView, imagePickerButton, imageCollectionView, pageControl, postLabel, borderView, postTextView].forEach { view in
+        [userNicknameLabel, uploadPostButton, cancelPostButton, imagePlusView, imagePickerButton, imageCollectionView, pageControl, postLabel, borderView, postTextView, placeholderLabel].forEach { view in
             addSubview(view)
             view.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -287,7 +299,7 @@ class AddPostView: UIView {
             postLabel.topAnchor.constraint(equalTo: imagePlusView.bottomAnchor, constant: textViewTopConstant),
             postLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: sideSpaceConstant),
             postLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -sideSpaceConstant),
-//            postLabel.heightAnchor.constraint(equalToConstant: postTextViewHeight),
+            //            postLabel.heightAnchor.constraint(equalToConstant: postTextViewHeight),
             
             borderView.topAnchor.constraint(equalTo: postLabel.bottomAnchor, constant: bolderViewTopConstant),
             borderView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: sideSpaceConstant),
@@ -301,8 +313,12 @@ class AddPostView: UIView {
             postTextView.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: textViewTopConstant),
             postTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: sideSpaceConstant),
             postTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -sideSpaceConstant),
-            postTextView.heightAnchor.constraint(equalToConstant: postTextViewHeight)
+            postTextView.heightAnchor.constraint(equalToConstant: postTextViewHeight),
+            
+            placeholderLabel.topAnchor.constraint(equalTo: postTextView.topAnchor, constant: 8),
+            placeholderLabel.leadingAnchor.constraint(equalTo: postTextView.leadingAnchor, constant: 8),
         ])
+        NotificationCenter.default.addObserver(self, selector: #selector(textViewDidChange(_:)), name: UITextView.textDidChangeNotification, object: postTextView)
     }
     
     // MARK: - Action
@@ -318,5 +334,11 @@ class AddPostView: UIView {
     @objc private func profileImageViewTapped(){
         print("image 클릭")
         delegate?.imageViewTapped()
+    }
+    
+    @objc func textViewDidChange(_ notification: Notification) {
+        if let textView = notification.object as? UITextView {
+            placeholderLabel.isHidden = !textView.text.isEmpty
+        }
     }
 }
