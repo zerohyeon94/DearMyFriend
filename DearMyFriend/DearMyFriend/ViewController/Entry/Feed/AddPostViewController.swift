@@ -72,6 +72,8 @@ class AddPostViewController: UIViewController {
         addPostView.translatesAutoresizingMaskIntoConstraints = false
         addPostView.delegate = self
         // 추후 현재 로그인된 ID를 받아와서 닉네임 표시
+        let currentUID: String = MyFirestore().getCurrentUser() ?? "" // 사용자 ID 확인
+        // 사용자 UID의 username 확인.
         addPostView.userNicknameLabel.text = "_zerohyeon"
         
         NSLayoutConstraint.activate([
@@ -89,7 +91,6 @@ extension AddPostViewController: AddPostViewDelegate {
     }
 
     func uploadButtonTapped() {
-        print("_zerohyeon")
         print("selectedImages: \(selectedImages)")
         
         // document : 현재 시간

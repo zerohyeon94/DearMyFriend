@@ -1,5 +1,6 @@
 import UIKit
 import Lottie
+import FirebaseAuth
 
 class FeedViewController: UIViewController {
     
@@ -144,6 +145,7 @@ class FeedViewController: UIViewController {
         ])
     }
     
+    // Firestore 업데이트 여부
     private func subscribeFirestore() {
         print("subscribeFirestore")
         myFirestore.subscribe(collection: MyFirestore().collectionInfo, id: "_zerohyeon") { [weak self] result in

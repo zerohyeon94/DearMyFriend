@@ -389,7 +389,7 @@ class FeedView: UIView {
         }
         
         // TEST: 현재 로그인 되어있는 ID userDefault로 가져오기 임시로 아이디 사용.
-        var id: String = "_zerohyeon"
+        var id: String = MyFirestore().getCurrentUser() ?? ""
         
         print("feedData 상태 업데이트 전 : \(feedDataValue)")
         

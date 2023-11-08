@@ -85,7 +85,8 @@ class FeedTableViewCell: UITableViewCell {
         imageNames = feedData.image
         
         // 좋아요 상태 확인
-        var id: String = "_zerohyeon"
+        var id: String = MyFirestore().getCurrentUser() ?? ""
+        print("setFeed id: \(id)")
         if feedData.like.contains(id) {
             feedView.likeButton.isSelected = true
         } else {

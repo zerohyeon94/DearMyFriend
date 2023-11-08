@@ -7,12 +7,23 @@
 
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseAuth
 
 final class MyFirestore {
     
     let collectionUsers = "Users"
     let collectionInfo = "Info"
     let collectionFeed = "Feed"
+    
+    func getCurrentUser() -> String? {
+        if let user = Auth.auth().currentUser {
+            print("getCurrentUser : \(type(of: user))")
+            return user.uid
+        } else {
+            print("not login")
+            return nil
+        }
+    }
     
     private var documentListener: ListenerRegistration? // 데이터 변경 이벤트를 수신하기 위한 리스너의 등록과 해제를 관리하는 역할. (데이터의 실시간 업데이트)
     
