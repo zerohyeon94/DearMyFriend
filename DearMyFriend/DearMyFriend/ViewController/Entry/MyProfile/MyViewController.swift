@@ -69,7 +69,6 @@ class MyViewController: UIViewController {
         view.addSubview(myProfileTitleView)
         myProfileTitleView.translatesAutoresizingMaskIntoConstraints = false
 
-
         myProfileTitleView.delegate = self
         
 
@@ -110,6 +109,9 @@ class MyViewController: UIViewController {
         view.addSubview(myPostView)
         myPetInfoView.translatesAutoresizingMaskIntoConstraints = false
         myPostView.translatesAutoresizingMaskIntoConstraints = false
+        
+        myPostView.delegate = self
+        
         NSLayoutConstraint.activate([
             myPetInfoView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10),
             myPetInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -152,5 +154,14 @@ extension MyViewController: MyProfileTitleViewDelegate {
         let settingsVC = SettingsViewController()
         navigationController?.isNavigationBarHidden = false
         navigationController?.pushViewController(settingsVC, animated: false)
+    }
+}
+
+extension MyViewController: MyPostViewDelegate {
+    func displayFeedView(index: Int) {
+        print("displayFeedView")
+        let myFeedViewController = MyFeedViewController(index: index)
+        navigationController?.isNavigationBarHidden = false
+        navigationController?.pushViewController(myFeedViewController, animated: true)
     }
 }

@@ -1,8 +1,13 @@
 import Foundation
 import UIKit
 
+protocol MyPostViewDelegate: AnyObject {
+    func displayFeedView(index: Int)
+}
+
 class MyPostView: UIView {
     // MARK: - Properties
+    var delegate: MyPostViewDelegate?
     let collectionViewDummyData: [String] = ["spider1", "spider2", "spider3", "one", "two", "three"]
     
     // MARK: Collection View
@@ -76,6 +81,15 @@ extension MyPostView: UICollectionViewDataSource {
         
         cell.setPostImageView(with: userFeedData.values.first?.image.first ?? "image upload fail")
         return cell
+    }
+}
+
+extension MyPostView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("click index : \(indexPath.row)")
+        let selectedCell = collectionView.cellForItem(at: indexPath) as! MyPostCollectionViewCell
+        
+        delegate?.displayFeedView(index: indexPath.row)
     }
 }
 

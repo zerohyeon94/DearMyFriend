@@ -23,9 +23,9 @@ class CommentViewController: UIViewController {
     var isKeyboardShown = false
     var keyboardHeight: CGFloat = 0  // 클래스 레벨 변수로 선언
     
-    
     let index: Int
     
+    // MARK: Initalizers
     init(index: Int){
         self.index = index
         super.init(nibName: nil, bundle: nil)

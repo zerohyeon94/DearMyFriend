@@ -48,3 +48,29 @@ struct UserData: Codable {
         self.petType = try container.decode([String].self, forKey: .petType)
     }
 }
+
+// 사용자 정보
+struct UserInfo: Codable {
+    let agreement: String
+    let email: String
+    let username: String
+    
+    init(agreement: String, email: String, username: String) {
+        self.agreement = agreement
+        self.email = email
+        self.username = username
+    }
+    
+    private enum CodingKeys: CodingKey {
+        case agreement
+        case email
+        case username
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.agreement = try container.decode(String.self, forKey: .agreement)
+        self.email = try container.decode(String.self, forKey: .email)
+        self.username = try container.decode(String.self, forKey: .username)
+    }
+}
