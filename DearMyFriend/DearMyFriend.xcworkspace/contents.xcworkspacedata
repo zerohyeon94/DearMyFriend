@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:imageAPIService.swift">
+   </FileRef>
+   <FileRef
       location = "group:DearMyFriend.xcodeproj">
    </FileRef>
    <FileRef
