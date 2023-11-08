@@ -208,21 +208,21 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     @objc func showHalfModal() {
         guard let data = modalData else { return }
         print(data)
-        self.searchImage(query: data.title) { imageURL in
-            if let imageURL = imageURL, let url = URL(string: imageURL) {
-                DispatchQueue.global().async {
-                    let data = try? Data(contentsOf: url)
-                    if let data = data {
-                        let image = UIImage(data: data)
-                        DispatchQueue.main.async {
-                            self.imageView.image = image
-                        }
-                    } else {
-                        print("이미지 로드 실")
-                    }
-                }
-            }
-        }
+//        self.searchImage(query: data.title) { imageURL in
+//            if let imageURL = imageURL, let url = URL(string: imageURL) {
+//                DispatchQueue.global().async {
+//                    let data = try? Data(contentsOf: url)
+//                    if let data = data {
+//                        let image = UIImage(data: data)
+//                        DispatchQueue.main.async {
+//                            self.imageView.image = image
+//                        }
+//                    } else {
+//                        print("이미지 로드 실")
+//                    }
+//                }
+//            }
+//        }
 
         modalView.backgroundColor = .white
         modalView.layer.cornerRadius = 10
@@ -483,56 +483,56 @@ extension MapViewController {
 
 }
 extension MapViewController {
-    func searchImage(query: String, completion: @escaping (String?) -> Void) {
-        print("searchImage 함수가 호출되었습니다. query: \(query)")
-        naverSearch.request(.searchImage(query: query)) { result in
-            switch result {
-            case .success(let response):
-                do {
-                    let decoder = JSONDecoder()
-                    let results = try decoder.decode(ImageWelcome.self, from: response.data)
-                    if let firstImageURL = results.items.first?.thumbnail {
-                        DispatchQueue.global().async {
-                            do {
-                                let data = try Data(contentsOf: URL(string: firstImageURL)!)
-                                DispatchQueue.main.async {
-                                    self.imageView.image = UIImage(data: data)
-                                    completion(firstImageURL)
-                                }
-                            } catch {
-                                print("이미지 로드 실패")
-                                completion(nil)
-                            }
-                        }
-                    } else {
-                        print("이미지를 찾을 수 없음")
-                        completion(nil)
-                    }
-                } catch {
-                    print("search Image 디코딩 실패: \(error)")
-                    completion(nil)
-                }
-            case .failure(let error):
-                print("Network request error: \(error)")
-                completion(nil)
-            }
-        }
-    }
+//    func searchImage(query: String, completion: @escaping (String?) -> Void) {
+//        print("searchImage 함수가 호출되었습니다. query: \(query)")
+//        naverSearch.request(.searchImage(query: query)) { result in
+//            switch result {
+//            case .success(let response):
+//                do {
+//                    let decoder = JSONDecoder()
+//                    let results = try decoder.decode(ImageWelcome.self, from: response.data)
+//                    if let firstImageURL = results.items.first?.thumbnail {
+//                        DispatchQueue.global().async {
+//                            do {
+//                                let data = try Data(contentsOf: URL(string: firstImageURL)!)
+//                                DispatchQueue.main.async {
+//                                    self.imageView.image = UIImage(data: data)
+//                                    completion(firstImageURL)
+//                                }
+//                            } catch {
+//                                print("이미지 로드 실패")
+//                                completion(nil)
+//                            }
+//                        }
+//                    } else {
+//                        print("이미지를 찾을 수 없음")
+//                        completion(nil)
+//                    }
+//                } catch {
+//                    print("search Image 디코딩 실패: \(error)")
+//                    completion(nil)
+//                }
+//            case .failure(let error):
+//                print("Network request error: \(error)")
+//                completion(nil)
+//            }
+//        }
+//    }
 
 }
-func extractImageURL(from data: Data) -> String? {
-    do {
-        let decoder = JSONDecoder()
-        let results = try decoder.decode([ImageItem].self, from: data)
-        if let firstImageURL = results.first?.thumbnail {
-            return firstImageURL
-        } else {
-            print("이미지를 찾을 수 없음")
-            return nil
-        }
-    } catch {
-        print("search Image 디코딩 실패: \(error)")
-        return nil
-    }
-}
+//func extractImageURL(from data: Data) -> String? {
+//    do {
+//        let decoder = JSONDecoder()
+//        let results = try decoder.decode([ImageItem].self, from: data)
+//        if let firstImageURL = results.first?.thumbnail {
+//            return firstImageURL
+//        } else {
+//            print("이미지를 찾을 수 없음")
+//            return nil
+//        }
+//    } catch {
+//        print("search Image 디코딩 실패: \(error)")
+//        return nil
+//    }
+//}
 

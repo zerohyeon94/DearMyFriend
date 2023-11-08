@@ -11,7 +11,7 @@ import FirebaseAuth
 
 final class MyFirestore {
     
-    let collectionUsers = "Users"
+    let collectionUsers = "users"
     let collectionInfo = "Info"
     let collectionFeed = "Feed"
     
@@ -86,17 +86,13 @@ final class MyFirestore {
     // MARK: Create
     func saveUserFeed(feedData: FeedData, completion: ((Error?) -> Void)? = nil) {
         let collectionDocumentPath = "\(collectionUsers)"
-        let collectionDocumentListener = Firestore.firestore().collection(collectionDocumentPath)
-        // document 생성
-        collectionDocumentListener.document("\(feedData.id)").setData(["id":"\(feedData.id)"]) { error in
-            if let error = error {
-                    print("Error adding document: \(error)")
-                } else {
-                    print("Document added successfully!")
-                }
-        }
-        // Users/pikachu/Feed
-        let collectionPath = "\(collectionUsers)/\(feedData.id)/\(collectionFeed)"
+        let collectionDocumentListener = Firestore.firestore().collection(collectionDocumentPath) // users라는 collection
+
+        // 현재 로그인 되어있는 UID를 확인
+        let documentID = getCurrentUser()
+        
+        // users/현재 로그인 되어있는 ID/Feed
+        let collectionPath = "\(collectionUsers)/\(documentID)/\(collectionFeed)" // feed collection
         let collectionListener = Firestore.firestore().collection(collectionPath)
         
         guard let dictionary = feedData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 잇는 dictionary
