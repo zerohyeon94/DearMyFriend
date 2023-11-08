@@ -88,7 +88,7 @@ class FeedViewController: UIViewController {
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
-        setupFeedTitleView()
+//        setupFeedTitleView()
         subscribeFirestore()
         getFirestore() // Firestore에 있는 정보 가져와서 TableView 표시
     }
@@ -98,7 +98,8 @@ class FeedViewController: UIViewController {
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            loadingView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+//            loadingView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
             loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             loadingView.widthAnchor.constraint(equalToConstant: 150),
@@ -138,7 +139,8 @@ class FeedViewController: UIViewController {
         feedTableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            feedTableView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+//            feedTableView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+            feedTableView.topAnchor.constraint(equalTo: view.topAnchor),
             feedTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             feedTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             feedTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -164,6 +166,14 @@ class FeedViewController: UIViewController {
         setupLoading()
         
         myFirestore.getFeed { feedAllData in
+            print("feedAllData: \(feedAllData)")
+            // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
+            if feedAllData.isEmpty {
+                print("데이터가 없습니다!")
+            } else {
+                print("데이터가 있습니다!")
+            }
+            
             FeedViewController.feedDatas = feedAllData
             
             // 데이터 로딩이 완료되면 로딩 애니메이션 숨기기
@@ -259,6 +269,9 @@ extension FeedViewController: FeedViewDelegate {
         
         // 좋아요 버튼을 누르고 새롭게 받은 데이터를 최신화해준다.
         myFirestore.getFeed { feedAllData in
+            
+            print("feedAllData: \(feedAllData)")
+            
             FeedViewController.feedDatas = feedAllData
             
             self.setupTableView()

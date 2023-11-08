@@ -141,13 +141,15 @@ final class MyFirestore {
                         defer { // defer 내에 코드를 작성하면 해당 블록을 빠져나갈 때 실행됨. - 조건문에서 return이 실행되면 실행됨. 작업이 어떤 이유로 종료되어도 'dispatchGroup.leave()'를 실행 시키기 위해 사용.
                             dispatchGroup.leave() // 디스패치 그룹 이탈
                         }
+                        
                         if let error = error {
+                            print("error???")
                             print("Error getting documents: \(error)")
                         } else {
                             // 게시물을 정보를 나열한다.
                             for document in querySnapshot!.documents {
                                 
-//                                print("게시물 업로드 날짜 : \(document.documentID)")
+                                print("게시물 업로드 날짜 : \(document.documentID)")
 //                                print("게시물 : \(document.data())")
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
