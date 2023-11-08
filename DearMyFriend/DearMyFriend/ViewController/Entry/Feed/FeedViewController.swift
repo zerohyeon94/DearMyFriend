@@ -13,7 +13,7 @@ class FeedViewController: UIViewController {
     private let feedTableView = UITableView()
     // Feed Data
     static var feedDatas: [[String: FeedData]] = []
-    static var allFeedData: [[String: FeedModel]] = []
+    static var allFeedData: [FeedModel] = []
     
     lazy var loadingView = {
         let animeView = LottieAnimationView(name: "loading")
@@ -80,7 +80,7 @@ class FeedViewController: UIViewController {
         writeButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 80 - 8 - 40 - 50, width: 60, height: 60)
     }
     
-    private func setUI() {
+    private func setupFloatingButton() {
         view.backgroundColor = .systemBackground
         view.addSubview(floatingButton)
         view.addSubview(writeButton)
@@ -124,8 +124,9 @@ class FeedViewController: UIViewController {
     }
     
     func setupTableView(){
-        feedTableView.dataSource = self
+        print("FeedViewController.allFeedData: \(FeedViewController.allFeedData)")
         
+        feedTableView.dataSource = self
         feedTableView.separatorStyle = .none
         
         let feedCellHeight: CGFloat = FeedView().calFeedViewHeight() + 10 // Cell의 여유분의 높이 10을 줌.
@@ -202,9 +203,9 @@ class FeedViewController: UIViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 
                 self.loadingView.removeFromSuperview()
-                // 테이블 뷰 설정
-                self.setupTableView()
-                self.setUI()
+                
+                self.setupTableView() // 테이블 뷰 설정
+                self.setupFloatingButton() // Floating Button 설정.
             }
         }
     }
@@ -258,7 +259,7 @@ class FeedViewController: UIViewController {
 extension FeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FeedViewController.feedDatas.count // 추후 받아오는 데이터 정보에 따라 표시되는 수 설정
+        return FeedViewController.allFeedData.count // 추후 받아오는 데이터 정보에 따라 표시되는 수 설정
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -268,9 +269,10 @@ extension FeedViewController: UITableViewDataSource {
         cell.feedView.delegate = self
         
         // 전체 데이터 중 순서대로 나열
-        let allData: [String: FeedData] = FeedViewController.feedDatas[indexPath.row] // 형태 [String: FeedData]
-        let indexData: FeedData = allData.values.first!
+        let indexData: FeedModel = FeedViewController.allFeedData[indexPath.row] // 형태 [String: FeedData]
+        print("indexData: \(indexData)")
         cell.cellIndex = indexPath.row
+        
         cell.setFeed(feedData: indexData, index: indexPath.row)
         
         return cell

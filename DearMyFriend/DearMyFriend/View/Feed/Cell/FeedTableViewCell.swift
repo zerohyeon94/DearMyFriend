@@ -78,11 +78,11 @@ class FeedTableViewCell: UITableViewCell {
         ])
     }
     
-    func setFeed(feedData: FeedData, index: Int) {
+    func setFeed(feedData: FeedModel, index: Int) {
         feedView.tableViewCellindex = index
-        feedView.userNicknameLabel.text = feedData.id
+        feedView.userNicknameLabel.text = feedData.uid
         feedView.postTextView.text = feedData.post
-        imageNames = feedData.image
+        imageNames = feedData.imageUrl
         
         // 좋아요 상태 확인
         var id: String = MyFirestore().getCurrentUser() ?? ""
