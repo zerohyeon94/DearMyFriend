@@ -122,6 +122,7 @@
 		52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */; };
 		52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */; };
 		52F9BC072AFA3297008C4438 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F9BC062AFA3297008C4438 /* WebViewController.swift */; };
+		52F9BC092AFB3A3A008C4438 /* imageAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F9BC082AFB3A3A008C4438 /* imageAPIService.swift */; };
 		7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95703E2AEA452E00F657FF /* joinFirebase.swift */; };
 		7DFCD0142AF8E166000644DC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCD0132AF8E166000644DC /* SettingViewController.swift */; };
 		EB16BA3F2AF8CEE60036CFE8 /* MyProfileFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */; };
@@ -226,6 +227,7 @@
 		52EFE7A82AE7AE3E00770F03 /* IndicatorCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorCircle.swift; sourceTree = "<group>"; };
 		52EFE7AA2AE7AFC800770F03 /* PopularityCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularityCellView.swift; sourceTree = "<group>"; };
 		52F9BC062AFA3297008C4438 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		52F9BC082AFB3A3A008C4438 /* imageAPIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = imageAPIService.swift; sourceTree = "<group>"; };
 		5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.release.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.release.xcconfig"; sourceTree = "<group>"; };
 		7D95703E2AEA452E00F657FF /* joinFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = joinFirebase.swift; sourceTree = "<group>"; };
 		7DFCD0132AF8E166000644DC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -586,6 +588,14 @@
 			path = PopularityView;
 			sourceTree = "<group>";
 		};
+		52F9BC0A2AFB3DF3008C4438 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				52F9BC082AFB3A3A008C4438 /* imageAPIService.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		BB298B00E51DBA2F5AA209DA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -627,6 +637,7 @@
 		EBD2B7382AE21C4A007FD1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				52F9BC0A2AFB3DF3008C4438 /* Map */,
 				528DDA9F2AF85D7C00E08DEC /* Login */,
 				EBD411AA2AF6675200A942D6 /* Pet */,
 				EB5EDEE02AEA4013002075F9 /* User */,
@@ -917,6 +928,7 @@
 				52D9984E2AD6B88600679B15 /* MainView.swift in Sources */,
 				528DDAA72AF88A8C00E08DEC /* Register.swift in Sources */,
 				52D9982D2AD6AAF000679B15 /* MyViewController.swift in Sources */,
+				52F9BC092AFB3A3A008C4438 /* imageAPIService.swift in Sources */,
 				EB5EDEE42AEF3C9C002075F9 /* CommentView.swift in Sources */,
 				EBD2B7602AE240FA007FD1DA /* FeedView.swift in Sources */,
 				528DDA9E2AF84AE400E08DEC /* AgreementlView.swift in Sources */,
