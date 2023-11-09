@@ -181,7 +181,8 @@ extension CommentViewController: CommentInputViewDelegate {
         print("comment text: \(commentInputView.commentTextField.text)")
         selectedFeedData.comment.append([id: commentText])
         
-//        self.dismiss(animated: true)
+        MyFirestore().updateFeedCommentData(documentID: selectedFeedId, updateFeedData: selectedFeedData)
+        
     }
 }
 
