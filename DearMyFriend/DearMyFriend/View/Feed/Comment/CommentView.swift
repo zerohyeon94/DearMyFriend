@@ -113,7 +113,7 @@ class CommentView: UIView {
         ])
     }
     
-    // FeedView의 크기를 계산하기 위해
+    // CommentView의 크기를 계산하기 위해
     func calCommentViewHeight() -> Double {
         var viewHeight: Double = 0
         

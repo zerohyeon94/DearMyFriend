@@ -56,23 +56,6 @@ class CommentViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo as NSDictionary?,
-              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
-            return
-        }
-        self.commentInputView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
-    }
-
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        print("hide")
-        self.commentInputView.transform = .identity
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
@@ -143,6 +126,24 @@ class CommentViewController: UIViewController {
             commentInputView.heightAnchor.constraint(equalToConstant: commentInputViewHeight)
         ])
     }
+    
+    // MARK: Action
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as NSDictionary?,
+              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
+            return
+        }
+        self.commentInputView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        print("hide")
+        self.commentInputView.transform = .identity
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
 
 extension CommentViewController: CommentTitleViewDelegate {
@@ -160,17 +161,16 @@ extension CommentViewController: CommentInputViewDelegate {
 extension CommentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 현재 Feed에 가져온 정보 확인.
-        var feedCellIndex: Int = index
-        var feedDataValue: [[String: String]] // 위의 Document ID 내 필드값 중 댓글
-        if let feedData = FeedViewController.feedDatas[index].values.first?.comment {
-            feedDataValue = feedData
+        
+        var feedCommentData: [[String: String]] // Feed 데이터의 필드값 중 Comment
+        if let feedData = FeedViewController.allFeedData[index].values.first?.comment { // 받은 Feed 데이터 중에서 몇번째에 해당하는지 index 값으로 확인.
+            feedCommentData = feedData
         } else {
             // 값이 없는 경우에 대한 처리
-            feedDataValue = [[:]]
+            feedCommentData = [[:]]
         }
         
-        return feedDataValue.count
+        return feedCommentData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -178,23 +178,22 @@ extension CommentViewController: UITableViewDataSource {
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
         // 현재 Feed에 가져온 정보 확인.
-        var feedCellIndex: Int = index
-        var feedDataKey: String // 업로드된 시간 -> Feed 내 Document ID
-        if let firstKey = FeedViewController.feedDatas[index].keys.first {
-            feedDataKey = firstKey
+        var feedIdD: String // Feed의 고유 ID (Document ID)
+        if let firstKey = FeedViewController.allFeedData[index].keys.first {
+            feedIdD = firstKey
         } else {
             // 값이 없는 경우에 대한 처리
-            feedDataKey = "" // 또는 다른 기본값
+            feedIdD = "" // 또는 다른 기본값
         }
-        var feedDataValue: [String: String] // 위의 Document ID 내 필드값 중 댓글
-        if let feedData = FeedViewController.feedDatas[index].values.first?.comment[indexPath.row] {
-            feedDataValue = feedData
+        var feedCommentData: [String: String] // Feed 데이터의 필드값 중 Comment
+        if let feedData = FeedViewController.allFeedData[index].values.first?.comment[indexPath.row] {
+            feedCommentData = feedData
         } else {
             // 값이 없는 경우에 대한 처리
-            feedDataValue = [:]
+            feedCommentData = [:]
         }
         
-        cell.setComment(comment: feedDataValue)
+        cell.setComment(comment: feedCommentData)
         
         return cell
     }
