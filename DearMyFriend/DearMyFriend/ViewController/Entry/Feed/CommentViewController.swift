@@ -97,6 +97,11 @@ class CommentViewController: UIViewController {
         setTableViewConstraints()
     }
     
+    func reloadTableView() {
+        commentTableView.dataSource = self
+        commentTableView.reloadData()
+    }
+    
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         // 테이블 뷰를 터치했을 때 키보드를 숨깁니다.
         view.endEditing(true)
@@ -182,6 +187,31 @@ extension CommentViewController: CommentInputViewDelegate {
         selectedFeedData.comment.append([id: commentText])
         
         MyFirestore().updateFeedCommentData(documentID: selectedFeedId, updateFeedData: selectedFeedData)
+        
+        MyFirestore().getFeedComment(documentID: selectedFeedId) { comment in
+            print("comment: \(comment)")
+            
+            print("데이터 변경 전: \(FeedViewController.allFeedData[self.index].values.first?.comment)")
+//            FeedViewController.allFeedData[index].values = comment
+            
+            // Optional chaining
+            if var firstValue = FeedViewController.allFeedData[self.index].values.first {
+                print("firstValue.comment: \(firstValue.comment)")
+                firstValue.comment = comment
+                
+                print("firstValue.comment: \(firstValue.comment)")
+                
+                // 현재 데이터를 가지고 있는 index
+                let nowIndex = FeedViewController.allFeedData[self.index].values.startIndex
+                
+                // 변경된 값을 다시 할당
+                FeedViewController.allFeedData[self.index].values[nowIndex] = firstValue
+            }
+            
+            print("데이터 변경 후: \(FeedViewController.allFeedData[self.index].values.first?.comment)")
+            
+            self.reloadTableView()
+        }
         
     }
 }

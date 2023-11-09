@@ -10,4 +10,5 @@ import Foundation
 enum FeedFirebaseError: Error {
     case firestoreError(Error?)
     case decodedError(Error?)
+    case documentNotFound(Error?)
 }
