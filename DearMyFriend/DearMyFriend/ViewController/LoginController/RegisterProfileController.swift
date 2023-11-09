@@ -4,7 +4,7 @@ import PhotosUI
 class RegisterProfileController: UIViewController {
     
     public var registerUser: RegisterUserRequest?
-    
+        
     private var isKeyboardUp = false
     
     private let registerView = RegisterProfileView()
@@ -48,6 +48,7 @@ class RegisterProfileController: UIViewController {
         let registerUsername = self.registerView.usernameField.text ?? ""
         registerUser?.username = registerUsername
         let vc = AgreementController()
+        vc.myPhoto = self.registerView.pickerView.image
         vc.registerUser = self.registerUser
         self.navigationController?.pushViewController(vc, animated: true)
     }

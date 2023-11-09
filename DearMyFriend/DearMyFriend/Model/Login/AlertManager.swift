@@ -45,5 +45,9 @@ extension AlertManager {
     public static func bannerImageReadFail(on vc: UIViewController) {
         self.showBasicAlert(on: vc, title: "배너 이미지", message: "정보를 읽어오지 못했습니다.")
     }
+    
+    public static func recommendationPlaceReadFail(on vc: UIViewController) {
+        self.showBasicAlert(on: vc, title: "추천 플레이스", message: "정보를 읽어오지 못했습니다.")
+    }
 
 }

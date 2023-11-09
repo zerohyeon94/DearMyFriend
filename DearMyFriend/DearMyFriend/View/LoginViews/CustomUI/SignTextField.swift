@@ -25,7 +25,7 @@ class SignTextField: UITextField {
         
         switch fieldType {
         case .username:
-            self.placeholder = "닉네임 (4~8글자)"
+            self.placeholder = "한국어 (2~10글자)"
         case .email:
             self.placeholder = "이메일"
             self.keyboardType = .emailAddress
