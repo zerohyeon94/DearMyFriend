@@ -12,8 +12,8 @@ class FeedViewController: UIViewController {
     // TableView
     private let feedTableView = UITableView()
     // Feed Data
-    static var feedDatas: [[String: FeedData]] = []
-    static var allFeedData: [FeedModel] = []
+//    static var feedDatas: [[String: FeedData]] = []
+    static var allFeedData: [[String: FeedModel]] = [] // Dictionary 형태 [Feed Id: Feed Data]
     
     lazy var loadingView = {
         let animeView = LottieAnimationView(name: "loading")
@@ -248,11 +248,10 @@ extension FeedViewController: UITableViewDataSource {
         cell.feedView.delegate = self
         
         // 전체 데이터 중 순서대로 나열
-        let indexData: FeedModel = FeedViewController.allFeedData[indexPath.row] // 형태 [String: FeedData]
-        print("indexData: \(indexData)")
-        cell.cellIndex = indexPath.row
+        let feedData: [String: FeedModel] = FeedViewController.allFeedData[indexPath.row] // 형태 [String: FeedData]
+        let feedDataValue: FeedModel = feedData.values.first!
         
-        cell.setFeed(feedData: indexData, index: indexPath.row)
+        cell.setFeed(feedData: feedDataValue, index: indexPath.row) // 해당되는 Feed의 데이터와 현재 TableView의 index
         
         return cell
     }

@@ -84,29 +84,29 @@ final class MyFirestore {
     }
     
     // MARK: Create
-    func saveUserFeed(feedData: FeedData, completion: ((Error?) -> Void)? = nil) {
-        // Feed/Feed UID
-        let collectionPath = "\(collectionFeed)" // Feed collection
-        let collectionListener = Firestore.firestore().collection(collectionPath)
-        
-        guard let dictionary = feedData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 잇는 dictionary
-            print("decode error")
-            return
-        }
-        // document : 현재 시간
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
-        
-        let now = Date() // 현재 시간 가져오기
-        let formattedDate = dateFormatter.string(from: now) // 형식에 맞게 날짜를 문자열로 변환
-        
-        print("현재 시간: \(formattedDate)")
-        
-        //        collectionListener.document("\(formattedDate)").setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
-        collectionListener.document().setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
-            completion?(error)
-        }
-    }
+//    func saveUserFeed(feedData: FeedData, completion: ((Error?) -> Void)? = nil) {
+//        // Feed/Feed UID
+//        let collectionPath = "\(collectionFeed)" // Feed collection
+//        let collectionListener = Firestore.firestore().collection(collectionPath)
+//
+//        guard let dictionary = feedData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 잇는 dictionary
+//            print("decode error")
+//            return
+//        }
+//        // document : 현재 시간
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
+//
+//        let now = Date() // 현재 시간 가져오기
+//        let formattedDate = dateFormatter.string(from: now) // 형식에 맞게 날짜를 문자열로 변환
+//
+//        print("현재 시간: \(formattedDate)")
+//
+//        //        collectionListener.document("\(formattedDate)").setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
+//        collectionListener.document().setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
+//            completion?(error)
+//        }
+//    }
     
     func saveFeed(feedData: FeedModel, completion: ((Error?) -> Void)? = nil) {
         // Feed/Feed UID
@@ -262,9 +262,9 @@ final class MyFirestore {
         }
     }
     
-    func getFeed(completion: @escaping ([FeedModel]) -> Void) { //} -> [[String: FeedData]] {
-        var allFeedData: [[Date: FeedModel]] = [] // key : 업로드 날짜, value : 데이터
-        var resultFeedData: [FeedModel] = []
+    func getFeed(completion: @escaping ([[String: FeedModel]]) -> Void) { //} -> [[String: FeedData]] {
+//        var allFeedData: [[String: FeedModel]] = [] // key : 업로드 날짜, value : 데이터
+        var resultFeedData: [[String: FeedModel]] = [] // key : Feed ID(Document ID), value : Feed 데이터
         
         // 'Users' collection. 확인
         let collectionListener = Firestore.firestore().collection(collectionFeed)
@@ -326,28 +326,18 @@ final class MyFirestore {
                     
                     let feedData = FeedModel(uid: feedUid, date: feedDate, imageUrl: feedImageUrl, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
                     
-                    allFeedData.append([feedDate : feedData]) // Date를 key로 한 후 날짜순으로 배열하기 위해서 Dictionary로 구성
+                    // document ID를 key값으로 저장.
+                    resultFeedData.append([document.documentID : feedData])
                 }
                 dispatchGroup.notify(queue: .main) {
-                    // 시간 순으로 재배열
-                    // Date로 변환하고 정렬
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-                    
-                    allFeedData.sort { (dictionary1, dictionary2) in
-                        guard let date1 = dictionary1.keys.first,
-                              let date2 = dictionary2.keys.first else {
+                    // 받아온 데이터를 날짜순으로 배열
+                    resultFeedData.sort { (feedData1, feedData2) in
+                        guard let date1 = feedData1.values.first?.date,
+                              let date2 = feedData2.values.first?.date else {
                             return false
                         }
                         
                         return date1 > date2
-                    }
-                    
-                    // 날짜 순으로 배열을 한 데이터의 Value값만 가지고옴.
-                    for data in allFeedData {
-                        if let feedModel = data.values.first {
-                            resultFeedData.append(feedModel)
-                        }
                     }
                     
                     completion(resultFeedData)
@@ -357,12 +347,10 @@ final class MyFirestore {
     }
     
     // MARK: Update
-    func updateFeedLikeData(documentID: String, updateFeedData: FeedData, completion: ((Error?) -> Void)? = nil) {
+    func updateFeedLikeData(documentID: String, updateFeedData: FeedModel, completion: ((Error?) -> Void)? = nil) {
         print("updateFeedLikeData")
-        print("documentID: \(documentID)")
-        print("updateFeedData: \(updateFeedData)")
         
-        let collectionPath = "\(collectionUsers)/\(updateFeedData.id)/\(collectionFeed)" // Users/선택한 FeedData의 ID/Feeds
+        let collectionPath = "\(collectionFeed)/\(documentID)" // Feeds/Document ID
         let collectionListener = Firestore.firestore().collection(collectionPath)
         print("collectionListener: \(collectionListener)")
         

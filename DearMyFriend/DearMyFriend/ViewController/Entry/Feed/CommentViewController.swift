@@ -37,7 +37,7 @@ class CommentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configure()
     }
     
@@ -162,7 +162,13 @@ extension CommentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        var feedCommentData: [[String: String]] = FeedViewController.allFeedData[index].comment
+        var feedCommentData: [[String: String]] // Feed 데이터의 필드값 중 Comment
+        if let feedData = FeedViewController.allFeedData[index].values.first?.comment { // 받은 Feed 데이터 중에서 몇번째에 해당하는지 index 값으로 확인.
+            feedCommentData = feedData
+        } else {
+            // 값이 없는 경우에 대한 처리
+            feedCommentData = [[:]]
+        }
         
         return feedCommentData.count
     }
@@ -171,7 +177,21 @@ extension CommentViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
-        var feedCommentData: [String: String] = FeedViewController.allFeedData[index].comment[indexPath.row]
+        // 현재 Feed에 가져온 정보 확인.
+        var feedIdD: String // Feed의 고유 ID (Document ID)
+        if let firstKey = FeedViewController.allFeedData[index].keys.first {
+            feedIdD = firstKey
+        } else {
+            // 값이 없는 경우에 대한 처리
+            feedIdD = "" // 또는 다른 기본값
+        }
+        var feedCommentData: [String: String] // Feed 데이터의 필드값 중 Comment
+        if let feedData = FeedViewController.allFeedData[index].values.first?.comment[indexPath.row] {
+            feedCommentData = feedData
+        } else {
+            // 값이 없는 경우에 대한 처리
+            feedCommentData = [:]
+        }
         
         cell.setComment(comment: feedCommentData)
         
