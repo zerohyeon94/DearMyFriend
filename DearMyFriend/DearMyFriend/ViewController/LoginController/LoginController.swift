@@ -111,14 +111,15 @@ class LoginController: UIViewController {
                 keyBoardHeight = keyboardRectangle - buttonMaxY // 키보드(Y)에서 하단UI(Y)를 뺀다 (음수가 나와야 함)
             }
             
-            guard let distance = keyBoardHeight else { return }
+            guard var distance = keyBoardHeight else { return }
+            let keyboardHeight = distance * 1.5
             
             if distance < 0 { // 음수가 나왔을 때만 y: -distance 올려준다.
                 isKeyboardUp = true
                 UIView.animate(
                     withDuration: 0.3
                     , animations: {
-                        self.view.transform = CGAffineTransform(translationX: 0, y: distance-25)
+                        self.view.transform = CGAffineTransform(translationX: 0, y: keyboardHeight)
                     }
                 )
             }
