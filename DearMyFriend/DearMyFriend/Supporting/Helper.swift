@@ -52,7 +52,7 @@ enum ButtonConfig {
     static let cameraIcon = UIImage(systemName: "camera", withConfiguration: cameraImageConfig)
     
     static let checkIconConfig = UIImage.SymbolConfiguration(pointSize: 5, weight: .heavy, scale: .small)
-    static let checkIcon = UIImage(systemName: "checkmark.square", withConfiguration: cameraImageConfig)
+    static let checkIcon = UIImage(systemName: "square", withConfiguration: cameraImageConfig)
     static let checkFillIcon = UIImage(systemName: "checkmark.square.fill", withConfiguration: cameraImageConfig)
 }
 
