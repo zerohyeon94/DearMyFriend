@@ -27,7 +27,7 @@ class AuthService {
             }
             
             let db = Firestore.firestore()
-            db.collection("users").document(resultUser.uid).setData([
+            db.collection("Users").document(resultUser.uid).setData([
                     "username": username,
                     "email": email,
                     "agreeMent": agreeMent

@@ -72,6 +72,8 @@ class AddPostViewController: UIViewController {
         addPostView.translatesAutoresizingMaskIntoConstraints = false
         addPostView.delegate = self
         // 추후 현재 로그인된 ID를 받아와서 닉네임 표시
+        let currentUID: String = MyFirestore().getCurrentUser() ?? "" // 사용자 ID 확인
+        // 사용자 UID의 username 확인.
         addPostView.userNicknameLabel.text = "_zerohyeon"
         
         NSLayoutConstraint.activate([
@@ -89,7 +91,6 @@ extension AddPostViewController: AddPostViewDelegate {
     }
 
     func uploadButtonTapped() {
-        print("_zerohyeon")
         print("selectedImages: \(selectedImages)")
         
         // document : 현재 시간
@@ -105,6 +106,7 @@ extension AddPostViewController: AddPostViewDelegate {
         var feedImage: [String] = []
         let feedPost: String = addPostView.postTextView.text
         let feedLike: [String] = ["pikachu", "ironMan"] // 처음에 생성할 때는 좋아요 수가 없음.
+        let feedLikeCount: Int = 0 // 초기 생성 시 좋아요 수는 0
         let feedComment: [[String: String]] = [["A":"a"], ["B":"b"]] // 처음에 생성할 때는 댓글이 없음.
         
         // Firebase Storage에 이미지 업로드
@@ -145,10 +147,18 @@ extension AddPostViewController: AddPostViewDelegate {
         
         // 모든 이미지 업로드 및 URL 저장 작업 완료시까지 대기
         group.notify(queue: .main) {
-            print("전체 feedImage: \(feedImage)")
-            
             let data = FeedData(id: feedId, image: feedImage, post: feedPost, like: feedLike, comment: feedComment)
-            print("data: \(data)")
+            
+            // 현재 시간
+            let currentDate = Date()
+            print("currentDate: \(currentDate)")
+            
+            let feedData = FeedModel(uid: feedId, date: currentDate, imageUrl: feedImage, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
+            
+            self.myFirestore.saveFeed(feedData: feedData) { error in
+                print("error: \(error)")
+            }
+            
             self.myFirestore.saveUserFeed(feedData: data) { error in
                 print("error: \(error)")
             }

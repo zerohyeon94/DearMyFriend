@@ -1,5 +1,6 @@
 import UIKit
 import Lottie
+import FirebaseAuth
 
 class FeedViewController: UIViewController {
     
@@ -12,6 +13,7 @@ class FeedViewController: UIViewController {
     private let feedTableView = UITableView()
     // Feed Data
     static var feedDatas: [[String: FeedData]] = []
+    static var allFeedData: [FeedModel] = []
     
     lazy var loadingView = {
         let animeView = LottieAnimationView(name: "loading")
@@ -23,6 +25,42 @@ class FeedViewController: UIViewController {
         
         return animeView
     }()
+    
+    // MARK: FloatingButton
+    private lazy var floatingButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = .systemPink
+        config.cornerStyle = .capsule
+        config.image = UIImage(systemName: "plus")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .medium))
+        button.configuration = config
+        button.layer.shadowRadius = 10
+        button.layer.shadowOpacity = 0.3
+        button.addTarget(self, action: #selector(didTapFloatingButton), for: .touchUpInside)
+        return button
+    }()
+
+    private let writeButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = .systemPink
+        config.cornerStyle = .capsule
+        config.image = UIImage(systemName: "pencil")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .medium))
+        button.configuration = config
+        button.layer.shadowRadius = 10
+        button.layer.shadowOpacity = 0.3
+        button.alpha = 0.0
+        button.addTarget(self, action: #selector(didTapWriteFloatingButton), for: .touchUpInside)
+        return button
+    }()
+    
+    private var isActive: Bool = false {
+        didSet {
+            showActionButtons()
+        }
+    }
+    
+    private var animation: UIViewPropertyAnimator?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,10 +74,22 @@ class FeedViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        floatingButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 8 - 40 - 50, width: 60, height: 60)
+        writeButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 80 - 8 - 40 - 50, width: 60, height: 60)
+    }
+    
+    private func setupFloatingButton() {
+        view.backgroundColor = .systemBackground
+        view.addSubview(floatingButton)
+        view.addSubview(writeButton)
+    }
+    
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
-        setupFeedTitleView()
+//        setupFeedTitleView()
         subscribeFirestore()
         getFirestore() // Firestore에 있는 정보 가져와서 TableView 표시
     }
@@ -49,7 +99,8 @@ class FeedViewController: UIViewController {
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            loadingView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+//            loadingView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
             loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             loadingView.widthAnchor.constraint(equalToConstant: 150),
@@ -73,8 +124,9 @@ class FeedViewController: UIViewController {
     }
     
     func setupTableView(){
-        feedTableView.dataSource = self
+        print("FeedViewController.allFeedData: \(FeedViewController.allFeedData)")
         
+        feedTableView.dataSource = self
         feedTableView.separatorStyle = .none
         
         let feedCellHeight: CGFloat = FeedView().calFeedViewHeight() + 10 // Cell의 여유분의 높이 10을 줌.
@@ -89,13 +141,15 @@ class FeedViewController: UIViewController {
         feedTableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            feedTableView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+//            feedTableView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+            feedTableView.topAnchor.constraint(equalTo: view.topAnchor),
             feedTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             feedTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             feedTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
+    // Firestore 업데이트 여부
     private func subscribeFirestore() {
         print("subscribeFirestore")
         myFirestore.subscribe(collection: MyFirestore().collectionInfo, id: "_zerohyeon") { [weak self] result in
@@ -113,24 +167,99 @@ class FeedViewController: UIViewController {
     private func getFirestore() {
         setupLoading()
         
-        myFirestore.getFeed { feedAllData in
-            FeedViewController.feedDatas = feedAllData
+//        myFirestore.getModelFeed { feedAllData in
+//            print("feedAllData: \(feedAllData)")
+//            // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
+//            if feedAllData.isEmpty {
+//                print("데이터가 없습니다!")
+//            } else {
+//                print("데이터가 있습니다!")
+//            }
+//
+//            FeedViewController.feedDatas = feedAllData
+//
+//            // 데이터 로딩이 완료되면 로딩 애니메이션 숨기기
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//
+//                self.loadingView.removeFromSuperview()
+//                // 테이블 뷰 설정
+//                self.setupTableView()
+//                self.setUI()
+//            }
+//        }
+        
+        myFirestore.getFeed { feedData in
+            print("feedData: \(feedData)")
+            // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
+            if feedData.isEmpty {
+                print("데이터가 없습니다!")
+            } else {
+                print("데이터가 있습니다!")
+            }
+            
+            FeedViewController.allFeedData = feedData
             
             // 데이터 로딩이 완료되면 로딩 애니메이션 숨기기
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 
                 self.loadingView.removeFromSuperview()
-                // 테이블 뷰 설정
-                self.setupTableView()
+                
+                self.setupTableView() // 테이블 뷰 설정
+                self.setupFloatingButton() // Floating Button 설정.
             }
         }
+    }
+    
+    // MARK: Floating Button Action
+    @objc private func didTapFloatingButton() {
+        isActive.toggle()
+    }
+    
+    @objc private func didTapWriteFloatingButton() {
+        let addPostViewController = AddPostViewController()
+        addPostViewController.modalPresentationStyle = .fullScreen
+        present(addPostViewController, animated: true, completion: nil)
+    }
+    
+    private func showActionButtons() {
+        popButtons()
+        rotateFloatingButton()
+    }
+    
+    private func popButtons() {
+        if isActive {
+            writeButton.layer.transform = CATransform3DMakeScale(0.4, 0.4, 1)
+            UIView.animate(withDuration: 0.3, delay: 0.2, usingSpringWithDamping: 0.55, initialSpringVelocity: 0.3, options: [.curveEaseInOut], animations: { [weak self] in
+                guard let self = self else { return }
+                self.writeButton.layer.transform = CATransform3DIdentity
+                self.writeButton.alpha = 1.0
+            })
+        } else {
+            UIView.animate(withDuration: 0.15, delay: 0.2, options: []) { [weak self] in
+                guard let self = self else { return }
+                self.writeButton.layer.transform = CATransform3DMakeScale(0.4, 0.4, 0.1)
+                self.writeButton.alpha = 0.0
+            }
+        }
+    }
+    
+    private func rotateFloatingButton() {
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+        let fromValue = isActive ? 0 : CGFloat.pi / 4
+        let toValue = isActive ? CGFloat.pi / 4 : 0
+        animation.fromValue = fromValue
+        animation.toValue = toValue
+        animation.duration = 0.3
+        animation.fillMode = .forwards
+        animation.isRemovedOnCompletion = false
+        floatingButton.layer.add(animation, forKey: nil)
     }
 }
 
 extension FeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FeedViewController.feedDatas.count // 추후 받아오는 데이터 정보에 따라 표시되는 수 설정
+        return FeedViewController.allFeedData.count // 추후 받아오는 데이터 정보에 따라 표시되는 수 설정
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -140,9 +269,10 @@ extension FeedViewController: UITableViewDataSource {
         cell.feedView.delegate = self
         
         // 전체 데이터 중 순서대로 나열
-        let allData: [String: FeedData] = FeedViewController.feedDatas[indexPath.row] // 형태 [String: FeedData]
-        let indexData: FeedData = allData.values.first!
+        let indexData: FeedModel = FeedViewController.allFeedData[indexPath.row] // 형태 [String: FeedData]
+        print("indexData: \(indexData)")
         cell.cellIndex = indexPath.row
+        
         cell.setFeed(feedData: indexData, index: indexPath.row)
         
         return cell
@@ -162,7 +292,10 @@ extension FeedViewController: FeedViewDelegate {
         print("likeButtonTapped")
         
         // 좋아요 버튼을 누르고 새롭게 받은 데이터를 최신화해준다.
-        myFirestore.getFeed { feedAllData in
+        myFirestore.getModelFeed { feedAllData in
+            
+            print("feedAllData: \(feedAllData)")
+            
             FeedViewController.feedDatas = feedAllData
             
             self.setupTableView()
