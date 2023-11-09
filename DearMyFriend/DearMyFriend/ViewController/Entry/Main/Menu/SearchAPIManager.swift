@@ -19,7 +19,7 @@ struct Item: Codable {
     let title: String
     let link: String
     let category, description, telephone, address: String
-    let roadAddress, mapx, mapy: String
+    var roadAddress, mapx, mapy: String
 
     func cleanTitle() -> String {
         return title.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)

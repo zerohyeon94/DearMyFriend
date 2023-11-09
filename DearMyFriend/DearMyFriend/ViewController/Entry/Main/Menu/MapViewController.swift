@@ -106,6 +106,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             self.view.addSubview(naverMapView)
         }
 
+
         setupButtonLayout()
         setupLocationManager()
         setupSearchController()
@@ -149,8 +150,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                     self.locationManager.startUpdatingLocation()
                 }
             }
-        } else {
-            print("위치 서비스가 활성화되어 있지 않습니다.")
         }
     }
 
@@ -347,7 +346,10 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return cell
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("###:)",searchResults)
+        
         if indexPath.row < recentSearches.count {
             let selectedSearch = recentSearches[indexPath.row]
             geocoder.geocodeAddressString(selectedSearch) { [weak self] placemarks, error in
@@ -393,7 +395,6 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
 }
-
 extension MapViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text, !searchText.isEmpty else { return }
@@ -427,6 +428,7 @@ extension MapViewController {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode(Welcome.self, from: response.data)
                     var searchResultsWithAddresses: [(title: String, roadAddress: String, telephone: String)] = []
+
 
                     if let mapView = self?.naverMapView?.mapView {
                         for item in results.items {
@@ -508,6 +510,11 @@ extension MapViewController {
                         print("이미지를 찾을 수 없음")
                         completion(nil)
                     }
+
+                    if let self = self {
+                        let placeNames = results.items.map { $0.cleanTitle() }
+                        self.handleSearchResults(placeNames)
+                    }
                 } catch {
                     print("search Image 디코딩 실패: \(error)")
                     completion(nil)
@@ -518,6 +525,22 @@ extension MapViewController {
             }
         }
     }
+//    func addMarkersFromSearchResults(_ items: [Item]) {
+//        if let mapView = self.naverMapView?.mapView {
+//            for item in items {
+//                // Item에서 위도와 경도를 추출
+//                if let mapx = Double(item.mapx), let mapy = Double(item.mapy) {
+//                    let coordinate = CLLocationCoordinate2D(latitude: mapy, longitude: mapx)
+//
+//                    // NMFMarker를 생성하고 지도에 추가
+//                    let marker = NMFMarker()
+//                    marker.position = NMGLatLng(from: coordinate)
+//                    marker.mapView = mapView
+//                    marker.captionText = item.title
+//                }
+//            }
+//        }
+//    }
 
 }
 func extractImageURL(from data: Data) -> String? {
@@ -529,6 +552,7 @@ func extractImageURL(from data: Data) -> String? {
         } else {
             print("이미지를 찾을 수 없음")
             return nil
+
         }
     } catch {
         print("search Image 디코딩 실패: \(error)")
