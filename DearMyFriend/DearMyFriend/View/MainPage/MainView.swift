@@ -147,7 +147,7 @@ class MainView: UIView {
             recommendedPlace.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 30),
             recommendedPlace.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             recommendedPlace.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            recommendedPlace.reuseCollection.heightAnchor.constraint(equalToConstant: Collection.reusePlaceHeightSize),
+            recommendedPlace.reuseCollection.heightAnchor.constraint(equalToConstant: CGFloat(Collection.reusePlaceHeightSize)),
             
             secondBorderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             secondBorderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),

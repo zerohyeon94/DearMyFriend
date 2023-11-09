@@ -1,13 +1,8 @@
-//
-//  AgreementController.swift
-//  DearMyFriend
-//
-//  Created by Macbook on 11/6/23.
-//
-
 import UIKit
 
 class AgreementController: UIViewController {
+    
+    public var myPhoto: UIImage?
     
     public var registerUser: RegisterUserRequest?
     
@@ -58,24 +53,39 @@ class AgreementController: UIViewController {
     @objc
     private func didTapSignIn() {
         self.registerView.activityIndicator.startAnimating()
-
-        let registerAgreement = self.registerView.allCheckBool ? "전체동의" : "미동의"
-        self.registerUser?.agreeMent = registerAgreement
-        guard let registerAccount = self.registerUser else { return }
-        AuthService.shared.registerUser(with: registerAccount) { [weak self] wasRegistered, error in
-            guard let self = self else { return }
-            
+        
+        AuthService.shared.photoUpdate(email: self.registerUser?.email, photo: self.myPhoto) { error in
             if let error = error {
-                registerView.activityIndicator.stopAnimating()
-                AlertManager.registerCheckAlert(on: self)
+                print("업로드 에러 발생", error)
+                return
             }
             
-            if wasRegistered {
-                registerView.activityIndicator.stopAnimating()
-                AuthService.shared.changeController(self)
-            } else {
-                registerView.activityIndicator.stopAnimating()
-                AlertManager.registerCheckAlert(on: self)
+            AuthService.shared.getPhotoUrl(email: self.registerUser?.email) { photoUrl, error in
+                if let error = error {
+                    print("에러발생", error)
+                    return
+                }
+                let registerAgreement = self.registerView.allCheckBool ? "전체동의" : "미동의"
+                self.registerUser?.agreeMent = registerAgreement
+                self.registerUser?.photoUrl = photoUrl
+                guard let registerAccount = self.registerUser else { return }
+                
+                AuthService.shared.registerUser(with: registerAccount) { [weak self] wasRegistered, error in
+                    guard let self = self else { return }
+                    
+                    if let error = error {
+                        registerView.activityIndicator.stopAnimating()
+                        AlertManager.registerCheckAlert(on: self)
+                    }
+                    
+                    if wasRegistered {
+                        registerView.activityIndicator.stopAnimating()
+                        AuthService.shared.changeController(self)
+                    } else {
+                        registerView.activityIndicator.stopAnimating()
+                        AlertManager.registerCheckAlert(on: self)
+                    }
+                }
             }
         }
     }

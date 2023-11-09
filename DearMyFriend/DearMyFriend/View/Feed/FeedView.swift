@@ -364,47 +364,43 @@ class FeedView: UIView {
         print("like 클릭")
         isLikeButtonSelected.toggle()
         likeButton.isSelected = isLikeButtonSelected
-        
+        // like Button 이미지 변경
         let resizedImage = resizeUIImage(imageName: isLikeButtonSelected ? likeFillButtonImage : likeButtonImage, heightSize: buttonSize, tintColor: buttonColor)
         likeButton.setImage(resizedImage, for: .selected)
         
         // index값을 얻어왔으니까, Feed 정보 중 몇번째인지 확인.
-        print("cell Index : \(tableViewCellindex)")
-        
-        // 현재 Feed에 가져온 정보 확인.
-        var feedCellIndex: Int = tableViewCellindex
-        var feedDataKey: String // 업로드된 시간 -> Feed 내 Document ID
-        if let firstKey = FeedViewController.feedDatas[tableViewCellindex].keys.first {
-            feedDataKey = firstKey
+        var selectedFeedId: String //Feed 고유 ID (Document ID)
+        if let firstKey = FeedViewController.allFeedData[tableViewCellindex].keys.first { // 받은 Feed 데이터 중에서 몇번째에 해당하는지 tableViewCellindex 값으로 확인.
+            selectedFeedId = firstKey
         } else {
             // 값이 없는 경우에 대한 처리
-            feedDataKey = "" // 또는 다른 기본값
-        }
-        var feedDataValue: FeedData // 위의 Document ID 내 필드값.
-        if let feedData = FeedViewController.feedDatas[tableViewCellindex].values.first {
-            feedDataValue = feedData
-        } else {
-            // 값이 없는 경우에 대한 처리
-            feedDataValue = FeedData(id: "", image: [""], post: "", like: [""], comment: [[:]])
+            selectedFeedId = "" // 또는 다른 기본값
         }
         
-        // TEST: 현재 로그인 되어있는 ID userDefault로 가져오기 임시로 아이디 사용.
+        var selectedFeedData: FeedModel // 위의 Document ID 내 필드값.
+        if let feedData = FeedViewController.allFeedData[tableViewCellindex].values.first {
+            selectedFeedData = feedData
+        } else {
+            // 값이 없는 경우에 대한 처리
+            selectedFeedData = FeedModel(uid: "", date: Date(), imageUrl: [], post: "", like: [], likeCount: 0, comment: [])
+        }
+        
+        // 현재 로그인 되어있는 ID 가져옴.
         var id: String = MyFirestore().getCurrentUser() ?? ""
-        
-        print("feedData 상태 업데이트 전 : \(feedDataValue)")
-        
-        if feedDataValue.like.contains(id) {
-            if let index = feedDataValue.like.firstIndex(of: id) {
-                print("index: \(index)")
-                feedDataValue.like.remove(at: index)
+        // 좋아요 정보가 담겨있는 배열에 로그인되어있는 ID가 있는지 확인.
+        if selectedFeedData.like.contains(id) {
+            print("있음")
+            if let index = selectedFeedData.like.firstIndex(of: id) {
+                selectedFeedData.like.remove(at: index)
+                selectedFeedData.likeCount -= 1
             }
         } else {
-            feedDataValue.like.append(id)
+            print("없음")
+            selectedFeedData.like.append(id)
+            selectedFeedData.likeCount += 1
         }
         
-        print("feedData 상태 업데이트 후 : \(feedDataValue)")
-        
-        MyFirestore().updateFeedLikeData(documentID: feedDataKey, updateFeedData: feedDataValue)
+        MyFirestore().updateFeedLikeData(documentID: selectedFeedId, updateFeedData: selectedFeedData)
         
         delegate?.likeButtonTapped()
     }
@@ -418,31 +414,6 @@ class FeedView: UIView {
     }
     
     // MARK: - Helper
-    // 이미지를 조절하고 싶었으나, SF Symbol이 각각 크기가 달라서 힘듬.
-    //    func resizeUIImage(imageName: String, heightSize: Double, tintColor: UIColor) -> UIImage {
-    //        let image = UIImage(systemName: imageName)
-    //        // 원하는 높이를 설정
-    //        let targetHeight: CGFloat = heightSize
-    //
-    //        // 원래 이미지의 비율을 유지하면서 이미지 리사이즈
-    //        let originalAspectRatio = image!.size.width / image!.size.height
-    //        let targetWidth = targetHeight * originalAspectRatio
-    //
-    //        // 목표 크기 설정
-    //        let targetSize = CGSize(width: targetWidth, height: targetHeight)
-    //
-    //        // SF Symbol Configuration을 생성하고 weight를 변경
-    //        let configuration = UIImage.SymbolConfiguration(weight: .regular)
-    //
-    //        // 이미지를 다시 그리면서 색상 변경.
-    //        UIGraphicsBeginImageContextWithOptions(targetSize, false, 0.0)
-    //        tintColor.set() // 색상 설정
-    //        image?.withConfiguration(configuration).draw(in: CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height))
-    //        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-    //        UIGraphicsEndImageContext()
-    //
-    //        return resizedImage!
-    //    }
     
     func resizeUIImage(imageName: String, heightSize: Double, tintColor: UIColor) -> UIImage {
         let image = UIImage(systemName: imageName)

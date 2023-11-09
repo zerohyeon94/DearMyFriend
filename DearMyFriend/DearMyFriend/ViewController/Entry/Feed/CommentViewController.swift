@@ -56,23 +56,6 @@ class CommentViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo as NSDictionary?,
-              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
-            return
-        }
-        self.commentInputView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
-    }
-
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        print("hide")
-        self.commentInputView.transform = .identity
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
@@ -114,6 +97,11 @@ class CommentViewController: UIViewController {
         setTableViewConstraints()
     }
     
+    func reloadTableView() {
+        commentTableView.dataSource = self
+        commentTableView.reloadData()
+    }
+    
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         // 테이블 뷰를 터치했을 때 키보드를 숨깁니다.
         view.endEditing(true)
@@ -143,6 +131,24 @@ class CommentViewController: UIViewController {
             commentInputView.heightAnchor.constraint(equalToConstant: commentInputViewHeight)
         ])
     }
+    
+    // MARK: Action
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as NSDictionary?,
+              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
+            return
+        }
+        self.commentInputView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        print("hide")
+        self.commentInputView.transform = .identity
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
 
 extension CommentViewController: CommentTitleViewDelegate {
@@ -152,25 +158,69 @@ extension CommentViewController: CommentTitleViewDelegate {
 }
 
 extension CommentViewController: CommentInputViewDelegate {
-    func uploadButtonTapped() {
-        print("upload")
+    func commentSendButtonTapped(){
+        print("send the Comment")
+        
+        // index값을 얻어왔으니까, Feed 정보 중 몇번째인지 확인.
+        var selectedFeedId: String //Feed 고유 ID (Document ID)
+        if let firstKey = FeedViewController.allFeedData[index].keys.first { // 받은 Feed 데이터 중에서 몇번째에 해당하는지 tableViewCellindex 값으로 확인.
+            selectedFeedId = firstKey
+        } else {
+            // 값이 없는 경우에 대한 처리
+            selectedFeedId = "" // 또는 다른 기본값
+        }
+        
+        var selectedFeedData: FeedModel // 위의 Document ID 내 필드값.
+        if let feedData = FeedViewController.allFeedData[index].values.first {
+            selectedFeedData = feedData
+        } else {
+            // 값이 없는 경우에 대한 처리
+            selectedFeedData = FeedModel(uid: "", date: Date(), imageUrl: [], post: "", like: [], likeCount: 0, comment: [])
+        }
+        
+        // 현재 로그인 되어있는 ID 가져옴.
+        var id: String = MyFirestore().getCurrentUser() ?? ""
+        var commentText: String = commentInputView.commentTextField.text!
+        // 좋아요 정보가 담겨있는 배열에 로그인되어있는 ID가 있는지 확인.
+        print("id: \(id)")
+        print("comment text: \(commentInputView.commentTextField.text)")
+        selectedFeedData.comment.append([id: commentText])
+        
+        // Firestore에 업데이트
+        MyFirestore().updateFeedCommentData(documentID: selectedFeedId, updateFeedData: selectedFeedData)
+        // 업데이트 이후 데이터 받아서 댓글창 초기화
+        MyFirestore().getFeedComment(documentID: selectedFeedId) { comment in
+            
+            // Optional chaining
+            if var firstValue = FeedViewController.allFeedData[self.index].values.first {
+                firstValue.comment = comment
+                
+                // 현재 데이터를 가지고 있는 index
+                let nowIndex = FeedViewController.allFeedData[self.index].values.startIndex
+                
+                // 변경된 값을 다시 할당
+                FeedViewController.allFeedData[self.index].values[nowIndex] = firstValue
+            }
+            
+            self.reloadTableView()
+        }
+        
     }
 }
 
 extension CommentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 현재 Feed에 가져온 정보 확인.
-        var feedCellIndex: Int = index
-        var feedDataValue: [[String: String]] // 위의 Document ID 내 필드값 중 댓글
-        if let feedData = FeedViewController.feedDatas[index].values.first?.comment {
-            feedDataValue = feedData
+        
+        var feedCommentData: [[String: String]] // Feed 데이터의 필드값 중 Comment
+        if let feedData = FeedViewController.allFeedData[index].values.first?.comment { // 받은 Feed 데이터 중에서 몇번째에 해당하는지 index 값으로 확인.
+            feedCommentData = feedData
         } else {
             // 값이 없는 경우에 대한 처리
-            feedDataValue = [[:]]
+            feedCommentData = [[:]]
         }
         
-        return feedDataValue.count
+        return feedCommentData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -178,23 +228,22 @@ extension CommentViewController: UITableViewDataSource {
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
         // 현재 Feed에 가져온 정보 확인.
-        var feedCellIndex: Int = index
-        var feedDataKey: String // 업로드된 시간 -> Feed 내 Document ID
-        if let firstKey = FeedViewController.feedDatas[index].keys.first {
-            feedDataKey = firstKey
+        var feedIdD: String // Feed의 고유 ID (Document ID)
+        if let firstKey = FeedViewController.allFeedData[index].keys.first {
+            feedIdD = firstKey
         } else {
             // 값이 없는 경우에 대한 처리
-            feedDataKey = "" // 또는 다른 기본값
+            feedIdD = "" // 또는 다른 기본값
         }
-        var feedDataValue: [String: String] // 위의 Document ID 내 필드값 중 댓글
-        if let feedData = FeedViewController.feedDatas[index].values.first?.comment[indexPath.row] {
-            feedDataValue = feedData
+        var feedCommentData: [String: String] // Feed 데이터의 필드값 중 Comment
+        if let feedData = FeedViewController.allFeedData[index].values.first?.comment[indexPath.row] {
+            feedCommentData = feedData
         } else {
             // 값이 없는 경우에 대한 처리
-            feedDataValue = [:]
+            feedCommentData = [:]
         }
         
-        cell.setComment(comment: feedDataValue)
+        cell.setComment(comment: feedCommentData)
         
         return cell
     }

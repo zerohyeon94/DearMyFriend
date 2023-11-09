@@ -4,7 +4,7 @@ import PhotosUI
 class RegisterProfileController: UIViewController {
     
     public var registerUser: RegisterUserRequest?
-    
+        
     private var isKeyboardUp = false
     
     private let registerView = RegisterProfileView()
@@ -48,6 +48,7 @@ class RegisterProfileController: UIViewController {
         let registerUsername = self.registerView.usernameField.text ?? ""
         registerUser?.username = registerUsername
         let vc = AgreementController()
+        vc.myPhoto = self.registerView.pickerView.image
         vc.registerUser = self.registerUser
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -99,10 +100,11 @@ extension RegisterProfileController {
         if !isKeyboardUp, let keyboardFrame:NSValue =
             notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             isKeyboardUp = true
-            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardRectangle = keyboardFrame.cgRectValue.height
+            let keyboardHeight = keyboardRectangle * 1.1
             
             UIView.animate(withDuration: 0.03, animations: {
-                self.registerView.signInButton.transform = CGAffineTransform(translationX: 0, y: -keyboardRectangle.height)
+                self.registerView.signInButton.transform = CGAffineTransform(translationX: 0, y: -keyboardHeight)
             }
             )
         }

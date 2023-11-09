@@ -1,13 +1,14 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    
+    //
     let appManager = AppNetworking.shared
     var bannerImageList: [Int:String] = [:]
     var appList: [SearchResult] = []
     var searchKeyword = "펫용품"
     var pageOfNumber = 1
     var bannerTime = Timer()
+    var placeArray: [RecommendationPlace] = []
     
     let mainView: MainView = {
         let view = MainView()
@@ -21,9 +22,24 @@ class MainViewController: UIViewController {
         view.backgroundColor = .white
         setupAppList()
         setupBanner()
+        setupPlace()
         autoLayout()
         setupCollectionView()
         print(StorageService.shared.bannerUrl.count)
+    }
+    
+    func setupPlace() {
+        RecommendationPlaceService.shared.uploadPlace { result in
+            switch result {
+            case .success(let placeData):
+                self.placeArray = placeData
+                self.mainView.recommendedPlace.reuseCollection.reloadData()
+                print("장소갯수",self.placeArray.count)
+            case .failure(let error):
+                print(error.localizedDescription)
+                AlertManager.recommendationPlaceReadFail(on: self)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,14 +93,15 @@ class MainViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        mainView.rankCollectionView.scrollToItem(at: [0, 1], at: .left, animated: false)
+        if !bannerImageList.isEmpty {
+            mainView.rankCollectionView.scrollToItem(at: [0, 1], at: .left, animated: false)
+        }
     }
     
     func setupTimer() {
-        if !bannerTime.isValid {
-            bannerTime = Timer.scheduledTimer(timeInterval: 2 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+        if !bannerTime.isValid && !bannerImageList.isEmpty {
+            bannerTime = Timer.scheduledTimer(timeInterval: 5 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
             RunLoop.current.add(bannerTime, forMode: .common)
-            // https://withthemilkyway.tistory.com/59
         }
     }
     
@@ -111,6 +128,12 @@ class MainViewController: UIViewController {
             }
         }
     }
+    
+    private func showWebViewController(with urlString: String) {
+        let vc = WebViewerController(with: urlString)
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true)
+    }
 }
 
 extension MainViewController: UICollectionViewDataSource {
@@ -125,7 +148,7 @@ extension MainViewController: UICollectionViewDataSource {
         case 2:
             return appList.count
         case 3:
-            return 5
+            return self.placeArray.count
         default:
             return 0
         }
@@ -157,6 +180,7 @@ extension MainViewController: UICollectionViewDataSource {
             return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.placeIdentifier, for: indexPath) as! RankImageCellView
+            cell.placeData = self.placeArray[indexPath.item]
             return cell
         default:
             return UICollectionViewCell()
@@ -196,6 +220,10 @@ extension MainViewController: UICollectionViewDelegate {
             if let url = URL(string: appStore) {
                 UIApplication.shared.open(url, options: [:])
             }
+        case 3:
+            guard let urlString = self.placeArray[indexPath.item].pageUrl else { return }
+            print("추천플레이스 url", urlString)
+            self.showWebViewController(with: urlString)
         default:
             return
         }

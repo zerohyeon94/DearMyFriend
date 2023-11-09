@@ -97,17 +97,17 @@ extension AddPostViewController: AddPostViewDelegate {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
         
-        let now = Date() // 현재 시간 가져오기
-        let formattedDate = dateFormatter.string(from: now) // 형식에 맞게 날짜를 문자열로 변환
+        let currentDate = Date() // 현재 시간 가져오기
+        let formattedCurrentDate = dateFormatter.string(from: currentDate) // 형식에 맞게 날짜를 문자열로 변환
         
-        print("현재 시간: \(formattedDate)")
+        print("현재 시간: \(currentDate)")
         
-        let feedId: String = "_zerohyeon"
+        let feedUid: String = MyFirestore().getCurrentUser() ?? "" // 사용자 UID 확인
         var feedImage: [String] = []
         let feedPost: String = addPostView.postTextView.text
-        let feedLike: [String] = ["pikachu", "ironMan"] // 처음에 생성할 때는 좋아요 수가 없음.
+        let feedLike: [String] = [] // 처음에 생성할 때는 좋아요 수가 없음.
         let feedLikeCount: Int = 0 // 초기 생성 시 좋아요 수는 0
-        let feedComment: [[String: String]] = [["A":"a"], ["B":"b"]] // 처음에 생성할 때는 댓글이 없음.
+        let feedComment: [[String: String]] = [] // 처음에 생성할 때는 댓글이 없음.
         
         // Firebase Storage에 이미지 업로드
         // Firebase Storage 인스턴스, 스토리지 참조 생성
@@ -118,7 +118,11 @@ extension AddPostViewController: AddPostViewDelegate {
         for image in selectedImages.enumerated() {
             group.enter() // Dispatch Group 진입
             
-            let savePath = "Feed/\(feedId)/\(formattedDate)/image\(image.offset).jpg" // Firebase Storage 이미지 업로드 경로
+            let feedImageGroup: String = "Feeds"
+            
+            // Firebase Storage 이미지 업로드 경로
+            // Feeds/사용자UID/업로드날짜/jpg파일
+            let savePath = "\(feedImageGroup)/\(feedUid)/\(formattedCurrentDate)/image\(image.offset).jpg"
             let imageRef = storageRef.child(savePath)
             
             if let imageData = image.element.jpegData(compressionQuality: 0.8) { // JPEG형식의 데이터로 변환. compressionQuality 이미지 품질(0.8 일반적인 값)
@@ -147,21 +151,17 @@ extension AddPostViewController: AddPostViewDelegate {
         
         // 모든 이미지 업로드 및 URL 저장 작업 완료시까지 대기
         group.notify(queue: .main) {
-            let data = FeedData(id: feedId, image: feedImage, post: feedPost, like: feedLike, comment: feedComment)
+//            let data = FeedData(id: feedUid, image: feedImage, post: feedPost, like: feedLike, comment: feedComment)
             
-            // 현재 시간
-            let currentDate = Date()
-            print("currentDate: \(currentDate)")
-            
-            let feedData = FeedModel(uid: feedId, date: currentDate, imageUrl: feedImage, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
+            let feedData = FeedModel(uid: feedUid, date: currentDate, imageUrl: feedImage, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
             
             self.myFirestore.saveFeed(feedData: feedData) { error in
                 print("error: \(error)")
             }
             
-            self.myFirestore.saveUserFeed(feedData: data) { error in
-                print("error: \(error)")
-            }
+//            self.myFirestore.saveUserFeed(feedData: data) { error in
+//                print("error: \(error)")
+//            }
             self.dismiss(animated: true)
         }
     }
