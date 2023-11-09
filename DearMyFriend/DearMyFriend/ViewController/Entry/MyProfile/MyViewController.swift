@@ -16,7 +16,7 @@ class MyViewController: UIViewController {
         return button
     }()
     
-    private lazy var writeButton: UIButton = {
+    private lazy var writeButton: UIButton = { 
         let button = UIButton()
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = .systemPink
