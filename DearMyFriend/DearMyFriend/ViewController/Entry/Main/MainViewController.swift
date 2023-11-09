@@ -1,8 +1,15 @@
 import UIKit
 
 class MainViewController: UIViewController {
-
-    // view = testView와 같이 자체를 할당하니 적용되지 않음
+    
+    let appManager = AppNetworking.shared
+    var bannerImageList: [Int:String] = [:]
+    var appList: [SearchResult] = []
+    var searchKeyword = "펫용품"
+    var pageOfNumber = 1
+    var bannerTime = Timer()
+    var placeArray: [RecommendationPlace] = []
+    
     let mainView: MainView = {
         let view = MainView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -10,14 +17,38 @@ class MainViewController: UIViewController {
     }()
     let MenuViewControllers = [YouTubeViewController(), MapViewController(), WishViewController(), CalculatorViewController()]
     
-    let MenuIcons = ButtonIcon.allButton
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setupAppList()
+        setupBanner()
+        setupPlace()
         autoLayout()
         setupCollectionView()
-        setupNavi()
+        print(StorageService.shared.bannerUrl.count)
+    }
+    
+    func setupPlace() {
+        RecommendationPlaceService.shared.uploadPlace { result in
+            switch result {
+            case .success(let placeData):
+                self.placeArray = placeData
+                self.mainView.recommendedPlace.reuseCollection.reloadData()
+                print("장소갯수",self.placeArray.count)
+            case .failure(let error):
+                print(error.localizedDescription)
+                AlertManager.recommendationPlaceReadFail(on: self)
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
+        self.setupTimer()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.bannerTime.invalidate()
     }
     
     func autoLayout() {
@@ -31,21 +62,77 @@ class MainViewController: UIViewController {
         ])
     }
     
-    func setupNavi() {
-        self.navigationController?.navigationBar.tintColor = .black
-        self.navigationItem.titleView = mainView.logoImgae
-    }
-    
     func setupCollectionView() {
-        mainView.collectionView.tag = 0
-        mainView.collectionView.dataSource = self
-        mainView.collectionView.delegate = self
-        mainView.collectionView.register(MainMenuCellView.self, forCellWithReuseIdentifier: Collection.menuIdentifier)
+        mainView.menuCollectionView.tag = 0
+        mainView.menuCollectionView.dataSource = self
+        mainView.menuCollectionView.delegate = self
+        mainView.menuCollectionView.register(MainMenuCellView.self, forCellWithReuseIdentifier: Collection.menuIdentifier)
         
         mainView.rankCollectionView.tag = 1
         mainView.rankCollectionView.dataSource = self
         mainView.rankCollectionView.delegate = self
         mainView.rankCollectionView.register(RankImageCellView.self, forCellWithReuseIdentifier: Collection.rankIdentifier)
+        
+        mainView.recommendedStore.reuseCollection.tag = 2
+        mainView.recommendedStore.reuseCollection.dataSource = self
+        mainView.recommendedStore.reuseCollection.delegate = self
+        mainView.recommendedStore.reuseCollection.register(MainMenuCellView.self, forCellWithReuseIdentifier: Collection.storeIdentifier)
+        
+        mainView.recommendedPlace.reuseCollection.tag = 3
+        mainView.recommendedPlace.reuseCollection.dataSource = self
+        mainView.recommendedPlace.reuseCollection.delegate = self
+        mainView.recommendedPlace.reuseCollection.register(RankImageCellView.self, forCellWithReuseIdentifier: Collection.placeIdentifier)
+    }
+    
+    func setupBanner() {
+        bannerImageList = StorageService.shared.bannerUrl
+        if !bannerImageList.isEmpty {
+            bannerImageList.updateValue(bannerImageList[bannerImageList.count-1]!, forKey: 0)
+            bannerImageList.updateValue(bannerImageList[1]!, forKey: bannerImageList.count)
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if !bannerImageList.isEmpty {
+            mainView.rankCollectionView.scrollToItem(at: [0, 1], at: .left, animated: false)
+        }
+    }
+    
+    func setupTimer() {
+        if !bannerTime.isValid && !bannerImageList.isEmpty {
+            bannerTime = Timer.scheduledTimer(timeInterval: 5 , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: true)
+            RunLoop.current.add(bannerTime, forMode: .common)
+        }
+    }
+    
+    @objc func timerCounter() {
+        if pageOfNumber < bannerImageList.count-2 {
+            pageOfNumber += 1
+            mainView.rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
+        } else {
+            pageOfNumber = 1
+            mainView.rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
+        }
+    }
+    
+    func setupAppList() {
+        appManager.fetchMusic(searchTerm: searchKeyword) { result in
+            switch result {
+            case .success(let apps):
+                self.appList = apps
+                DispatchQueue.main.async {
+                    self.mainView.recommendedStore.reuseCollection.reloadData()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func showWebViewController(with urlString: String) {
+        let vc = WebViewerController(with: urlString)
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true)
     }
 }
 
@@ -56,8 +143,12 @@ extension MainViewController: UICollectionViewDataSource {
         case 0:
             return MenuViewControllers.count
         case 1:
-            mainView.pageControl.numberOfPages = 5
-            return 5
+            mainView.pageControl.numberOfPages = bannerImageList.count-2
+            return bannerImageList.count
+        case 2:
+            return appList.count
+        case 3:
+            return self.placeArray.count
         default:
             return 0
         }
@@ -70,14 +161,31 @@ extension MainViewController: UICollectionViewDataSource {
             cell.iconSet = MenuTest.allMenu[indexPath.item]
             return cell
         case 1:
-            print("test")
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.rankIdentifier, for: indexPath) as! RankImageCellView
-            cell.myImageView.image = Rankbanner.image[indexPath.item]
+            cell.bannerTouchesBegan = { [weak self] in
+                guard let self = self else { return }
+                self.bannerTime.invalidate()
+            }
+            cell.bannerTouchesEnded = { [weak self] in
+                guard let self = self else { return }
+                self.setupTimer()
+            }
+            cell.bannerImage = bannerImageList[indexPath.item]
+            cell.myImageView.backgroundColor = ThemeColor.pink
+            cell.myImageView.layer.cornerRadius = 0
+            return cell
+        case 2:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.storeIdentifier, for: indexPath) as! MainMenuCellView
+            cell.appStore = appList[indexPath.item]
+            return cell
+        case 3:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Collection.placeIdentifier, for: indexPath) as! RankImageCellView
+            cell.placeData = self.placeArray[indexPath.item]
             return cell
         default:
             return UICollectionViewCell()
         }
-       
+        
     }
     
 }
@@ -86,10 +194,36 @@ extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch collectionView.tag {
         case 0:
-            navigationController?.isNavigationBarHidden = false
+            self.navigationController?.navigationBar.isHidden = false
             self.navigationController?.pushViewController(MenuViewControllers[indexPath.row], animated: false)
         case 1:
-            return
+            if indexPath.item == 2 {
+                let storyManager = StorageService.shared
+                storyManager.uploadStory { [weak self] error in
+                    guard let self = self else { return }
+                    if let error = error {
+                        print(error) 
+                    } else {
+                        let popularityView = PopularityViewController()
+                        popularityView.mainPage = self
+                        popularityView.modalTransitionStyle = .crossDissolve
+                        popularityView.modalPresentationStyle = .fullScreen
+                        present(popularityView, animated: true) {
+                            self.bannerTime.invalidate()
+                        }
+                    }
+                }
+            }
+            
+        case 2:
+            guard let appStore = appList[indexPath.item].appUrl else { return }
+            if let url = URL(string: appStore) {
+                UIApplication.shared.open(url, options: [:])
+            }
+        case 3:
+            guard let urlString = self.placeArray[indexPath.item].pageUrl else { return }
+            print("추천플레이스 url", urlString)
+            self.showWebViewController(with: urlString)
         default:
             return
         }
@@ -97,22 +231,74 @@ extension MainViewController: UICollectionViewDelegate {
 }
 
 extension MainViewController: UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt                            indexPath: IndexPath) -> CGSize {
-        if collectionView.tag == 1 {
+        
+        switch collectionView.tag {
+        case 0:
+            return CGSize(width: Collection.menuSize, height: Collection.cellHeightSize)
+        case 1:
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        case 2:
+            return CGSize(width: Collection.reuseStoreWidtSize, height: Collection.reuseStoreHeightSize)
+        default:
+            return CGSize(width: CGFloat(Collection.reusePlaceWidtSize), height: collectionView.frame.height)
         }
-        return CGSize(width: Collection.itemSize, height: Collection.itemSize)
-
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        switch collectionView.tag {
+        case 1:
+            return UIEdgeInsets()
+        case 0, 2, 3:
+            return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        default:
+            return UIEdgeInsets()
+        }
+        
     }
 }
 
 extension MainViewController: UIScrollViewDelegate {
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // page control 설정.
-        if scrollView.frame.size.width != 0 {
-            let value = (scrollView.contentOffset.x / scrollView.frame.width)
-            mainView.pageControl.currentPage = Int(round(value))
+        if scrollView == mainView.rankCollectionView {
+            let pageCoordinate = scrollView.contentOffset.x - scrollView.frame.width
+            
+            if scrollView.frame.size.width != 0 {
+                let value = (pageCoordinate / scrollView.frame.width)
+                mainView.pageControl.currentPage = Int(round(value))
+            }
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView == mainView.rankCollectionView {
+            let last = bannerImageList.count-2
+            if scrollView.contentOffset.x == 0  {
+                mainView.rankCollectionView.scrollToItem(at: [0, last], at: .left, animated: false)
+            }
+            if scrollView.contentOffset.x == scrollView.frame.width * CGFloat(bannerImageList.count-1)  {
+                mainView.rankCollectionView.scrollToItem(at: [0, 1], at: .left, animated: false)
+            }
+            
+            let page = scrollView.contentOffset.x / scrollView.frame.width
+            let intPage = Int(page)
+            pageOfNumber = intPage
+        }
+    }
+    
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if scrollView == mainView.rankCollectionView {
+            bannerTime.invalidate()
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if scrollView == mainView.rankCollectionView {
+            setupTimer()
         }
     }
 }

@@ -7,55 +7,13 @@
 
 import UIKit
 
-// 사용자 정보
-struct UserData: Codable {
-    let profile: String
-    let id: String
-    let password: String
-    let nickname: String
-    let petName: [String]
-    let petAge: [Int]
-    let petType: [String]
-    
-    init(profile: String, id: String, password: String, nickname: String, petName: [String], petAge: [Int], petType: [String]) {
-        self.profile = profile
-        self.id = id
-        self.password = password
-        self.nickname = nickname
-        self.petName = petName
-        self.petAge = petAge
-        self.petType = petType
-    }
-    
-    private enum CodingKeys: CodingKey {
-        case profile
-        case id
-        case password
-        case nickname
-        case petName
-        case petAge
-        case petType
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.profile = try container.decode(String.self, forKey: .profile)
-        self.id = try container.decode(String.self, forKey: .id)
-        self.password = try container.decode(String.self, forKey: .password)
-        self.nickname = try container.decode(String.self, forKey: .nickname)
-        self.petName = try container.decode([String].self, forKey: .petName)
-        self.petAge = try container.decode([Int].self, forKey: .petAge)
-        self.petType = try container.decode([String].self, forKey: .petType)
-    }
-}
-
 // 업로드 되는 피드 정보
 struct FeedData: Codable {
     let id: String
     let image: [String]
-    let post: String
-    let like: [String]
-    let comment: [[String: String]]
+    var post: String
+    var like: [String]
+    var comment: [[String: String]]
     
     init(id: String, image: [String], post: String, like: [String], comment: [[String : String]]) {
         self.id = id
@@ -80,6 +38,48 @@ struct FeedData: Codable {
         self.post = try container.decode(String.self, forKey: .post)
         self.like = try container.decode([String].self, forKey: .like)
         self.comment = try container.decode([[String : String]].self, forKey: .comment)
+    }
+}
+
+// 업로드 되는 피드 정보
+struct FeedModel: Codable {
+    let uid: String
+    let date: Date
+    let imageUrl: [String]
+    var post: String
+    var like: [String]
+    var likeCount: Int
+    var comment: [[String: String]]
+    
+    init(uid: String, date: Date, imageUrl: [String], post: String, like: [String], likeCount: Int, comment: [[String : String]]) {
+        self.uid = uid
+        self.date = date
+        self.imageUrl = imageUrl
+        self.post = post
+        self.like = like
+        self.likeCount = likeCount
+        self.comment = comment
+    }
+    
+    private enum CodingKeys: CodingKey {
+        case uid
+        case date
+        case imageUrl
+        case post
+        case like
+        case likeCount
+        case comment
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.uid = try container.decode(String.self, forKey: .uid)
+        self.date = try container.decode(Date.self, forKey: .date)
+        self.imageUrl = try container.decode([String].self, forKey: .imageUrl)
+        self.post = try container.decode(String.self, forKey: .post)
+        self.like = try container.decode([String].self, forKey: .like)
+        self.likeCount = try container.decode(Int.self, forKey: .likeCount)
+        self.comment = try container.decode([[String: String]].self, forKey: .comment)
     }
 }
 

@@ -1,18 +1,11 @@
 import UIKit
 
 class MainView: UIView {
-
-    let logoImgae: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(named: "logo")
-        image.contentMode = .scaleAspectFit
-        return image
-    }()
     
     let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.showsVerticalScrollIndicator = true
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     
@@ -22,56 +15,70 @@ class MainView: UIView {
         return view
     }()
     
-    let rankeView: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.image = UIImage(named: "three")
-        view.contentMode = .scaleToFill
-        return view
-    }()
-    
     let rankCollectionView : UICollectionView = {
-
+        
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
         flowLayout.minimumInteritemSpacing = 0
-
+        
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collection.backgroundColor = .clear
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.isScrollEnabled = true
         collection.isPagingEnabled = true
         collection.showsHorizontalScrollIndicator = false
-
+        
         return collection
     }()
     
     let pageControl: UIPageControl = {
-       let pageControl = UIPageControl()
+        let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.backgroundColor = .systemMint
+        pageControl.pageIndicatorTintColor = .white
+        pageControl.currentPageIndicatorTintColor = ThemeColor.deepPink
         return pageControl
     }()
     
-    let collectionView : UICollectionView = {
+    let menuCollectionView : UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = Collection.menuSpacing
+        flowLayout.minimumInteritemSpacing = 0
         
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = Collection.spacingWidth
-        flowLayout.minimumInteritemSpacing = Collection.spacingWidth
-
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.backgroundColor = .systemBlue
+        collection.isScrollEnabled = false
+        collection.backgroundColor = .clear
         return collection
     }()
     
-    let recommendationView: UIView = {
+    let borderView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor.borderLineColor
         return view
+    }()
+    
+    let recommendedStore: ReuseCollectionView = {
+        let storeCollection = ReuseCollectionView()
+        storeCollection.translatesAutoresizingMaskIntoConstraints = false
+        storeCollection.titleLabel.text = "추천 스토어"
+        return storeCollection
+    }()
+    
+    let secondBorderView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor.borderLineColor
+        return view
+    }()
+    
+    let recommendedPlace: ReuseCollectionView = {
+        let storeCollection = ReuseCollectionView()
+        storeCollection.translatesAutoresizingMaskIntoConstraints = false
+        storeCollection.titleLabel.text = "추천 플레이스"
+        return storeCollection
     }()
 
     override init(frame: CGRect) {
@@ -79,6 +86,7 @@ class MainView: UIView {
         backgroundColor = .white
         autoLayout()
         setupContentView()
+        print("메뉴사이즈",Collection.menuSize)
     }
     
     required init?(coder: NSCoder) {
@@ -106,29 +114,53 @@ class MainView: UIView {
     func setupContentView() {
         contentView.addSubview(rankCollectionView)
         contentView.addSubview(pageControl)
-        contentView.addSubview(collectionView)
-        contentView.addSubview(recommendationView)
-        
+        contentView.addSubview(menuCollectionView)
+        contentView.addSubview(borderView)
+        contentView.addSubview(recommendedStore)
+        contentView.addSubview(secondBorderView)
+        contentView.addSubview(recommendedPlace)
+        print("asdf",UIScreen.main.bounds.width)
         NSLayoutConstraint.activate([
             rankCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            rankCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            rankCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            rankCollectionView.heightAnchor.constraint(equalToConstant: 250),
+            // rankCollectionView 배너와 같이 뷰의 크기와 셀의 크기를 맞추는 경우
+            // 뷰의 크기를 화면 크기와 맞추는 경우
+            // 소수점이 들어가는 경우
+            // rankCollectionView와 cell크기를 동일하게 맞추었지만 cell의 높이에 0.16666666 차이발생
+            // 정수화시켜서 크기를 맞추어서 해결 (모든 constraints에 해당하는 사항은 아님)
+            rankCollectionView.widthAnchor.constraint(equalToConstant: CGFloat(Collection.bannerWidth)),
+            rankCollectionView.heightAnchor.constraint(equalToConstant: CGFloat(Collection.bannerHeight)),
             
-            pageControl.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor, constant: 10),
-            pageControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            pageControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: rankCollectionView.bottomAnchor),
+            pageControl.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            pageControl.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
                     
-            collectionView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 10),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            collectionView.heightAnchor.constraint(equalToConstant: Collection.itemSize),
-                    
-            recommendationView.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
-            recommendationView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            recommendationView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            recommendationView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            recommendationView.heightAnchor.constraint(equalToConstant: 1500),
+            menuCollectionView.topAnchor.constraint(equalTo: rankCollectionView.bottomAnchor, constant: 20),
+            menuCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            menuCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            menuCollectionView.heightAnchor.constraint(equalToConstant: CGFloat(Collection.cellHeightSize)),
+            
+            borderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            borderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            borderView.topAnchor.constraint(equalTo: menuCollectionView.bottomAnchor, constant: 20),
+            borderView.heightAnchor.constraint(equalToConstant: 10),
+            
+            recommendedPlace.topAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 30),
+            recommendedPlace.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            recommendedPlace.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            recommendedPlace.reuseCollection.heightAnchor.constraint(equalToConstant: CGFloat(Collection.reusePlaceHeightSize)),
+            
+            secondBorderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            secondBorderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            secondBorderView.topAnchor.constraint(equalTo: recommendedPlace.bottomAnchor, constant: 15),
+            secondBorderView.heightAnchor.constraint(equalToConstant: 1),
+            
+            recommendedStore.topAnchor.constraint(equalTo: secondBorderView.bottomAnchor, constant: 15),
+            recommendedStore.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            recommendedStore.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            recommendedStore.reuseCollection.heightAnchor.constraint(equalToConstant: CGFloat(Collection.reuseStoreHeightSize)),
+            recommendedStore.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -150),
+            
+
             ])
     }
 }

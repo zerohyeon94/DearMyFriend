@@ -1,5 +1,13 @@
-# Created by https://www.toptal.com/developers/gitignore/api/macos,firebase,xcode,swift
-# Edit at https://www.toptal.com/developers/gitignore?templates=macos,firebase,xcode,swift
+# Created by https://www.toptal.com/developers/gitignore/api/swift,firebase,macos,cocoapods,swiftpackagemanager,xcodeinjection
+# Edit at https://www.toptal.com/developers/gitignore?templates=swift,firebase,macos,cocoapods,swiftpackagemanager,xcodeinjection
+
+### CocoaPods ###
+## CocoaPods GitIgnore Template
+
+# CocoaPods - Only use to conserve bandwidth / Save time on Pushing
+#           - Also handy if you have a large number of dependant pods
+#           - AS PER https://guides.cocoapods.org/using/using-cocoapods.html NEVER IGNORE THE LOCK FILE
+Pods/
 
 ### Firebase ###
 .idea
@@ -127,17 +135,16 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-### Xcode ###
+### SwiftPackageManager ###
+Packages
+xcuserdata
+*.xcodeproj
 
-## Xcode 8 and earlier
 
-### Xcode Patch ###
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
-!*.xcodeproj/project.xcworkspace/
-!*.xcworkspace/contents.xcworkspacedata
-/*.gcno
-**/xcshareddata/WorkspaceSettings.xcsettings
+### XcodeInjection ###
+# Code Injection
+# After new code Injection tools there's a generated folder /iOSInjectionProject
+# https://github.com/johnno1962/injectionforxcode
+!Assets/
 
-# End of https://www.toptal.com/developers/gitignore/api/macos,firebase,xcode,swift
+# End of https://www.toptal.com/developers/gitignore/api/swift,firebase,macos,cocoapods,swiftpackagemanager,xcodeinjection
