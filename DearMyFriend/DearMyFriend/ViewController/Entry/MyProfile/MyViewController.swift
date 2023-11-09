@@ -189,6 +189,7 @@ class MyViewController: UIViewController {
         shouldHideFirstView = segment.selectedSegmentIndex == 1
     }
     
+    //petinfo에 네비게이션컨트롤로 연결
     @objc private func didTapWriteButton() {
         let petInfoVC = PetInfoViewController()
         navigationController?.isNavigationBarHidden = false
