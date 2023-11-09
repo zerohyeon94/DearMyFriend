@@ -376,6 +376,7 @@ class FeedView: UIView {
             // 값이 없는 경우에 대한 처리
             selectedFeedId = "" // 또는 다른 기본값
         }
+        print("selectedFeedId: \(selectedFeedId)")
         
         var selectedFeedData: FeedModel // 위의 Document ID 내 필드값.
         if let feedData = FeedViewController.allFeedData[tableViewCellindex].values.first {
@@ -389,11 +390,13 @@ class FeedView: UIView {
         var id: String = MyFirestore().getCurrentUser() ?? ""
         // 좋아요 정보가 담겨있는 배열에 로그인되어있는 ID가 있는지 확인.
         if selectedFeedData.like.contains(id) {
+            print("있음")
             if let index = selectedFeedData.like.firstIndex(of: id) {
                 selectedFeedData.like.remove(at: index)
                 selectedFeedData.likeCount -= 1
             }
         } else {
+            print("없음")
             selectedFeedData.like.append(id)
             selectedFeedData.likeCount += 1
         }
