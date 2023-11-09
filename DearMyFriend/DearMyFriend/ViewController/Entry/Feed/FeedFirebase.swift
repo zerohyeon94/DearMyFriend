@@ -350,7 +350,7 @@ final class MyFirestore {
     func updateFeedLikeData(documentID: String, updateFeedData: FeedModel, completion: ((Error?) -> Void)? = nil) {
         print("updateFeedLikeData")
         
-        let collectionPath = "\(collectionFeed)/\(documentID)" // Feeds/Document ID
+        let collectionPath = "\(collectionFeed)" // Feeds/Document ID
         let collectionListener = Firestore.firestore().collection(collectionPath)
         print("collectionListener: \(collectionListener)")
         
