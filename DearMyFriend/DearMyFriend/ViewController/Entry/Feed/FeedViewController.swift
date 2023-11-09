@@ -12,7 +12,7 @@ class FeedViewController: UIViewController {
     // TableView
     private let feedTableView = UITableView()
     // Feed Data
-//    static var feedDatas: [[String: FeedData]] = []
+    //    static var feedDatas: [[String: FeedData]] = []
     static var allFeedData: [[String: FeedModel]] = [] // Dictionary 형태 [Feed Id: Feed Data]
     
     lazy var loadingView = {
@@ -39,7 +39,7 @@ class FeedViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapFloatingButton), for: .touchUpInside)
         return button
     }()
-
+    
     private let writeButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.filled()
@@ -89,7 +89,7 @@ class FeedViewController: UIViewController {
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
-//        setupFeedTitleView()
+        //        setupFeedTitleView()
         subscribeFirestore()
         getFirestore() // Firestore에 있는 정보 가져와서 TableView 표시
     }
@@ -99,7 +99,7 @@ class FeedViewController: UIViewController {
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-//            loadingView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+            //            loadingView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
             loadingView.topAnchor.constraint(equalTo: view.topAnchor),
             loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -141,7 +141,7 @@ class FeedViewController: UIViewController {
         feedTableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-//            feedTableView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
+            //            feedTableView.topAnchor.constraint(equalTo: feedTitleView.bottomAnchor),
             feedTableView.topAnchor.constraint(equalTo: view.topAnchor),
             feedTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             feedTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -284,17 +284,22 @@ extension FeedViewController: FeedViewDelegate {
         print("commentButtonTapped : \(index)")
         
         let commentViewController = CommentViewController(index: index)
+        commentViewController.modalPresentationStyle = .pageSheet
         
-        // 왜 안되는거지...?
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let modalHeight = screenHeight * 0.7
+        if let presentationController = commentViewController.presentationController as? UISheetPresentationController {
+            presentationController.detents = [.medium()]
+        }
         
-        commentViewController.modalPresentationStyle = .formSheet
-        commentViewController.modalTransitionStyle = .coverVertical
-        
-        commentViewController.preferredContentSize = CGSize(width: screenWidth, height: modalHeight)
-        print("commentViewController.preferredContentSize: \(commentViewController.preferredContentSize)")
+        //        // 왜 안되는거지...?
+        //        let screenWidth = UIScreen.main.bounds.width
+        //        let screenHeight = UIScreen.main.bounds.height
+        //        let modalHeight = screenHeight * 0.7
+        //
+        //        commentViewController.modalPresentationStyle = .formSheet
+        //        commentViewController.modalTransitionStyle = .coverVertical
+        //
+        //        commentViewController.preferredContentSize = CGSize(width: screenWidth, height: modalHeight)
+        //        print("commentViewController.preferredContentSize: \(commentViewController.preferredContentSize)")
         
         present(commentViewController, animated: true, completion: nil)
     }

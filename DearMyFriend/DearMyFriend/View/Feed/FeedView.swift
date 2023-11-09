@@ -376,7 +376,6 @@ class FeedView: UIView {
             // 값이 없는 경우에 대한 처리
             selectedFeedId = "" // 또는 다른 기본값
         }
-        print("selectedFeedId: \(selectedFeedId)")
         
         var selectedFeedData: FeedModel // 위의 Document ID 내 필드값.
         if let feedData = FeedViewController.allFeedData[tableViewCellindex].values.first {

@@ -105,9 +105,9 @@ extension AddPostViewController: AddPostViewDelegate {
         let feedUid: String = MyFirestore().getCurrentUser() ?? "" // 사용자 UID 확인
         var feedImage: [String] = []
         let feedPost: String = addPostView.postTextView.text
-        let feedLike: [String] = ["pikachu", "ironMan"] // 처음에 생성할 때는 좋아요 수가 없음.
+        let feedLike: [String] = [] // 처음에 생성할 때는 좋아요 수가 없음.
         let feedLikeCount: Int = 0 // 초기 생성 시 좋아요 수는 0
-        let feedComment: [[String: String]] = [["A":"a"], ["B":"b"]] // 처음에 생성할 때는 댓글이 없음.
+        let feedComment: [[String: String]] = [] // 처음에 생성할 때는 댓글이 없음.
         
         // Firebase Storage에 이미지 업로드
         // Firebase Storage 인스턴스, 스토리지 참조 생성

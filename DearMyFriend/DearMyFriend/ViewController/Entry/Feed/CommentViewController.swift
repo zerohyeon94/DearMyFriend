@@ -97,6 +97,11 @@ class CommentViewController: UIViewController {
         setTableViewConstraints()
     }
     
+    func reloadTableView() {
+        commentTableView.dataSource = self
+        commentTableView.reloadData()
+    }
+    
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         // 테이블 뷰를 터치했을 때 키보드를 숨깁니다.
         view.endEditing(true)
@@ -153,8 +158,53 @@ extension CommentViewController: CommentTitleViewDelegate {
 }
 
 extension CommentViewController: CommentInputViewDelegate {
-    func uploadButtonTapped() {
-        print("upload")
+    func commentSendButtonTapped(){
+        print("send the Comment")
+        
+        // index값을 얻어왔으니까, Feed 정보 중 몇번째인지 확인.
+        var selectedFeedId: String //Feed 고유 ID (Document ID)
+        if let firstKey = FeedViewController.allFeedData[index].keys.first { // 받은 Feed 데이터 중에서 몇번째에 해당하는지 tableViewCellindex 값으로 확인.
+            selectedFeedId = firstKey
+        } else {
+            // 값이 없는 경우에 대한 처리
+            selectedFeedId = "" // 또는 다른 기본값
+        }
+        
+        var selectedFeedData: FeedModel // 위의 Document ID 내 필드값.
+        if let feedData = FeedViewController.allFeedData[index].values.first {
+            selectedFeedData = feedData
+        } else {
+            // 값이 없는 경우에 대한 처리
+            selectedFeedData = FeedModel(uid: "", date: Date(), imageUrl: [], post: "", like: [], likeCount: 0, comment: [])
+        }
+        
+        // 현재 로그인 되어있는 ID 가져옴.
+        var id: String = MyFirestore().getCurrentUser() ?? ""
+        var commentText: String = commentInputView.commentTextField.text!
+        // 좋아요 정보가 담겨있는 배열에 로그인되어있는 ID가 있는지 확인.
+        print("id: \(id)")
+        print("comment text: \(commentInputView.commentTextField.text)")
+        selectedFeedData.comment.append([id: commentText])
+        
+        // Firestore에 업데이트
+        MyFirestore().updateFeedCommentData(documentID: selectedFeedId, updateFeedData: selectedFeedData)
+        // 업데이트 이후 데이터 받아서 댓글창 초기화
+        MyFirestore().getFeedComment(documentID: selectedFeedId) { comment in
+            
+            // Optional chaining
+            if var firstValue = FeedViewController.allFeedData[self.index].values.first {
+                firstValue.comment = comment
+                
+                // 현재 데이터를 가지고 있는 index
+                let nowIndex = FeedViewController.allFeedData[self.index].values.startIndex
+                
+                // 변경된 값을 다시 할당
+                FeedViewController.allFeedData[self.index].values[nowIndex] = firstValue
+            }
+            
+            self.reloadTableView()
+        }
+        
     }
 }
 
