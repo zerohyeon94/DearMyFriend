@@ -5,7 +5,18 @@ class RankImageCellView: UICollectionViewCell {
     var bannerImage: String? {
         didSet {
             guard let bannerImage = bannerImage else { return }
-            loadImage(bannerImage)
+            loadImage(bannerImage) {}
+        }
+    }
+    
+    var placeData: RecommendationPlace? {
+        didSet {
+            guard let placeData = placeData else { return }
+            loadImage(placeData.imageUrl) { [weak self] in
+                guard let self = self else { return}
+                self.placeName.text = placeData.placeName
+            }
+            
         }
     }
     
@@ -18,9 +29,29 @@ class RankImageCellView: UICollectionViewCell {
         return view
     }()
     
+    private let placeName: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .clear
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 15)
+        return label
+    }()
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.style = UIActivityIndicatorView.Style.large
+        activityIndicator.isHidden = false
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        activityIndicator.startAnimating()
     }
     
     required init?(coder: NSCoder) {
@@ -29,6 +60,8 @@ class RankImageCellView: UICollectionViewCell {
     
     private func setupUI() {
         self.contentView.addSubview(myImageView)
+        self.contentView.addSubview(activityIndicator)
+        self.contentView.addSubview(placeName)
         
         
         NSLayoutConstraint.activate([
@@ -36,7 +69,12 @@ class RankImageCellView: UICollectionViewCell {
             myImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             myImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
             myImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
-
+            
+            placeName.centerXAnchor.constraint(equalTo: self.myImageView.centerXAnchor),
+            placeName.centerYAnchor.constraint(equalTo: self.myImageView.centerYAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: self.myImageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: self.myImageView.centerYAnchor),
         ])
     }
     
@@ -53,7 +91,7 @@ class RankImageCellView: UICollectionViewCell {
         bannerTouchesEnded()
     }
     
-    private func loadImage(_ url: String?) {
+    private func loadImage(_ url: String?, completion: @escaping () -> ()) {
         guard let imageUrl = url else { return }
         guard let url = URL(string: imageUrl)  else { return }
         DispatchQueue.global().async {
@@ -62,8 +100,15 @@ class RankImageCellView: UICollectionViewCell {
                 return
             }
             DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
                 self.myImageView.image = UIImage(data: data)
+                completion()
             }
         }
+    }
+    
+    override func prepareForReuse() {
+        self.myImageView.image = nil
+        self.placeName.text = nil
     }
 }

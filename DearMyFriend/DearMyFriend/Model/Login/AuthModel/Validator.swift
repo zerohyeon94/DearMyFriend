@@ -33,7 +33,7 @@ class Validator {
     
     static func isValidUsername(for username: String) -> Bool {
         let username = username.trimmingCharacters(in: .whitespacesAndNewlines)
-        let usernameRegEx = "^[a-zA-Z0-9]{4,14}$"
+        let usernameRegEx = "^[가-힣].{2,10}$"
         let usernamePred = NSPredicate(format: "SELF MATCHES %@", usernameRegEx)
         return usernamePred.evaluate(with: username)
     }

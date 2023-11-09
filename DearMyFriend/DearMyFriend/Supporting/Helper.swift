@@ -31,7 +31,7 @@ struct Collection {
     
     static let reusePlaceColumns: CGFloat = 2
     static let reusePlaceWidtSize = (reuseStoreWidtSize*2) + 20
-    static let reusePlaceHeightSize:CGFloat = 100
+    static let reusePlaceHeightSize = (reusePlaceWidtSize/4)*3
 }
 
 struct IndicatorInfo {
@@ -52,7 +52,7 @@ enum ButtonConfig {
     static let cameraIcon = UIImage(systemName: "camera", withConfiguration: cameraImageConfig)
     
     static let checkIconConfig = UIImage.SymbolConfiguration(pointSize: 5, weight: .heavy, scale: .small)
-    static let checkIcon = UIImage(systemName: "checkmark.square", withConfiguration: cameraImageConfig)
+    static let checkIcon = UIImage(systemName: "square", withConfiguration: cameraImageConfig)
     static let checkFillIcon = UIImage(systemName: "checkmark.square.fill", withConfiguration: cameraImageConfig)
 }
 

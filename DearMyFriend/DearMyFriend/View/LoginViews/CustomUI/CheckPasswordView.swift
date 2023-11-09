@@ -35,7 +35,7 @@ class CheckPasswordView: UIView {
         sv.axis = .horizontal
         sv.distribution = .fill
         sv.alignment = .fill
-        sv.spacing = 10
+        sv.spacing = 5
         return sv
     }()
     
