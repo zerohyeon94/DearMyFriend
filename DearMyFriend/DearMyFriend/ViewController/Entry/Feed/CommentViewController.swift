@@ -186,20 +186,14 @@ extension CommentViewController: CommentInputViewDelegate {
         print("comment text: \(commentInputView.commentTextField.text)")
         selectedFeedData.comment.append([id: commentText])
         
+        // Firestore에 업데이트
         MyFirestore().updateFeedCommentData(documentID: selectedFeedId, updateFeedData: selectedFeedData)
-        
+        // 업데이트 이후 데이터 받아서 댓글창 초기화
         MyFirestore().getFeedComment(documentID: selectedFeedId) { comment in
-            print("comment: \(comment)")
-            
-            print("데이터 변경 전: \(FeedViewController.allFeedData[self.index].values.first?.comment)")
-//            FeedViewController.allFeedData[index].values = comment
             
             // Optional chaining
             if var firstValue = FeedViewController.allFeedData[self.index].values.first {
-                print("firstValue.comment: \(firstValue.comment)")
                 firstValue.comment = comment
-                
-                print("firstValue.comment: \(firstValue.comment)")
                 
                 // 현재 데이터를 가지고 있는 index
                 let nowIndex = FeedViewController.allFeedData[self.index].values.startIndex
@@ -207,8 +201,6 @@ extension CommentViewController: CommentInputViewDelegate {
                 // 변경된 값을 다시 할당
                 FeedViewController.allFeedData[self.index].values[nowIndex] = firstValue
             }
-            
-            print("데이터 변경 후: \(FeedViewController.allFeedData[self.index].values.first?.comment)")
             
             self.reloadTableView()
         }
