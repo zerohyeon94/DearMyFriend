@@ -31,7 +31,7 @@ struct Collection {
     
     static let reusePlaceColumns: CGFloat = 2
     static let reusePlaceWidtSize = (reuseStoreWidtSize*2) + 20
-    static let reusePlaceHeightSize:CGFloat = 100
+    static let reusePlaceHeightSize = (reusePlaceWidtSize/4)*3
 }
 
 struct IndicatorInfo {

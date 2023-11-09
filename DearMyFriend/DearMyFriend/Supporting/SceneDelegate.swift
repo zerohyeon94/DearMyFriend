@@ -11,7 +11,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // 앱의 기본 화면 및 초기 화면에 어떤 ViewController를 할당할지를 결정하고 설정
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         setupWindow(with: scene)
-        checkAuthentication()
+        let launchScreen = LoadingController()
+        window?.rootViewController = launchScreen
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            StorageService.shared.uploadBanner { [weak self] error in
+                guard let self = self else { return }
+                self.checkAuthentication(opacity: 1)
+            }
+        }
     }
     
     private func setupWindow(with scene: UIScene) {
@@ -21,25 +28,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.makeKeyAndVisible()
     }
     
-    public func checkAuthentication() {
+    public func checkAuthentication(opacity: Float) {
         if Auth.auth().currentUser?.isEmailVerified == true {
-            StorageService.shared.uploadBanner { [weak self] error in
-                guard let self = self else { return }
-                if let error = error {
-                    self.goToController(with: TabBarController(), navi: false)
-                } else {
-                    self.goToController(with: TabBarController(), navi: false)
-                }
-            }
+            self.goToController(with: TabBarController(), navi: false, opacity: opacity)
         } else {
-            self.goToController(with: LoginController(), navi: true)
+            self.goToController(with: LoginController(), navi: true, opacity: opacity)
         }
     }
     
-    private func goToController(with viewController: UIViewController, navi: Bool) {
+    private func goToController(with viewController: UIViewController, navi: Bool, opacity: Float) {
         DispatchQueue.main.async { [weak self] in
             UIView.animate(withDuration: 0.25) {
-                self?.window?.layer.opacity = 0
+                self?.window?.layer.opacity = opacity
                 
             } completion: { [weak self] _ in
                 if navi {
@@ -80,7 +80,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             case "resetPassword":
                 let resetController = ResetPasswordController()
                 resetController.resetCode = oobCode
-                self.goToController(with: resetController, navi: true)
+                self.goToController(with: resetController, navi: true, opacity: 0)
             default:
                 return
             }
