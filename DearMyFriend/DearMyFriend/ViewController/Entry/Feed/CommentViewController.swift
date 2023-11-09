@@ -153,8 +153,35 @@ extension CommentViewController: CommentTitleViewDelegate {
 }
 
 extension CommentViewController: CommentInputViewDelegate {
-    func uploadButtonTapped() {
-        print("upload")
+    func commentSendButtonTapped(){
+        print("send the Comment")
+        
+        // index값을 얻어왔으니까, Feed 정보 중 몇번째인지 확인.
+        var selectedFeedId: String //Feed 고유 ID (Document ID)
+        if let firstKey = FeedViewController.allFeedData[index].keys.first { // 받은 Feed 데이터 중에서 몇번째에 해당하는지 tableViewCellindex 값으로 확인.
+            selectedFeedId = firstKey
+        } else {
+            // 값이 없는 경우에 대한 처리
+            selectedFeedId = "" // 또는 다른 기본값
+        }
+        
+        var selectedFeedData: FeedModel // 위의 Document ID 내 필드값.
+        if let feedData = FeedViewController.allFeedData[index].values.first {
+            selectedFeedData = feedData
+        } else {
+            // 값이 없는 경우에 대한 처리
+            selectedFeedData = FeedModel(uid: "", date: Date(), imageUrl: [], post: "", like: [], likeCount: 0, comment: [])
+        }
+        
+        // 현재 로그인 되어있는 ID 가져옴.
+        var id: String = MyFirestore().getCurrentUser() ?? ""
+        var commentText: String = commentInputView.commentTextField.text!
+        // 좋아요 정보가 담겨있는 배열에 로그인되어있는 ID가 있는지 확인.
+        print("id: \(id)")
+        print("comment text: \(commentInputView.commentTextField.text)")
+        selectedFeedData.comment.append([id: commentText])
+        
+//        self.dismiss(animated: true)
     }
 }
 

@@ -350,7 +350,25 @@ final class MyFirestore {
     func updateFeedLikeData(documentID: String, updateFeedData: FeedModel, completion: ((Error?) -> Void)? = nil) {
         print("updateFeedLikeData")
         
-        let collectionPath = "\(collectionFeed)" // Feeds/Document ID
+        let collectionPath = "\(collectionFeed)" // Feeds
+        let collectionListener = Firestore.firestore().collection(collectionPath)
+        print("collectionListener: \(collectionListener)")
+        
+        guard let dictionary = updateFeedData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 있는 dictionary
+            print("decode error")
+            return
+        }
+        
+        collectionListener.document("\(documentID)").setData(dictionary){ error in // Firestore Collection에 데이터 변경.
+            completion?(error)
+        }
+    }
+    
+    // MARK: Update
+    func updateFeedCommentData(documentID: String, updateFeedData: FeedModel, completion: ((Error?) -> Void)? = nil) {
+        print("updateFeedCommentData")
+        
+        let collectionPath = "\(collectionFeed)" // Feeds
         let collectionListener = Firestore.firestore().collection(collectionPath)
         print("collectionListener: \(collectionListener)")
         

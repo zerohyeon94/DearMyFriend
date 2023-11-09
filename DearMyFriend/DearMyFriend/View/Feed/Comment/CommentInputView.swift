@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 protocol CommentInputViewDelegate: AnyObject {
-    func uploadButtonTapped()
+    func commentSendButtonTapped()
 }
 
 class CommentInputView: UIView {
@@ -40,7 +40,7 @@ class CommentInputView: UIView {
         let resizedImage = FeedView().resizeUIImage(imageName: uploadCommentButtonImage, heightSize: buttonSize, tintColor: buttonColor)
         button.setImage(resizedImage, for: .normal)
         
-        button.addTarget(self, action: #selector(uploadButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(commentSendButtonTapped), for: .touchUpInside)
         
         // 패딩 설정
         let padding = UIEdgeInsets(top: buttonPadding, left: buttonPadding, bottom: buttonPadding, right: buttonPadding)
@@ -99,8 +99,7 @@ class CommentInputView: UIView {
     }
     
     // MARK: Action
-    @objc func uploadButtonTapped() {
-        print("comment 창 종료")
-        delegate?.uploadButtonTapped()
+    @objc func commentSendButtonTapped() {
+        delegate?.commentSendButtonTapped()
     }
 }
