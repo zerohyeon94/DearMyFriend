@@ -1,7 +1,7 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    
+    //
     let appManager = AppNetworking.shared
     var bannerImageList: [Int:String] = [:]
     var appList: [SearchResult] = []
