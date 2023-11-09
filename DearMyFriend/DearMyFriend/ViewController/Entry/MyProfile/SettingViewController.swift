@@ -123,7 +123,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 } else {
                     print("탈퇴 성공")
                     AuthService.shared.changeController(self)
-                    AlertManager.loginFailedAlert(on: self)
                 }
             }
         }

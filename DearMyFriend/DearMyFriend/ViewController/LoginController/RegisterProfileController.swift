@@ -133,7 +133,6 @@ extension RegisterProfileController: PHPickerViewControllerDelegate {
                 DispatchQueue.main.async {
                     self.registerView.pickerView.clipsToBounds = true
                     self.registerView.pickerView.image = image as? UIImage
-                    self.registerView.cameraImageView.isHidden = true
                 }
             }
         } else {
