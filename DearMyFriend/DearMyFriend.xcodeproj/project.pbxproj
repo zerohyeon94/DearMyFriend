@@ -124,6 +124,7 @@
 		52F9BC072AFA3297008C4438 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F9BC062AFA3297008C4438 /* WebViewController.swift */; };
 		7D95703F2AEA452E00F657FF /* joinFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95703E2AEA452E00F657FF /* joinFirebase.swift */; };
 		7DFCD0142AF8E166000644DC /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCD0132AF8E166000644DC /* SettingViewController.swift */; };
+		7DFCD0162AFAB809000644DC /* PetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCD0152AFAB809000644DC /* PetInfoViewController.swift */; };
 		EB16BA3F2AF8CEE60036CFE8 /* MyProfileFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */; };
 		EB16BA422AF9F0F10036CFE8 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EB16BA412AF9F0F10036CFE8 /* Kingfisher */; };
 		EB17F3E22AF48DA600971859 /* MyProfileTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */; };
@@ -229,6 +230,7 @@
 		5FA86767F069DDC92CC19989 /* Pods-DearMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DearMyFriend.release.xcconfig"; path = "Target Support Files/Pods-DearMyFriend/Pods-DearMyFriend.release.xcconfig"; sourceTree = "<group>"; };
 		7D95703E2AEA452E00F657FF /* joinFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = joinFirebase.swift; sourceTree = "<group>"; };
 		7DFCD0132AF8E166000644DC /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		7DFCD0152AFAB809000644DC /* PetInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetInfoViewController.swift; sourceTree = "<group>"; };
 		EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileFirebase.swift; sourceTree = "<group>"; };
 		EB17F3E12AF48DA600971859 /* MyProfileTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTitleView.swift; sourceTree = "<group>"; };
 		EB17F3E32AF492BF00971859 /* MyProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileInfoView.swift; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 				52D9982C2AD6AAF000679B15 /* MyViewController.swift */,
 				7DFCD0132AF8E166000644DC /* SettingViewController.swift */,
 				EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */,
+				7DFCD0152AFAB809000644DC /* PetInfoViewController.swift */,
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -904,6 +907,7 @@
 				52D998172AD6A89600679B15 /* AppDelegate.swift in Sources */,
 				EBD2B7522AE2235C007FD1DA /* FeedFirebaseError.swift in Sources */,
 				52D9983F2AD6ABB500679B15 /* StoreViewController.swift in Sources */,
+				7DFCD0162AFAB809000644DC /* PetInfoViewController.swift in Sources */,
 				EB5EDEEA2AEF4FBF002075F9 /* CommentTitleView.swift in Sources */,
 				528DDAA52AF88A7300E08DEC /* Login.swift in Sources */,
 				52D9982B2AD6AADC00679B15 /* FeedViewController.swift in Sources */,
