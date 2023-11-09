@@ -37,7 +37,7 @@ class CommentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         configure()
     }
     
@@ -54,23 +54,6 @@ class CommentViewController: UIViewController {
         super.viewWillDisappear(animated)
         // 화면이 나갈 때 Notification 제거
         NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo as NSDictionary?,
-              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
-            return
-        }
-        self.commentInputView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
-    }
-
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        print("hide")
-        self.commentInputView.transform = .identity
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
     }
     
     // MARK: Configure
@@ -143,6 +126,24 @@ class CommentViewController: UIViewController {
             commentInputView.heightAnchor.constraint(equalToConstant: commentInputViewHeight)
         ])
     }
+    
+    // MARK: Action
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as NSDictionary?,
+              var keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { // 현재동작하는 키보드의 frame을 받아옴.
+            return
+        }
+        self.commentInputView.transform = CGAffineTransform(translationX: 0, y: -keyboardFrame.height)
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        print("hide")
+        self.commentInputView.transform = .identity
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
 
 extension CommentViewController: CommentTitleViewDelegate {
@@ -160,41 +161,19 @@ extension CommentViewController: CommentInputViewDelegate {
 extension CommentViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 현재 Feed에 가져온 정보 확인.
-        var feedCellIndex: Int = index
-        var feedDataValue: [[String: String]] // 위의 Document ID 내 필드값 중 댓글
-        if let feedData = FeedViewController.feedDatas[index].values.first?.comment {
-            feedDataValue = feedData
-        } else {
-            // 값이 없는 경우에 대한 처리
-            feedDataValue = [[:]]
-        }
         
-        return feedDataValue.count
+        var feedCommentData: [[String: String]] = FeedViewController.allFeedData[index].comment
+        
+        return feedCommentData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
-        // 현재 Feed에 가져온 정보 확인.
-        var feedCellIndex: Int = index
-        var feedDataKey: String // 업로드된 시간 -> Feed 내 Document ID
-        if let firstKey = FeedViewController.feedDatas[index].keys.first {
-            feedDataKey = firstKey
-        } else {
-            // 값이 없는 경우에 대한 처리
-            feedDataKey = "" // 또는 다른 기본값
-        }
-        var feedDataValue: [String: String] // 위의 Document ID 내 필드값 중 댓글
-        if let feedData = FeedViewController.feedDatas[index].values.first?.comment[indexPath.row] {
-            feedDataValue = feedData
-        } else {
-            // 값이 없는 경우에 대한 처리
-            feedDataValue = [:]
-        }
+        var feedCommentData: [String: String] = FeedViewController.allFeedData[index].comment[indexPath.row]
         
-        cell.setComment(comment: feedDataValue)
+        cell.setComment(comment: feedCommentData)
         
         return cell
     }

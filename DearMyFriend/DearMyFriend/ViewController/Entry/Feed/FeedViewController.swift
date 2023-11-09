@@ -167,27 +167,6 @@ class FeedViewController: UIViewController {
     private func getFirestore() {
         setupLoading()
         
-//        myFirestore.getModelFeed { feedAllData in
-//            print("feedAllData: \(feedAllData)")
-//            // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
-//            if feedAllData.isEmpty {
-//                print("데이터가 없습니다!")
-//            } else {
-//                print("데이터가 있습니다!")
-//            }
-//
-//            FeedViewController.feedDatas = feedAllData
-//
-//            // 데이터 로딩이 완료되면 로딩 애니메이션 숨기기
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//
-//                self.loadingView.removeFromSuperview()
-//                // 테이블 뷰 설정
-//                self.setupTableView()
-//                self.setUI()
-//            }
-//        }
-        
         myFirestore.getFeed { feedData in
             print("feedData: \(feedData)")
             // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
@@ -292,11 +271,11 @@ extension FeedViewController: FeedViewDelegate {
         print("likeButtonTapped")
         
         // 좋아요 버튼을 누르고 새롭게 받은 데이터를 최신화해준다.
-        myFirestore.getModelFeed { feedAllData in
+        myFirestore.getFeed { feedAllData in
             
             print("feedAllData: \(feedAllData)")
             
-            FeedViewController.feedDatas = feedAllData
+            FeedViewController.allFeedData = feedAllData
             
             self.setupTableView()
         }
@@ -306,7 +285,18 @@ extension FeedViewController: FeedViewDelegate {
         print("commentButtonTapped : \(index)")
         
         let commentViewController = CommentViewController(index: index)
-        commentViewController.modalPresentationStyle = .fullScreen
+        
+        // 왜 안되는거지...?
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let modalHeight = screenHeight * 0.7
+        
+        commentViewController.modalPresentationStyle = .formSheet
+        commentViewController.modalTransitionStyle = .coverVertical
+        
+        commentViewController.preferredContentSize = CGSize(width: screenWidth, height: modalHeight)
+        print("commentViewController.preferredContentSize: \(commentViewController.preferredContentSize)")
+        
         present(commentViewController, animated: true, completion: nil)
     }
 }
