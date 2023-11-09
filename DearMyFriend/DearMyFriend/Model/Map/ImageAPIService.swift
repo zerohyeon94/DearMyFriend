@@ -20,4 +20,8 @@ struct ImageItem: Codable {
     let link: String
     let thumbnail: String
     let sizeheight, sizewidth: String
+    
+    func cleanTitle() -> String {
+        return title.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+    }
 }
