@@ -100,10 +100,11 @@ extension RegisterProfileController {
         if !isKeyboardUp, let keyboardFrame:NSValue =
             notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             isKeyboardUp = true
-            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardRectangle = keyboardFrame.cgRectValue.height
+            let keyboardHeight = keyboardRectangle * 1.1
             
             UIView.animate(withDuration: 0.03, animations: {
-                self.registerView.signInButton.transform = CGAffineTransform(translationX: 0, y: -keyboardRectangle.height)
+                self.registerView.signInButton.transform = CGAffineTransform(translationX: 0, y: -keyboardHeight)
             }
             )
         }
