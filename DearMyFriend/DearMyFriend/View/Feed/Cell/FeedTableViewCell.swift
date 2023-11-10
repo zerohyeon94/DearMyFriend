@@ -86,7 +86,16 @@ class FeedTableViewCell: UITableViewCell {
             self.feedView.userNicknameLabel.text = name
         }
         feedView.postTextView.text = feedData.post
+        
+        // image
         imageNames = feedData.imageUrl
+        
+        MyFirestore().getUserProfile(uid: feedData.uid) { profileUrl in
+            let url = URL(string: profileUrl)
+            
+            self.feedView.profileImageView.kf.indicatorType = .activity
+            self.feedView.profileImageView.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
+        }
         
         // 좋아요 상태 확인
         var id: String = MyFirestore().getCurrentUser() ?? ""

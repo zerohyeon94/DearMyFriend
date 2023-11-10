@@ -22,7 +22,6 @@ class MyPetInfoView: UIView {
     func setupTableView(){
         print("setupTableView 실행")
         
-        
         petInfoTableView.separatorStyle = .none // Cell 사이 줄 제거
         let petInfoCellHeight: CGFloat = 150 // Cell의 여유분의 높이 10을 줌.
         petInfoTableView.rowHeight = petInfoCellHeight

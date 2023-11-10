@@ -16,7 +16,7 @@ class MyViewController: UIViewController {
         return button
     }()
     
-    private lazy var writeButton: UIButton = { 
+    private lazy var writeButton: UIButton = {
         let button = UIButton()
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = .systemPink
@@ -39,31 +39,31 @@ class MyViewController: UIViewController {
     let myProfileTitleView: MyProfileTitleView = .init(frame: .zero)
     let myProfileInfoView: MyProfileInfoView = .init(frame: .zero)
     
-//    let myPetInfoView = MyPetInfoView()
-//    let myPostView = MyPostView()
+    //    let myPetInfoView = MyPetInfoView()
+    //    let myPostView = MyPostView()
     
     let myPetInfoView: MyPetInfoView = .init(frame: .zero)
     let myPostView: MyPostView = .init(frame: .zero)
-
+    
     let myProfileFirestore = MyProfileFirestore() // Firebase
     
     static var myProfileData: UserData = UserData(profile: "", id: "", nickname: "", petProfile: [], petName: [], petAge: [], petType: [])
     static var myFeedData: [[String: FeedData]] = [] // key : 업로드 날짜, value : 데이터
     
     // Height
-
+    
     let myProfileTitleViewHeight: CGFloat = 50
     let myProfileInfoViewHeight: CGFloat = 150
     let topBottomConstant: CGFloat = 10
     let leftRightConstant: CGFloat = 10
     let segmentedHeight: CGFloat = 30
     
-
+    
     private let feedTableView = UITableView()
     
-
+    
     // segment
-
+    
     private let segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["마이프렌드"])
         control.selectedSegmentIndex = 0
@@ -80,12 +80,12 @@ class MyViewController: UIViewController {
     private var animation: UIViewPropertyAnimator?
     
     override func viewDidLoad() {
-            super.viewDidLoad()
-            view.backgroundColor = .white
-            getUserFirestore()
-            setUI()
-            configure()
-        }
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        getUserFirestore()
+        setUI()
+        configure()
+    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -99,13 +99,13 @@ class MyViewController: UIViewController {
         // feedTableView를 앞쪽으로 가져옴
         view.bringSubviewToFront(feedTableView)
     }
-
-       
+    
+    
     private func setUI() {
-            view.backgroundColor = .systemBackground
-            view.addSubview(floatingButton)
-            view.addSubview(writeButton)
-        }
+        view.backgroundColor = .systemBackground
+        view.addSubview(floatingButton)
+        view.addSubview(writeButton)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
@@ -122,10 +122,9 @@ class MyViewController: UIViewController {
     private func setupMyProfileTitleView() {
         view.addSubview(myProfileTitleView)
         myProfileTitleView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         myProfileTitleView.delegate = self
         
-
         NSLayoutConstraint.activate([
             myProfileTitleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             myProfileTitleView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -181,9 +180,8 @@ class MyViewController: UIViewController {
     }
     
     @objc private func didTapFloatingButton() {
-            isActive.toggle()
-        }
-    
+        isActive.toggle()
+    }
     
     @objc private func didChangeValue(segment: UISegmentedControl) {
         shouldHideFirstView = segment.selectedSegmentIndex == 1
@@ -197,14 +195,12 @@ class MyViewController: UIViewController {
     }
     
     private func showActionButtons() {
-            popButtons()
-            rotateFloatingButton()
-        }
+        popButtons()
+        rotateFloatingButton()
+    }
     
     private func popButtons() {
-        
         if isActive {
-            
             writeButton.layer.transform = CATransform3DMakeScale(0.4, 0.4, 1)
             UIView.animate(withDuration: 0.3, delay: 0.2, usingSpringWithDamping: 0.55, initialSpringVelocity: 0.3, options: [.curveEaseInOut], animations: { [weak self] in
                 guard let self = self else { return }
@@ -212,7 +208,7 @@ class MyViewController: UIViewController {
                 self.writeButton.alpha = 1.0
             })
         } else {
-
+            
             UIView.animate(withDuration: 0.15, delay: 0.2, options: []) { [weak self] in
                 guard let self = self else { return }
                 self.writeButton.layer.transform = CATransform3DMakeScale(0.4, 0.4, 0.1)
@@ -221,24 +217,18 @@ class MyViewController: UIViewController {
         }
     }
     
-   
-    
     private func rotateFloatingButton() {
-        
-            
-            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
-            let fromValue = isActive ? 0 : CGFloat.pi / 4
-            let toValue = isActive ? CGFloat.pi / 4 : 0
-            animation.fromValue = fromValue
-            animation.toValue = toValue
-            animation.duration = 0.3
-            animation.fillMode = .forwards
-            animation.isRemovedOnCompletion = false
-            floatingButton.layer.add(animation, forKey: nil)
-        }
-    
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+        let fromValue = isActive ? 0 : CGFloat.pi / 4
+        let toValue = isActive ? CGFloat.pi / 4 : 0
+        animation.fromValue = fromValue
+        animation.toValue = toValue
+        animation.duration = 0.3
+        animation.fillMode = .forwards
+        animation.isRemovedOnCompletion = false
+        floatingButton.layer.add(animation, forKey: nil)
+    }
 
-    
     func getUserFirestore() {
         // 내 프로필 정보 표시
         myProfileFirestore.getMyProfile { myProfile in
@@ -257,8 +247,6 @@ class MyViewController: UIViewController {
         }
     }
 }
-
-
 
 extension MyViewController: MyProfileTitleViewDelegate {
     func settingButtonTapped() {
