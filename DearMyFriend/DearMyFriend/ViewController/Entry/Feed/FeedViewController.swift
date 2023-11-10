@@ -9,6 +9,8 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
     let feedTitleViewHeight: CGFloat = 50
     let myFirestore = MyFirestore() // Firebase
     
+    let refreshControl = UIRefreshControl()
+    
     // TableView
     private let feedTableView = UITableView()
     // Feed Data
@@ -66,8 +68,9 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
         super.viewDidLoad()
         
         configure()
-        //        subscribeFirestore()
+        setupRefreshControl()
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         // NavigationBar 숨김.
@@ -86,8 +89,6 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
             FeedViewController.allFeedData = feedData
             
             self.feedTableView.reloadData()
-//            self.setupTableView() // 테이블 뷰 설정
-//            self.setupFloatingButton() // Floating Button 설정.
         }
     }
     
@@ -101,6 +102,10 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
         view.backgroundColor = .systemBackground
         view.addSubview(floatingButton)
         view.addSubview(writeButton)
+    }
+    
+    private func setupRefreshControl() {
+        self.initRefresh()
     }
     
     // MARK: Configure
@@ -321,4 +326,28 @@ extension FeedViewController: FeedViewDelegate {
         
         present(commentViewController, animated: true, completion: nil)
     }
+}
+
+// UIRefreshControl()
+extension FeedViewController {
+    func initRefresh() {
+        refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
+        refreshControl.backgroundColor = UIColor.clear
+        self.feedTableView.refreshControl = refreshControl
+    }
+ 
+    @objc func refreshTable(refresh: UIRefreshControl) {
+        print("refreshTable")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.feedTableView.reloadData()
+            refresh.endRefreshing()
+        }
+    }
+ 
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if(velocity.y < -0.1) {
+            self.refreshTable(refresh: self.refreshControl)
+        }
+    }
+ 
 }
