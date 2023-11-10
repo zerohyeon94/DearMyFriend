@@ -10,7 +10,8 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
         }()
-
+    
+    
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -38,17 +39,19 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
     private let petNameInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "애완동물 이름"
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 18)
         label.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         return label
     }()
     
     
+    
     private lazy var petNameTextField: UITextField = {
         var tf = UITextField()
         tf.frame.size.height = 48
-        tf.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-        tf.textColor = .white
+        tf.backgroundColor = .clear
+        tf.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        
         tf.tintColor = .white
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
@@ -74,7 +77,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
     private let petageInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "애완동물 나이"
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 18)
         label.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         return label
     }()
@@ -110,7 +113,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
     private let petSpeciesInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "애완동물 종"
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 18)
         label.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         return label
     }()
@@ -142,7 +145,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         button.setTitle("추가하기", for: .normal)
         button.setTitleColor(.lightGray, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.titleLabel?.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 18)
         button.isEnabled = true // 버튼 기능 활성화 
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
@@ -345,7 +348,7 @@ extension PetInfoViewController: UITextFieldDelegate {
             petNameTextFieldView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
             // 빈칸이면 원래로 되돌리기
             if petNameTextField.text == "" {
-                petNameInfoLabel.font = UIFont.systemFont(ofSize: 18)
+                petNameInfoLabel.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 18)
                 petNameInfoLabelCenterYConstraint.constant = 0
             }
         }
@@ -353,7 +356,7 @@ extension PetInfoViewController: UITextFieldDelegate {
             petageTextFieldView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
             // 빈칸이면 원래로 되돌리기
             if petageTextField.text == "" {
-                petageInfoLabel.font = UIFont.systemFont(ofSize: 18)
+                petageInfoLabel.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 18)
                 petageInfoLabelCenterYConstraint.constant = 0
             }
         }
@@ -361,7 +364,7 @@ extension PetInfoViewController: UITextFieldDelegate {
             petSpeciesTextFieldView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
             // 빈칸이면 원래로 되돌리기
             if petSpeciesTextField.text == "" {
-                petSpeciesInfoLabel.font = UIFont.systemFont(ofSize: 18)
+                petSpeciesInfoLabel.font = UIFont(name: "SpoqaHanSansNeo-Bold", size: 18)
                 petSpeciesInfoLabelCenterYConstraint.constant = 0
             }
         }
