@@ -5,6 +5,7 @@
 
 import Foundation
 import UIKit
+import FirebaseFirestore
 
 protocol FeedViewDelegate: AnyObject {
     func likeButtonTapped()
