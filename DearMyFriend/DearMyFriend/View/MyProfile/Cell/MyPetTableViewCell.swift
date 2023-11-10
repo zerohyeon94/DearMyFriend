@@ -141,20 +141,5 @@ class MyPetTableViewCell: UITableViewCell {
         
         petProfileImageView.kf.indicatorType = .activity
         petProfileImageView.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
-        
-//        let url = URL(string: imageURL) //입력받은 url string을 URL로 변경
-//
-//        DispatchQueue.global().async { [weak self] in
-//            if imageURL == url?.absoluteString {
-//                if let data = try? Data(contentsOf: url!) {
-//                    if let image = UIImage(data: data) {
-//                        //UI 변경 작업은 main thread에서 해야함.
-//                        DispatchQueue.main.async {
-//                            self?.petProfileImageView.image = image
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 }

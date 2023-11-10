@@ -45,6 +45,26 @@ final class MyFirestore {
         }
     }
     
+    func getUserProfile(uid: String, completion: @escaping (String) -> Void) {
+        var profileURL: String = ""
+        
+        let documentPath = "\(collectionUsers)/\(uid)"
+        removeListener()
+        
+        let documentListener = Firestore.firestore().document(documentPath).addSnapshotListener { documentSnapshot, error in
+            print("documentSnapshot: \(documentSnapshot?.data())")
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                let data = documentSnapshot?.data()
+                if let url = data?["photoUrl"] as? String {
+                    profileURL = url
+                }
+            }
+            completion(profileURL)
+        }
+    }
+    
     private var documentListener: ListenerRegistration? // 데이터 변경 이벤트를 수신하기 위한 리스너의 등록과 해제를 관리하는 역할. (데이터의 실시간 업데이트)
     
     // 해당되는 ID의 데이터를 구독 및 해당 데이터에 대한 변경 사항 실시간 모니터링 - 아직 기능을 잘 모르겠다.
