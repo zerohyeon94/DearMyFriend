@@ -7,3 +7,4 @@ struct RegisterUserRequest {
     var agreeMent: String?
     var photoUrl: String?
 }
+

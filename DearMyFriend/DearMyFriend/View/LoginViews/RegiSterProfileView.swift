@@ -12,21 +12,10 @@ class RegisterProfileView: UIView {
     public let pickerView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.backgroundColor = .clear
+        view.backgroundColor = ThemeColor.pink
         view.image = UIImage(named: "camera")
         view.clipsToBounds = false
         view.layer.cornerRadius = 50
-        return view
-    }()
-    
-    public let cameraImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        view.tintColor = ThemeColor.titleColor
-        view.image = ButtonConfig.cameraIcon
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 10
-        view.backgroundColor = ThemeColor.deepPink
         return view
     }()
     
