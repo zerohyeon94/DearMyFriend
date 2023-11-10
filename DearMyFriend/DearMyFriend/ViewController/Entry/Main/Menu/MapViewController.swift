@@ -26,6 +26,10 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     var modalData: (title: String, roadAddress: String)?
     //    var searchRadius: CLLocationDistance = 1000
     var selectedResult: (title: String, roadAddress: String, telephone: String)?
+    var userLocations: [CLLocationCoordinate2D] = []
+    var userMarkers: [String: NMFMarker] = [:]
+
+
 
 
 
@@ -316,7 +320,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
         locationNameLabel.text = data.title
         roadAddressLabel.text = data.roadAddress
-//        phoneNumberLabel.text = data.telephone
+        //        phoneNumberLabel.text = data.telephone
 
         modalView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
@@ -359,35 +363,32 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         }
     }
 
-    func addMarker(at coordinate: CLLocationCoordinate2D, title: String) {
+    func addMarker(forUser userId: String, at coordinate: CLLocationCoordinate2D, title: String) {
         guard let mapView = naverMapView?.mapView else {
             return
         }
 
         // 중복 체크
-        let isDuplicate = markers.contains(where: { existingMarker in
-            existingMarker.position.lat == coordinate.latitude &&
-            existingMarker.position.lng == coordinate.longitude
-        })
-
-        if !isDuplicate {
-            let marker = NMFMarker()
-            marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
-            marker.mapView = mapView
-            marker.captionText = title
-
-            marker.touchHandler = { [weak self] overlay in
-                if let marker = overlay as? NMFMarker {
-                    let selectedItem = self?.searchResults.first(where: { $0.title == marker.captionText })
-                    self?.modalData = selectedItem
-                    self?.showHalfModal()
-
-                }
-                return true
-            }
-
-            markers.append(marker)
+        if let existingMarker = userMarkers[userId] {
+            existingMarker.mapView = nil
         }
+
+        let marker = NMFMarker()
+        marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
+        marker.mapView = mapView
+        marker.captionText = title
+
+        marker.touchHandler = { [weak self] overlay in
+            if let marker = overlay as? NMFMarker {
+                let selectedItem = self?.searchResults.first(where: { $0.title == marker.captionText })
+                self?.modalData = selectedItem
+                self?.showHalfModal()
+            }
+            return true
+        }
+
+        // 사용자별 마커 저장
+        userMarkers[userId] = marker
     }
 }
 
