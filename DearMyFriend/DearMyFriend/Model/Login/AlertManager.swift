@@ -49,5 +49,17 @@ extension AlertManager {
     public static func recommendationPlaceReadFail(on vc: UIViewController) {
         self.showBasicAlert(on: vc, title: "추천 플레이스", message: "정보를 읽어오지 못했습니다.")
     }
-
+    
+    // 피드 게시물 업로드
+    public static func notSelectedImageAlert(on vc: UIViewController) {
+        self.showBasicAlert(on: vc, title: "피드 게시물 추가", message: "이미지가 선택되지 않았습니다")
+    }
+    
+    public static func notEnteredTextAlert(on vc: UIViewController) {
+        self.showBasicAlert(on: vc, title: "피드 게시물 추가", message: "텍스트가 입력되지 않았습니다")
+    }
+    
+    public static func nothingAlert(on vc: UIViewController) {
+        self.showBasicAlert(on: vc, title: "피드 게시물 추가", message: "이미지와 텍스트가 입력되지 않았습니다")
+    }
 }
