@@ -128,11 +128,12 @@ class MyPetTableViewCell: UITableViewCell {
         ])
     }
     
-    func setPetInfo(petData: PetData, index: Int){
-        configureURL(imageURL: petData.petProfile)
-        petNameLabel.text = petData.petName
-        petAgeLabel.text = "\(petData.petAge) 살"
-        petTypeLabel.text = petData.petType
+    func setPetInfo(petData: RegisterMyPetInfo, index: Int){
+        configureURL(imageURL: petData.photoUrl ?? "")
+        petNameLabel.text = petData.name
+        let age: String = petData.age ?? "1"
+        petAgeLabel.text = "\(age) 살"
+        petTypeLabel.text = petData.type
     }
     
     func configureURL(imageURL: String) {
@@ -141,20 +142,5 @@ class MyPetTableViewCell: UITableViewCell {
         
         petProfileImageView.kf.indicatorType = .activity
         petProfileImageView.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
-        
-//        let url = URL(string: imageURL) //입력받은 url string을 URL로 변경
-//
-//        DispatchQueue.global().async { [weak self] in
-//            if imageURL == url?.absoluteString {
-//                if let data = try? Data(contentsOf: url!) {
-//                    if let image = UIImage(data: data) {
-//                        //UI 변경 작업은 main thread에서 해야함.
-//                        DispatchQueue.main.async {
-//                            self?.petProfileImageView.image = image
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 }

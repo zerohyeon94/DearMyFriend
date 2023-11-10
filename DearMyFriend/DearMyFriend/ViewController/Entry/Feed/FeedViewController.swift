@@ -9,11 +9,17 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
     let feedTitleViewHeight: CGFloat = 50
     let myFirestore = MyFirestore() // Firebase
     
+    let refreshControl = UIRefreshControl()
+    
     // TableView
     private let feedTableView = UITableView()
     // Feed Data
-    //    static var feedDatas: [[String: FeedData]] = []
+    
     static var allFeedData: [[String: FeedModel]] = [] // Dictionary 형태 [Feed Id: Feed Data]
+    var displayFeedData: Int = 0 // 현재 표시가 된 Feed 번호 기록
+    // 2가 나올라고 하고 다나오면 4가 나왔음. 2가 다표시되면 4까지가 셀이 표시됨.
+    // displayFeedData에서 -2를 하면 지금까지 본거네.
+    // 그러면 데이터 업데이트를 하게되면 배열에서 displayFeedData-2 한 값을 배열에서 제거하고, 없어진 만큼 추가하자.
     
     lazy var loadingView = {
         let animeView = LottieAnimationView(name: "loading")
@@ -66,12 +72,28 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
         super.viewDidLoad()
         
         configure()
-        //        subscribeFirestore()
+        setupRefreshControl()
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         // NavigationBar 숨김.
         navigationController?.isNavigationBarHidden = true
+        print("B ViewController 종료")
+        
+        myFirestore.getFeed(displayIndex: displayFeedData) { feedData in
+            print("feedData: \(feedData)")
+            // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
+            if feedData.isEmpty {
+                print("데이터가 없습니다!")
+            } else {
+                print("데이터가 있습니다!")
+            }
+            
+            FeedViewController.allFeedData = feedData
+            
+            self.feedTableView.reloadData()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -86,11 +108,13 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
         view.addSubview(writeButton)
     }
     
+    private func setupRefreshControl() {
+        self.initRefresh()
+    }
+    
     // MARK: Configure
     private func configure() {
         view.backgroundColor = .white
-        //        setupFeedTitleView()
-        subscribeFirestore()
         getFirestore() // Firestore에 있는 정보 가져와서 TableView 표시
     }
     
@@ -149,25 +173,10 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
         ])
     }
     
-    // Firestore 업데이트 여부
-    private func subscribeFirestore() {
-        print("subscribeFirestore")
-        myFirestore.subscribe(collection: MyFirestore().collectionInfo, id: "_zerohyeon") { [weak self] result in
-            switch result {
-            case .success(let messages):
-                print("subscribeFirestore success")
-                print("message: \(messages)")
-            case .failure(let error):
-                print("subscribeFirestore failure")
-                print(error)
-            }
-        }
-    }
-    
     private func getFirestore() {
         setupLoading()
         
-        myFirestore.getFeed { feedData in
+        myFirestore.getFeed(displayIndex: displayFeedData) { feedData in
             print("feedData: \(feedData)")
             // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
             if feedData.isEmpty {
@@ -245,11 +254,15 @@ extension FeedViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.identifier, for: indexPath) as! FeedTableViewCell
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
+        displayFeedData = indexPath.row
+        
         cell.feedView.delegate = self
         
         // 전체 데이터 중 순서대로 나열
         let feedData: [String: FeedModel] = FeedViewController.allFeedData[indexPath.row] // 형태 [String: FeedData]
         let feedDataValue: FeedModel = feedData.values.first!
+        print("displayFeedData: \(displayFeedData)")
+        print("feedDataValue: \(feedDataValue.post)")
         
         cell.setFeed(feedData: feedDataValue, index: indexPath.row) // 해당되는 Feed의 데이터와 현재 TableView의 index
         
@@ -270,7 +283,7 @@ extension FeedViewController: FeedViewDelegate {
         print("likeButtonTapped")
         
         // 좋아요 버튼을 누르고 새롭게 받은 데이터를 최신화해준다.
-        myFirestore.getFeed { feedAllData in
+        myFirestore.getFeed(displayIndex: displayFeedData) { feedAllData in
             
             print("feedAllData: \(feedAllData)")
             
@@ -303,5 +316,32 @@ extension FeedViewController: FeedViewDelegate {
         //        print("commentViewController.preferredContentSize: \(commentViewController.preferredContentSize)")
         
         present(commentViewController, animated: true, completion: nil)
+    }
+}
+
+// UIRefreshControl()
+extension FeedViewController {
+    func initRefresh() {
+        refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
+        refreshControl.backgroundColor = UIColor.clear
+        self.feedTableView.refreshControl = refreshControl
+    }
+ 
+    @objc func refreshTable(refresh: UIRefreshControl) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.myFirestore.getFeed(displayIndex: self.displayFeedData-1) { feedData in // 이것 같은 경우는 refresh scroll을 내리면서 셀값을 하나 더 읽어서 -1을 함.
+                print("feedData: \(feedData)")
+                // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
+                if feedData.isEmpty {
+                    print("데이터가 없습니다!")
+                } else {
+                    print("데이터가 있습니다!")
+                }
+                FeedViewController.allFeedData = feedData
+                self.feedTableView.reloadData()
+            }
+            
+            refresh.endRefreshing()
+        }
     }
 }

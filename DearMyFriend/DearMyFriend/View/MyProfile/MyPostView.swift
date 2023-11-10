@@ -77,9 +77,9 @@ extension MyPostView: UICollectionViewDataSource {
         
         let userFeedData = MyViewController.myFeedData[indexPath.row]
 
-        print("image: \(userFeedData.values.first?.image.first)")
+        print("image: \(userFeedData.values.first?.imageUrl.first)")
         
-        cell.setPostImageView(with: userFeedData.values.first?.image.first ?? "image upload fail")
+        cell.setPostImageView(with: userFeedData.values.first?.imageUrl.first ?? "image upload fail")
         return cell
     }
 }
