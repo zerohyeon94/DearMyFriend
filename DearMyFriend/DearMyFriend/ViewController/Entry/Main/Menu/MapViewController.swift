@@ -8,7 +8,7 @@ import Firebase
 
 
 class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewDelegate {
-
+    
     var isLoadingResults: Bool = false
     var searchStart: Int = 1
     var selectedItem: Item?
@@ -24,33 +24,33 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     var searchResultsTableViewController: UITableViewController!
     var recentSearches: [String] = []
     var modalData: (title: String, roadAddress: String, telephone: String)?
-//    var searchRadius: CLLocationDistance = 1000
+    //    var searchRadius: CLLocationDistance = 1000
     var selectedResult: (title: String, roadAddress: String, telephone: String)?
-
-
-
+    
+    
+    
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 10
         return imageView
-
+        
     }()
-
+    
     private lazy var showAnimalHospitalButton: UIButton = {
         let button = createStyledButton(title: "동물병원")
         button.addTarget(self, action: #selector(showAnimalHospital), for: .touchUpInside)
         return button
     }()
-
-
+    
+    
     private lazy var modalView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 10
         return view
     }()
-
+    
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setTitle("닫기", for: .normal)
@@ -58,24 +58,24 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         button.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
         button.isUserInteractionEnabled = true
         button.layer.cornerRadius = 10
-
+        
         return button
     }()
-
+    
     private lazy var locationNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textAlignment = .left
         return label
     }()
-
+    
     private lazy var roadAddressLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .left
         return label
     }()
-
+    
     private lazy var phoneNumberLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
@@ -96,27 +96,27 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
-           super.viewWillDisappear(animated)
-           saveMarkersToFirestore()
-       }
-
+        super.viewWillDisappear(animated)
+        saveMarkersToFirestore()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchController()
         loadMarkersFromFirestore()
-
+        
         searchResultsTableView.register(UITableViewCell.self, forCellReuseIdentifier: SearchResultCell)
-
+        
         naverMapView = NMFNaverMapView(frame: self.view.frame)
         naverMapView?.showLocationButton = true
         naverMapView?.mapView.isScrollGestureEnabled = true
         naverMapView?.mapView.delegate = self
         searchController.searchBar.delegate = self
-
-
+        
+        
         addTableView()
-
-
+        
+        
         if let naverMapView = naverMapView {
             self.view.addSubview(naverMapView)
         }
@@ -126,16 +126,16 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         //
         //       @objc func dismissKeyboard() {
         //           self.view.endEditing(true)
-
+        
         setupButtonLayout()
         setupLocationManager()
         if let currentLocation = locationManager.location {
             addMarker(at: currentLocation.coordinate, title: "현재 위치입니다.")
             moveMapToLocation(currentLocation.coordinate)
         }
-
+        
     }
-
+    
     private func createStyledButton(title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
@@ -144,24 +144,24 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         return button
     }
-
+    
     private func setupButtonLayout() {
         view.addSubview(showAnimalHospitalButton)
-
+        
         showAnimalHospitalButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(12)
             $0.leading.equalToSuperview().offset(12)
             $0.width.equalTo(100)
             $0.height.equalTo(40)
         }
-
+        
         showAnimalHospitalButton.layer.cornerRadius = 10
     }
-
+    
     func setupLocationManager() {
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-
+        
         if CLLocationManager.locationServicesEnabled() {
             let status = self.locationManager.authorizationStatus
             if status == .notDetermined {
@@ -175,102 +175,112 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             print("위치 서비스가 활성화되어 있지 않습니다.")
         }
     }
-
+    
     func setupSearchController() {
         searchResultsTableViewController = UITableViewController(style: .plain)
         searchResultsTableViewController.tableView = searchResultsTableView
         searchResultsTableView.delegate = self
         searchResultsTableView.dataSource = self
-
+        
         searchController = UISearchController(searchResultsController: searchResultsTableViewController)
         searchController.searchResultsUpdater = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.placeholder = "찿으시는 매장을 입력하세요!"
         searchController.searchBar.delegate = self
-
+        
         navigationItem.searchController = searchController
         definesPresentationContext = true
-//                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-//                searchController.view.addGestureRecognizer(tapGesture)
-
+        //                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        //                searchController.view.addGestureRecognizer(tapGesture)
+        
     }
-
-
-
+    
+    
+    
     func addTableView() {
         searchResultsTableView.frame = view.bounds
         searchResultsTableView.delegate = self
         searchResultsTableView.dataSource = self
         view.addSubview(searchResultsTableView)
     }
-
+    
     func handleSearchResults(_ results: [(title: String, roadAddress: String)]) {
         if searchStart == 1 {
             searchResults = results
         } else {
             searchResults.append(contentsOf: results)
         }
-
+        
         isLoadingResults = false
         searchResultsTableView.reloadData()
     }
     func saveMarkersToFirestore() {
-            let db = Firestore.firestore()
-            let markersCollection = db.collection("markers")
-
+        let db = Firestore.firestore()
+        let markersCollection = db.collection("markers")
+        
         markersCollection.getDocuments { [weak self] snapshot, error in
-                   guard let documents = snapshot?.documents else {
-                       print("Error fetching documents: \(error?.localizedDescription ?? "")")
-                       return
-                   }
-
-                for marker in self?.markers ?? [] {
-                    let markerData: [String: Any] = [
-                        "latitude": marker.position.lat,
-                        "longitude": marker.position.lng,
-                        "title": marker.captionText ?? ""
-                    ]
-                    markersCollection.addDocument(data: markerData)
+            guard let documents = snapshot?.documents else {
+                print("Error fetching documents: \(error?.localizedDescription ?? "")")
+                return
+            }
+            
+            for (index, marker) in (self?.markers ?? []).enumerated() {
+                let markerData: [String: Any] = [
+                    "latitude": marker.position.lat,
+                    "longitude": marker.position.lng,
+                    "title": marker.captionText ?? ""
+                ]
+                markersCollection.document("marker_\(index + 1)").setData(markerData)
+            }
+        }
+    }
+    func loadMarkersFromFirestore() {
+        let db = Firestore.firestore()
+        let markersCollection = db.collection("markers")
+        
+        markersCollection.getDocuments { [weak self] snapshot, error in
+            guard let documents = snapshot?.documents else {
+                print("Error fetching documents: \(error?.localizedDescription ?? "")")
+                return
+            }
+            
+            for document in documents {
+                let data = document.data()
+                if let latitude = data["latitude"] as? Double,
+                   let longitude = data["longitude"] as? Double,
+                   let title = data["title"] as? String {
+                    let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                    
+                    // 중복 체크
+                    let isDuplicate = self?.markers.contains(where: { existingMarker in
+                        existingMarker.position.lat == coordinate.latitude &&
+                        existingMarker.position.lng == coordinate.longitude
+                    }) ?? false
+                    
+                    if !isDuplicate {
+                        self?.addMarker(at: coordinate, title: title)
+                    }
                 }
             }
         }
-    func loadMarkersFromFirestore() {
-           let db = Firestore.firestore()
-           let markersCollection = db.collection("markers")
-
-           markersCollection.getDocuments { [weak self] snapshot, error in
-               guard let documents = snapshot?.documents else {
-                   print("Error fetching documents: \(error?.localizedDescription ?? "")")
-                   return
-               }
-
-               for document in documents {
-                   let data = document.data()
-                   if let latitude = data["latitude"] as? Double,
-                      let longitude = data["longitude"] as? Double,
-                      let title = data["title"] as? String {
-                       let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-                       self?.addMarker(at: coordinate, title: title)
-                   }
-               }
-           }
-       }
-
+    }
+    
+    
     @objc func showAnimalHospital() {
         if isLoadingResults {
             return
         }
-
+        
         searchResults.removeAll()
         searchStart = 1 // 다시 첫 번째 페이지부터 시작
-
+        
     }
-
+    
     @objc func closeModal() {
         modalView.removeFromSuperview()
         selectedItem = nil
     }
-
+    
     @objc func showHalfModal() {
         guard let data = modalData else { return }
         print(data)
@@ -289,25 +299,25 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                 }
             }
         }
-
+        
         modalView.backgroundColor = .white
         modalView.layer.cornerRadius = 10
         self.view.addSubview(modalView)
-
+        
         modalView.addSubview(imageView)
         //    modalView.addSubview(heartButton)
-
+        
         imageView.snp.makeConstraints {
             $0.top.equalTo(modalView).offset(16)
             $0.leading.equalTo(modalView).offset(16)
             $0.trailing.equalTo(modalView).offset(-16)
             $0.height.equalTo(150)
         }
-
+        
         locationNameLabel.text = data.title
         roadAddressLabel.text = data.roadAddress
         phoneNumberLabel.text = data.telephone
-
+        
         modalView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
@@ -332,8 +342,8 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             $0.leading.equalTo(modalView).offset(16)
             $0.trailing.equalTo(modalView).offset(-16)
         }
-
-
+        
+        
         modalView.addSubview(closeButton)
         closeButton.snp.makeConstraints {
             $0.bottom.equalTo(modalView).inset(100)
@@ -348,28 +358,34 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             $0.width.height.equalTo(30)
         }
     }
-
-
+    
     func addMarker(at coordinate: CLLocationCoordinate2D, title: String) {
         guard let mapView = naverMapView?.mapView else {
             return
         }
-
-        let marker = NMFMarker()
-        marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
-        marker.mapView = mapView
-        marker.captionText = title
-
-        marker.touchHandler = { [weak self] overlay in
-            if let marker = overlay as? NMFMarker {
-                let selectedItem = self?.searchResults.first(where: { $0.title == marker.captionText })
-                //                self?.modalData = (title: selectedItem?.title ?? "", roadAddress: selectedItem?.roadAddress ?? "")
-                self?.showHalfModal()
+        
+        // 중복 체크
+        let isDuplicate = markers.contains(where: { existingMarker in
+            existingMarker.position.lat == coordinate.latitude &&
+            existingMarker.position.lng == coordinate.longitude
+        })
+        
+        if !isDuplicate {
+            let marker = NMFMarker()
+            marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
+            marker.mapView = mapView
+            marker.captionText = title
+            
+            marker.touchHandler = { [weak self] overlay in
+                if let marker = overlay as? NMFMarker {
+                    let selectedItem = self?.searchResults.first(where: { $0.title == marker.captionText })
+                    self?.showHalfModal()
+                }
+                return true
             }
-            return true
+            
+            markers.append(marker)
         }
-
-        markers.append(marker)
     }
 }
 
