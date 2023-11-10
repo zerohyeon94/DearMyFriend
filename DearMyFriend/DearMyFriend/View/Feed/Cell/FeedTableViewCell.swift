@@ -51,8 +51,9 @@ class FeedTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
+        feedView.userNicknameLabel.text = ""
         imageNames = []
+        feedView.postTextView.text = ""
     }
     
     // MARK: Configure
