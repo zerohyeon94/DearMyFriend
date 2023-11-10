@@ -15,7 +15,7 @@ class MainViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    let MenuViewControllers = [YouTubeViewController(), MapViewController(), WishViewController(), CalculatorViewController()]
+    let MenuViewControllers = [YouTubeViewController(), MapViewController(), CalculatorViewController()]
     
     override func viewDidLoad() {
         super.viewDidLoad()
