@@ -128,11 +128,12 @@ class MyPetTableViewCell: UITableViewCell {
         ])
     }
     
-    func setPetInfo(petData: PetData, index: Int){
-        configureURL(imageURL: petData.petProfile)
-        petNameLabel.text = petData.petName
-        petAgeLabel.text = "\(petData.petAge) 살"
-        petTypeLabel.text = petData.petType
+    func setPetInfo(petData: RegisterMyPetInfo, index: Int){
+        configureURL(imageURL: petData.photoUrl ?? "")
+        petNameLabel.text = petData.name
+        let age: String = petData.age ?? "1"
+        petAgeLabel.text = "\(age) 살"
+        petTypeLabel.text = petData.type
     }
     
     func configureURL(imageURL: String) {

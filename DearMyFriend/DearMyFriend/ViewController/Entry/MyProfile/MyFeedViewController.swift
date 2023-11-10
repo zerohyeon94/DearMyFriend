@@ -39,10 +39,4 @@ class MyFeedViewController: UIViewController {
             myFeedView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
-    
-    func setMyFeedData() {
-        // 전체 데이터 중 순서대로 나열
-        let allData: [String: FeedData] = MyViewController.myFeedData[index] // 형태 [String: FeedData]
-        let indexData: FeedData = allData.values.first!
-    }
 }
