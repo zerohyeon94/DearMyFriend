@@ -54,8 +54,8 @@ extension MyPetInfoView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let userPetData = MyViewController.myProfileData
-        print("userPetData.petName.count: \(userPetData.petName.count)")
-        return userPetData.petName.count
+        print("userPetData.petName.count: \(userPetData.count)")
+        return userPetData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -63,14 +63,14 @@ extension MyPetInfoView: UITableViewDataSource {
         cell.selectionStyle = .none // cell 선택 효과 없애기
         cell.cellIndex = indexPath.row
         
-        let userPetData = MyViewController.myProfileData
+        let userPetData = MyViewController.myProfileData[indexPath.row]
         
-        let petProfile = userPetData.petProfile[indexPath.row]
-        let petName = userPetData.petName[indexPath.row]
-        let petAge = userPetData.petAge[indexPath.row]
-        let petType = userPetData.petType[indexPath.row]
+        let petPhotoUrl = userPetData.values.first?.photoUrl
+        let petName = userPetData.values.first?.name
+        let petAge = userPetData.values.first?.age
+        let petType = userPetData.values.first?.type
         
-        let petData: PetData = PetData(petProfile: petProfile, petName: petName, petAge: petAge, petType: petType)
+        let petData: RegisterMyPetInfo = RegisterMyPetInfo(name: petName, age: petAge, type: petType, photoUrl: petPhotoUrl)
         print("petData: \(petData)")
         cell.setPetInfo(petData: petData, index: indexPath.row)
         

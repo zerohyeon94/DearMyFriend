@@ -5,6 +5,7 @@ final class MyProfileFirestore {
     
     let collectionUsers = "Users"
     let collectionFeed = "Feed"
+    let collectionPet = "Pet"
     
     // MARK: Read
     func getMyProfile(completion: @escaping (UserData) -> Void) { //} -> [[String: FeedData]] {
@@ -122,10 +123,55 @@ final class MyProfileFirestore {
                     let userFeedData = FeedData(id: userFeedId, image: userFeedImage, post: userFeedPost, like: userFeedLike, comment: userFeedComment)
                     myFeedData.append([document.documentID : userFeedData])
                 }
-                
                 completion(myFeedData)
             }
         }
     }
     
+    func getMyPet(uid: String, completion: @escaping ([[String: RegisterMyPetInfo]]) -> Void) {
+        var myPetData: [[String: RegisterMyPetInfo]] = [] // key : pet Document ID, value : 데이터
+        // 'Users' collection & 해당되는 User ID
+        let documentID: String = uid
+        let collectionListener = Firestore.firestore().collection(collectionUsers).document(documentID).collection(collectionPet) // Users / Document ID / Pet
+        
+        // Pet 내에 있는 pet document ID 값 얻기
+        collectionListener.getDocuments() { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                
+                for document in querySnapshot!.documents{
+                    
+                    // Firestore 문서의 데이터를 딕셔너리로 가져옴
+                    var petAge: String = ""
+                    var petName: String = ""
+                    var petPhoto: String = ""
+                    var petSpices: String = ""
+                    
+                    let data = document.data()
+                    if let age = data["age"] as? String {
+                        petAge = age
+                    }
+                    
+                    if let name = data["name"] as? String {
+                        petName = name
+                    }
+                    
+                    if let photo = data["photo"] as? String {
+                        petPhoto = photo
+                    }
+                    
+                    if let spices = data["spices"] as? String {
+                        petSpices = spices
+                    }
+                    
+                    
+                    let petData = RegisterMyPetInfo(name: petName, age: petAge, type: petSpices, photoUrl: petPhoto)
+                    myPetData.append([document.documentID : petData])
+                }
+                
+                completion(myPetData)
+            }
+        }
+    }
 }

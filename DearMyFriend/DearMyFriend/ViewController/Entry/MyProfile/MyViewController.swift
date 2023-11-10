@@ -46,12 +46,12 @@ class MyViewController: UIViewController {
     let myPostView: MyPostView = .init(frame: .zero)
     
     let myProfileFirestore = MyProfileFirestore() // Firebase
+    var userUid: String = MyFirestore().getCurrentUser() ?? ""
     
-    static var myProfileData: UserData = UserData(profile: "", id: "", nickname: "", petProfile: [], petName: [], petAge: [], petType: [])
+    static var myProfileData: [[String: RegisterMyPetInfo]] = []
     static var myFeedData: [[String: FeedData]] = [] // key : 업로드 날짜, value : 데이터
     
     // Height
-    
     let myProfileTitleViewHeight: CGFloat = 50
     let myProfileInfoViewHeight: CGFloat = 150
     let topBottomConstant: CGFloat = 10
@@ -234,16 +234,16 @@ class MyViewController: UIViewController {
         myProfileInfoView.setupUserProfile()
         
         // 애완동물 정보 표시
-        myProfileFirestore.getMyProfile { myProfile in
+        myProfileFirestore.getMyPet(uid: userUid) { myPet in
             
-            MyViewController.myProfileData = myProfile
+            MyViewController.myProfileData = myPet
             
             self.myProfileInfoView.setupUserProfile()
             self.myPetInfoView.setupTableView()
             self.myPetInfoView.reloadTableView()
         }
         
-        // 
+        // 사용자의 Feed 정보
         myProfileFirestore.getMyFeed { myFeed in
             MyViewController.myFeedData = myFeed
             
