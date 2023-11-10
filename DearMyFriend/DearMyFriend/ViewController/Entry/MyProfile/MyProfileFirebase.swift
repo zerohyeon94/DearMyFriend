@@ -4,7 +4,7 @@ import FirebaseFirestoreSwift
 final class MyProfileFirestore {
     
     let collectionUsers = "Users"
-    let collectionFeed = "Feed"
+    let collectionFeeds = "Feeds"
     let collectionPet = "Pet"
     
     // MARK: Read
@@ -78,50 +78,70 @@ final class MyProfileFirestore {
         }
     }
     
-    func getMyFeed(completion: @escaping ([[String: FeedData]]) -> Void) { //} -> [[String: FeedData]] {
-        var myFeedData: [[String: FeedData]] = [] // key : 업로드 날짜, value : 데이터
+    func getMyFeed(uid: String, completion: @escaping ([[String: FeedModel]]) -> Void) {
+        var myFeedData: [[String: FeedModel]] = [] // key : Feed Document ID, value : 데이터
         
         // 'Users' collection & 해당되는 User ID
-        let documentID: String = "_zerohyeon"
-        let collectionListener = Firestore.firestore().collection(collectionUsers).document(documentID).collection(collectionFeed)
-        
-        collectionListener.getDocuments() { (querySnapshot, error) in
+        let documentID: String = uid
+        let collectionListener = Firestore.firestore().collection(collectionFeeds)
+        print("1111 documentID: \(documentID)")
+        collectionListener.whereField("uid", isEqualTo: documentID)
+            .order(by: "date", descending: true)
+            .getDocuments { (querySnapshot, error) in
+//        collectionListener.whereField("uid", isEqualTo: documentID).getDocuments() { (querySnapshot, error) in
+//        collectionListener.order(by: "date", descending: true).getDocuments() { (querySnapshot, error) in
+            print("1111 querySnapshot: \(querySnapshot)")
             if let error = error {
+                print("뭐지?")
                 print("Error getting documents: \(error)")
             } else {
-                
+                print("1111 querySnapshot!.documents: \(querySnapshot!.documents)")
                 for document in querySnapshot!.documents{
-                    
+                    print("1111 documentID: \(documentID)")
                     // Firestore 문서의 데이터를 딕셔너리로 가져옴
-                    var userFeedId: String = ""
-                    var userFeedImage: [String] = []
-                    var userFeedPost: String = ""
-                    var userFeedLike: [String] = []
-                    var userFeedComment: [[String: String]] = []
+                    var feedUid: String = ""
+                    var feedDate: Date = Date()
+                    var feedImageUrl: [String] = []
+                    var feedPost: String = ""
+                    var feedLike: [String] = []
+                    var feedLikeCount: Int = 0
+                    var feedComment: [[String: String]] = []
                     
                     let data = document.data()
-                    if let id = data["id"] as? String {
-                        userFeedId = id
+                    print("data: \(data)")
+                    if let uid = data["uid"] as? String {
+                        feedUid = uid
                     }
                     
-                    if let image = data["image"] as? [String] {
-                        userFeedImage = image
+                    if let date = data["date"] as? Date {
+                        feedDate = date
+                    }
+                    print("feedDate: \(feedDate)")
+                    
+                    if let imageUrl = data["imageUrl"] as? [String] {
+                        feedImageUrl = imageUrl
                     }
                     
                     if let post = data["post"] as? String {
-                        userFeedPost = post
+                        feedPost = post
                     }
                     
                     if let like = data["like"] as? [String] {
-                        userFeedLike = like
+                        feedLike = like
+                    }
+                    
+                    if let likeCount = data["likeCount"] as? Int {
+                        feedLikeCount = likeCount
                     }
                     
                     if let comment = data["comment"] as? [[String: String]] {
-                        userFeedComment = comment
+                        feedComment = comment
                     }
                     
-                    let userFeedData = FeedData(id: userFeedId, image: userFeedImage, post: userFeedPost, like: userFeedLike, comment: userFeedComment)
-                    myFeedData.append([document.documentID : userFeedData])
+                    let feedData = FeedModel(uid: feedUid, date: feedDate, imageUrl: feedImageUrl, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
+                    
+                    // document ID를 key값으로 저장.
+                    myFeedData.append([document.documentID : feedData])
                 }
                 completion(myFeedData)
             }

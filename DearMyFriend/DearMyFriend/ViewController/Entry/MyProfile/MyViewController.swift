@@ -49,7 +49,7 @@ class MyViewController: UIViewController {
     var userUid: String = MyFirestore().getCurrentUser() ?? ""
     
     static var myProfileData: [[String: RegisterMyPetInfo]] = []
-    static var myFeedData: [[String: FeedData]] = [] // key : 업로드 날짜, value : 데이터
+    static var myFeedData: [[String: FeedModel]] = [] // key : feed Document ID, value : 데이터
     
     // Height
     let myProfileTitleViewHeight: CGFloat = 50
@@ -65,7 +65,7 @@ class MyViewController: UIViewController {
     // segment
     
     private let segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["마이프렌드"])
+        let control = UISegmentedControl(items: ["마이 프렌드", "마이 게시물"])
         control.selectedSegmentIndex = 0
         return control
     }()
@@ -244,7 +244,7 @@ class MyViewController: UIViewController {
         }
         
         // 사용자의 Feed 정보
-        myProfileFirestore.getMyFeed { myFeed in
+        myProfileFirestore.getMyFeed(uid: userUid) { myFeed in
             MyViewController.myFeedData = myFeed
             
             self.myPostView.reloadCollectionView()
