@@ -74,7 +74,9 @@ class AddPostViewController: UIViewController {
         // 추후 현재 로그인된 ID를 받아와서 닉네임 표시
         let currentUID: String = MyFirestore().getCurrentUser() ?? "" // 사용자 ID 확인
         // 사용자 UID의 username 확인.
-        addPostView.userNicknameLabel.text = "_zerohyeon"
+        MyFirestore().getUsername(uid: currentUID) { name in
+            self.addPostView.userNicknameLabel.text = name
+        }
         
         NSLayoutConstraint.activate([
             addPostView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -105,7 +107,7 @@ extension AddPostViewController: AddPostViewDelegate {
             print("있음!")
             // document : 현재 시간
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // 표시 형식을 원하는 대로 설정
             
             let currentDate = Date() // 현재 시간 가져오기
             let formattedCurrentDate = dateFormatter.string(from: currentDate) // 형식에 맞게 날짜를 문자열로 변환
