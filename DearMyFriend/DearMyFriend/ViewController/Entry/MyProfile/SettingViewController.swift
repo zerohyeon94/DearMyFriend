@@ -116,16 +116,29 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         // 🟡 추가했음
         let alert = UIAlertController(title: "회원탈퇴", message: "정말로 회원탈퇴 하시겠습니까?", preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "확인", style: .destructive) { _ in
-            AuthService.shared.deleteAccount { [weak self] error in
-                guard let self = self else { return }
-                if let error = error {
-                    print("탈퇴 실패", error)
-                } else {
-                    print("탈퇴 성공")
-                    AuthService.shared.changeController(self)
+            let accountManeger = AuthService.shared
+            
+            accountManeger.deleteStore { error in
+                if error != nil {
+                    AlertManager.registerCheckAlert(on: self)
+                }
+                
+                accountManeger.deleteStorage { error in
+                    if error != nil {
+                        AlertManager.registerCheckAlert(on: self)
+                    }
+                    
+                    accountManeger.deleteAccount { [weak self] error in
+                        guard let self = self else { return }
+                        if error != nil {
+                            AlertManager.registerCheckAlert(on: self)
+                        }
+                        accountManeger.changeController(self)
+                    }
                 }
             }
         }
+        
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         alert.addAction(confirmAction)
         alert.addAction(cancelAction)
