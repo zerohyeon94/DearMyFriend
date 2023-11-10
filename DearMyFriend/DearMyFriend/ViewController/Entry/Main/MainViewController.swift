@@ -197,12 +197,13 @@ extension MainViewController: UICollectionViewDelegate {
             self.navigationController?.navigationBar.isHidden = false
             self.navigationController?.pushViewController(MenuViewControllers[indexPath.row], animated: false)
         case 1:
-            if indexPath.item == 2 {
+            switch indexPath.item {
+            case 2:
                 let storyManager = StorageService.shared
                 storyManager.uploadStory { [weak self] error in
                     guard let self = self else { return }
                     if let error = error {
-                        print(error) 
+                        print(error)
                     } else {
                         let popularityView = PopularityViewController()
                         popularityView.mainPage = self
@@ -213,6 +214,12 @@ extension MainViewController: UICollectionViewDelegate {
                         }
                     }
                 }
+                // firebase에서 정보받아올수있게 변경 필요
+            case 3:
+                let urlString = "https://hyewon07.tistory.com/entry/%EB%B0%98%EB%A0%A4%EB%8F%99%EB%AC%BC-%EC%A0%95%EB%B6%80-%EC%A7%80%EC%9B%90%EA%B8%88"
+                self.showWebViewController(with: urlString)
+            default:
+                return
             }
             
         case 2:

@@ -25,7 +25,7 @@ class PopularityCellView: UICollectionViewCell {
     let profileView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.backgroundColor = .systemBlue
+        image.backgroundColor = .clear
         image.clipsToBounds = true
         image.layer.cornerRadius = IndicatorInfo.size/2
         return image
@@ -37,7 +37,7 @@ class PopularityCellView: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
         label.font = UIFont(name: "SpoqaHanSansNeo-Medium", size: 15)
-        label.text = "ryusdb"
+//        label.text = "ryusdb"
         return label
     }()
     
@@ -64,8 +64,8 @@ class PopularityCellView: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large)
         let buttonImage = UIImage(systemName: "heart", withConfiguration: imageConfig)
-        button.setImage(buttonImage, for: .normal)
-        button.tintColor = .white
+//        button.setImage(buttonImage, for: .normal)
+//        button.tintColor = .white
         return button
     }()
     
