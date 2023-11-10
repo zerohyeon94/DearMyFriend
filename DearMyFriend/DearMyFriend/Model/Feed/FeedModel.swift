@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 // 업로드 되는 피드 정보
 struct FeedData: Codable {
