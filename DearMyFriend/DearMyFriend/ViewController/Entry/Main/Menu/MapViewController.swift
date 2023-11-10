@@ -24,7 +24,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     var searchResultsTableViewController: UITableViewController!
     var recentSearches: [String] = []
     var modalData: (title: String, roadAddress: String, telephone: String)?
-    var searchRadius: CLLocationDistance = 1000
+//    var searchRadius: CLLocationDistance = 1000
     var selectedResult: (title: String, roadAddress: String, telephone: String)?
 
 
@@ -105,15 +105,11 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         setupSearchController()
         loadMarkersFromFirestore()
 
-
-
-
-
         searchResultsTableView.register(UITableViewCell.self, forCellReuseIdentifier: SearchResultCell)
 
         naverMapView = NMFNaverMapView(frame: self.view.frame)
         naverMapView?.showLocationButton = true
-        naverMapView?.mapView.isScrollGestureEnabled = false
+        naverMapView?.mapView.isScrollGestureEnabled = true
         naverMapView?.mapView.delegate = self
         searchController.searchBar.delegate = self
 
@@ -133,6 +129,10 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
         setupButtonLayout()
         setupLocationManager()
+        if let currentLocation = locationManager.location {
+            addMarker(at: currentLocation.coordinate, title: "현재 위치입니다.")
+            moveMapToLocation(currentLocation.coordinate)
+        }
 
     }
 
@@ -147,7 +147,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
     private func setupButtonLayout() {
         view.addSubview(showAnimalHospitalButton)
-        //        view.addSubview(showPetShopsButton)
 
         showAnimalHospitalButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(12)
@@ -265,10 +264,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         searchResults.removeAll()
         searchStart = 1 // 다시 첫 번째 페이지부터 시작
 
-        if let currentLocation = locationManager.location {
-            addMarker(at: currentLocation.coordinate, title: "현재 위치입니다.")
-            searchLocalPlaces("동물병원")
-        }
     }
 
     @objc func closeModal() {
