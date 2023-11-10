@@ -34,7 +34,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         return view
     }()
     
-   
+   //
     private let petNameInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "애완동물 이름"
