@@ -280,10 +280,9 @@ final class MyFirestore {
         }
     }
     
-    func getFeed(completion: @escaping ([[String: FeedModel]]) -> Void) {
+    func getFeed(displayIndex: Int, completion: @escaping ([[String: FeedModel]]) -> Void) {
         //        var allFeedData: [[String: FeedModel]] = [] // key : 업로드 날짜, value : 데이터
         var resultFeedData: [[String: FeedModel]] = [] // key : Feed ID(Document ID), value : Feed 데이터
-        
         // 'Users' collection. 확인
         let collectionListener = Firestore.firestore().collection(collectionFeed)
         
@@ -293,13 +292,43 @@ final class MyFirestore {
                 print("Error getting documents: \(error)")
             } else {
                 let dispatchGroup = DispatchGroup() // 디스패치 그룹 생성
+                // 2가 나올라고 하고 다나오면 4가 나왔음. 2가 다표시되면 4까지가 셀이 표시됨.
+                // displayFeedData에서 -2를 하면 지금까지 본거네.
+                // 그러면 데이터 업데이트를 하게되면 배열에서 displayFeedData-2 한 값을 배열에서 제거하고, 없어진 만큼 추가하자.
+                resultFeedData = FeedViewController.allFeedData // 기존에 있는 데이터를 넣고
+                let allKeys = resultFeedData.compactMap { $0.keys.first }
+                print("지우기 전 resultFeedData: \(resultFeedData.count)")
+                print("allKeys: \(allKeys)")
+                
+                if displayIndex == 0 {
+                    print("처음 실행이라 상관 없음.")
+                }
+                else if displayIndex == 1 {
+                    resultFeedData.remove(at: 0)
+                } else if displayIndex == 2 {
+                    resultFeedData.removeSubrange(0...1)
+                } else {
+                    resultFeedData.removeSubrange(0...(displayIndex-2))
+                }
+                
+                print("지우기 후 resultFeedData: \(resultFeedData.count)")
+                
                 // Users에 있는 사용자들의 ID 정보 획득
                 for document in querySnapshot!.documents {
                     print("등록된 documentID : \(document.documentID)")
                     dispatchGroup.enter() // 디스패치 그룹 진입 - 작업이 시작될 때마다 내부 카운터가 증가
-                    
                     defer { // defer 내에 코드를 작성하면 해당 블록을 빠져나갈 때 실행됨. - 조건문에서 return이 실행되면 실행됨. 작업이 어떤 이유로 종료되어도 'dispatchGroup.leave()'를 실행 시키기 위해 사용.
                         dispatchGroup.leave() // 디스패치 그룹 이탈
+                    }
+                    if allKeys.contains(document.documentID) {
+                        print("응~ 이미 있음!")
+                        continue
+                    }
+                    // 데이터 수가 10개가 되면 함수를 종료
+                    if resultFeedData.count == 10 {
+                        print("왜 아님?")
+                        completion(resultFeedData)
+                        return
                     }
                     
                     // Firestore 문서의 데이터를 딕셔너리로 가져옴
@@ -346,12 +375,7 @@ final class MyFirestore {
                     
                     // document ID를 key값으로 저장.
                     resultFeedData.append([document.documentID : feedData])
-                    
-                    // 데이터 수가 10개가 되면 함수를 종료
-                    if resultFeedData.count == 10 {
-                        completion(resultFeedData)
-                        return
-                    }
+                    print("for문 안 resultFeedData: \(resultFeedData.count)")
                 }
                 dispatchGroup.notify(queue: .main) {
                     completion(resultFeedData)
