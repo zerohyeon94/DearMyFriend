@@ -17,8 +17,18 @@ final class MyFirestore {
     
     func getCurrentUser() -> String? {
         if let user = Auth.auth().currentUser {
-            print("getCurrentUser : \(type(of: user))")
+            print("getCurrentUser : \(user)")
             return user.uid
+        } else {
+            print("not login")
+            return nil
+        }
+    }
+    
+    func getCurrentUserEmail() -> String? {
+        if let user = Auth.auth().currentUser {
+            print("getCurrentUserEmail : \(user)")
+            return user.email
         } else {
             print("not login")
             return nil

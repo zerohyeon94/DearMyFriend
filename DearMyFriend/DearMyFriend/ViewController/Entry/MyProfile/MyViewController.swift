@@ -231,6 +231,9 @@ class MyViewController: UIViewController {
 
     func getUserFirestore() {
         // 내 프로필 정보 표시
+        myProfileInfoView.setupUserProfile()
+        
+        // 애완동물 정보 표시
         myProfileFirestore.getMyProfile { myProfile in
             
             MyViewController.myProfileData = myProfile
@@ -240,6 +243,7 @@ class MyViewController: UIViewController {
             self.myPetInfoView.reloadTableView()
         }
         
+        // 
         myProfileFirestore.getMyFeed { myFeed in
             MyViewController.myFeedData = myFeed
             
