@@ -84,19 +84,19 @@ final class MyFirestore {
     }
     
     //이거 참고해서 만들면됨
-    func saveUserInfo(userData: UserData, completion: ((Error?) -> Void)? = nil) {
-        let collectionPath = "\(collectionUsers)/\(userData.id)/\(collectionInfo)" //Users/_zerohyeon/Info
-        let collectionListener = Firestore.firestore().collection(collectionPath)
-        
-        guard let dictionary = userData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 잇는 dictionary
-            print("decode error")
-            return
-        }
-        // document : 사용자의 이름(userData.id)
-        collectionListener.document("\(userData.id)").setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
-            completion?(error)
-        }
-    }
+//    func saveUserInfo(userData: UserData, completion: ((Error?) -> Void)? = nil) {
+//        let collectionPath = "\(collectionUsers)/\(userData.id)/\(collectionInfo)" //Users/_zerohyeon/Info
+//        let collectionListener = Firestore.firestore().collection(collectionPath)
+//
+//        guard let dictionary = userData.asDictionary else { // Firestore에 저장 가능한 형식으로 변환할 수 잇는 dictionary
+//            print("decode error")
+//            return
+//        }
+//        // document : 사용자의 이름(userData.id)
+//        collectionListener.document("\(userData.id)").setData(dictionary){ error in // Firestore Collection에 데이터를 추가.
+//            completion?(error)
+//        }
+//    }
     
     // 리스너 제거
     func removeListener() {
@@ -108,14 +108,16 @@ final class MyFirestore {
         // Feed/Feed UID
         let collectionPath = "\(collectionFeed)" // Feed collection
         let collectionListener = Firestore.firestore().collection(collectionPath)
-        
+
         // Firestore에 저장 가능한 형식으로 변환할 수 잇는 dictionary
         guard let dictionary = feedData.asDictionary else {
             print("decode error")
             return
         }
+        var newDictionary = dictionary
+        newDictionary["date"] = feedData.date
         
-        collectionListener.document().setData(dictionary) { error in // Firestore Collection에 데이터를 추가.
+        collectionListener.document().setData(newDictionary) { error in // Firestore Collection에 데이터를 추가.
             completion?(error)
         }
     }
@@ -265,7 +267,7 @@ final class MyFirestore {
         // 'Users' collection. 확인
         let collectionListener = Firestore.firestore().collection(collectionFeed)
         
-        collectionListener.getDocuments() { (querySnapshot, error) in
+        collectionListener.order(by: "date", descending: true).getDocuments() { (querySnapshot, error) in
             print("querySnapshot:\(querySnapshot)")
             if let error = error {
                 print("Error getting documents: \(error)")
@@ -327,14 +329,14 @@ final class MyFirestore {
                 }
                 dispatchGroup.notify(queue: .main) {
                     // 받아온 데이터를 날짜순으로 배열
-                    resultFeedData.sort { (feedData1, feedData2) in
-                        guard let date1 = feedData1.values.first?.date,
-                              let date2 = feedData2.values.first?.date else {
-                            return false
-                        }
-                        
-                        return date1 > date2
-                    }
+//                    resultFeedData.sort { (feedData1, feedData2) in
+//                        guard let date1 = feedData1.values.first?.date,
+//                              let date2 = feedData2.values.first?.date else {
+//                            return false
+//                        }
+//                        
+//                        return date1 > date2
+//                    }
                     
                     completion(resultFeedData)
                 }
@@ -354,8 +356,10 @@ final class MyFirestore {
             print("decode error")
             return
         }
+        var newDictionary = dictionary
+        newDictionary["date"] = updateFeedData.date
         
-        collectionListener.document("\(documentID)").setData(dictionary){ error in // Firestore Collection에 데이터 변경.
+        collectionListener.document("\(documentID)").setData(newDictionary){ error in // Firestore Collection에 데이터 변경.
             completion?(error)
         }
     }
@@ -371,8 +375,10 @@ final class MyFirestore {
             print("decode error")
             return
         }
+        var newDictionary = dictionary
+        newDictionary["date"] = updateFeedData.date
         
-        collectionListener.document("\(documentID)").setData(dictionary){ error in // Firestore Collection에 데이터 변경.
+        collectionListener.document("\(documentID)").setData(newDictionary){ error in // Firestore Collection에 데이터 변경.
             completion?(error)
         }
     }

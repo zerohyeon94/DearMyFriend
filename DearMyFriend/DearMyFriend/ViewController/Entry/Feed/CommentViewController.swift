@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import FirebaseFirestore
 
 class CommentViewController: UIViewController {
     // MARK: Properties
