@@ -167,12 +167,7 @@ class AddPostView: UIView {
         textView.isEditable = true
         textView.isSelectable = true
         
-        //        textView.layer.borderWidth = 1.0
-        //        textView.layer.borderColor = UIColor.gray.cgColor
-        //        textView.layer.cornerRadius = 5.0
-        
         textView.font = UIFont.systemFont(ofSize: textViewFont)
-//        textView.text = "게시글 작성"
         
         return textView
     }()
