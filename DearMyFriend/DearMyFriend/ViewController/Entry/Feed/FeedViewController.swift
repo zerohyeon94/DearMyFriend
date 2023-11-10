@@ -2,7 +2,7 @@ import UIKit
 import Lottie
 import FirebaseAuth
 
-class FeedViewController: UIViewController {
+class FeedViewController: UIViewController, UIViewControllerTransitioningDelegate {
     
     // MARK: Properties
     let feedTitleView: FeedTitleView = .init(frame: .zero)

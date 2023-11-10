@@ -89,80 +89,86 @@ extension AddPostViewController: AddPostViewDelegate {
     func cancelButtonTapped() {
         dismiss(animated: true)
     }
-
+    
     func uploadButtonTapped() {
-        print("selectedImages: \(selectedImages)")
-        
-        // document : 현재 시간
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
-        
-        let currentDate = Date() // 현재 시간 가져오기
-        let formattedCurrentDate = dateFormatter.string(from: currentDate) // 형식에 맞게 날짜를 문자열로 변환
-        
-        print("현재 시간: \(currentDate)")
-        
-        let feedUid: String = MyFirestore().getCurrentUser() ?? "" // 사용자 UID 확인
-        var feedImage: [String] = []
-        let feedPost: String = addPostView.postTextView.text
-        let feedLike: [String] = [] // 처음에 생성할 때는 좋아요 수가 없음.
-        let feedLikeCount: Int = 0 // 초기 생성 시 좋아요 수는 0
-        let feedComment: [[String: String]] = [] // 처음에 생성할 때는 댓글이 없음.
-        
-        // Firebase Storage에 이미지 업로드
-        // Firebase Storage 인스턴스, 스토리지 참조 생성
-        let storage = Storage.storage()
-        let storageRef = storage.reference()
-        let group = DispatchGroup() // Dispatch Group 생성
-        // 선택한 이미지 전체 확인
-        for image in selectedImages.enumerated() {
-            group.enter() // Dispatch Group 진입
+        // textView와 iamge가 선택된 경우에만
+        if selectedImages.isEmpty && addPostView.postTextView.text == "" {
+            // 이미지와 Post를 작성해주세요
+            AlertManager.nothingAlert(on: self)
+        } else if addPostView.postTextView.text == "" {
+            // Post를 작성해주세요
+            AlertManager.notEnteredTextAlert(on: self)
+        } else if selectedImages.isEmpty {
+            // 이미지를 추가해주세요
+            AlertManager.notSelectedImageAlert(on: self)
+        } else {
+            print("있음!")
+            // document : 현재 시간
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
             
-            let feedImageGroup: String = "Feeds"
+            let currentDate = Date() // 현재 시간 가져오기
+            let formattedCurrentDate = dateFormatter.string(from: currentDate) // 형식에 맞게 날짜를 문자열로 변환
             
-            // Firebase Storage 이미지 업로드 경로
-            // Feeds/사용자UID/업로드날짜/jpg파일
-            let savePath = "\(feedImageGroup)/\(feedUid)/\(formattedCurrentDate)/image\(image.offset).jpg"
-            let imageRef = storageRef.child(savePath)
+            print("현재 시간: \(currentDate)")
             
-            if let imageData = image.element.jpegData(compressionQuality: 0.8) { // JPEG형식의 데이터로 변환. compressionQuality 이미지 품질(0.8 일반적인 값)
-                imageRef.putData(imageData, metadata: nil) { (metadata, error) in
-                    if let error = error {
-                        print("이미지 업로드 실패: \(error.localizedDescription)")
-                    } else {
-                        print("이미지 업로드 성공")
-                        // 이미지 다운로드 URL 가져오기
-                        imageRef.downloadURL { (url, error) in
-                            if let error = error {
-                                print("URL 가져오기 실패: \(error.localizedDescription)")
-                            } else {
-                                if let downloadURL = url?.absoluteString {
-                                    // Firestore에 URL 저장
-                                    feedImage.append(downloadURL)
-                                    print("feedImage: \(feedImage)")
+            let feedUid: String = MyFirestore().getCurrentUser() ?? "" // 사용자 UID 확인
+            var feedImage: [String] = []
+            let feedPost: String = addPostView.postTextView.text
+            let feedLike: [String] = [] // 처음에 생성할 때는 좋아요 수가 없음.
+            let feedLikeCount: Int = 0 // 초기 생성 시 좋아요 수는 0
+            let feedComment: [[String: String]] = [] // 처음에 생성할 때는 댓글이 없음.
+            
+            // Firebase Storage에 이미지 업로드
+            // Firebase Storage 인스턴스, 스토리지 참조 생성
+            let storage = Storage.storage()
+            let storageRef = storage.reference()
+            let group = DispatchGroup() // Dispatch Group 생성
+            // 선택한 이미지 전체 확인
+            for image in selectedImages.enumerated() {
+                group.enter() // Dispatch Group 진입
+                
+                let feedImageGroup: String = "Feeds"
+                
+                // Firebase Storage 이미지 업로드 경로
+                // Feeds/사용자UID/업로드날짜/jpg파일
+                let savePath = "\(feedImageGroup)/\(feedUid)/\(formattedCurrentDate)/image\(image.offset).jpg"
+                let imageRef = storageRef.child(savePath)
+                
+                if let imageData = image.element.jpegData(compressionQuality: 0.8) { // JPEG형식의 데이터로 변환. compressionQuality 이미지 품질(0.8 일반적인 값)
+                    imageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                        if let error = error {
+                            print("이미지 업로드 실패: \(error.localizedDescription)")
+                        } else {
+                            print("이미지 업로드 성공")
+                            // 이미지 다운로드 URL 가져오기
+                            imageRef.downloadURL { (url, error) in
+                                if let error = error {
+                                    print("URL 가져오기 실패: \(error.localizedDescription)")
+                                } else {
+                                    if let downloadURL = url?.absoluteString {
+                                        // Firestore에 URL 저장
+                                        feedImage.append(downloadURL)
+                                        print("feedImage: \(feedImage)")
+                                    }
                                 }
+                                group.leave()
                             }
-                            group.leave()
                         }
                     }
                 }
             }
-        }
-        
-        // 모든 이미지 업로드 및 URL 저장 작업 완료시까지 대기
-        group.notify(queue: .main) {
-//            let data = FeedData(id: feedUid, image: feedImage, post: feedPost, like: feedLike, comment: feedComment)
             
-            let feedData = FeedModel(uid: feedUid, date: currentDate, imageUrl: feedImage, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
-            
-            self.myFirestore.saveFeed(feedData: feedData) { error in
-                print("error: \(error)")
+            // 모든 이미지 업로드 및 URL 저장 작업 완료시까지 대기
+            group.notify(queue: .main) {
+                let feedData = FeedModel(uid: feedUid, date: currentDate, imageUrl: feedImage, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
+                
+                self.myFirestore.saveFeed(feedData: feedData) { error in
+                    print("error: \(error)")
+                }
+                
+                self.dismiss(animated: true)
             }
-            
-//            self.myFirestore.saveUserFeed(feedData: data) { error in
-//                print("error: \(error)")
-//            }
-            self.dismiss(animated: true)
         }
     }
     
