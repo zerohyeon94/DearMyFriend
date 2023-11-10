@@ -143,7 +143,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         button.setTitle("추가하기", for: .normal)
         button.setTitleColor(.lightGray, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.isEnabled = true
+        button.isEnabled = true // 버튼 기능 활성화 
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
         return button
