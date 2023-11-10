@@ -1,15 +1,28 @@
-//
-//  ViewController.swift
-//  LoginProject
-//
-//  Created by Allen H on 2021/12/05.
-//
+
 
 import UIKit
 
 class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-   
-    
+        
+    private lazy var topHalfView: UIView = {
+            let view = UIView()
+            view.backgroundColor = UIColor.systemPink.withAlphaComponent(0.5) // 연한 핑크색으로 설정
+            view.translatesAutoresizingMaskIntoConstraints = false
+            return view
+        }()
+
+    private lazy var profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 100
+        imageView.clipsToBounds = true
+        imageView.image = UIImage(named: "camera")
+        imageView.isUserInteractionEnabled = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileImageTapped))
+        imageView.addGestureRecognizer(tapGesture)
+        return imageView
+    }()
     
     private lazy var petNameTextFieldView: UIView = {
         let view = UIView()
@@ -21,7 +34,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         return view
     }()
     
-    // "이메일 또는 전화번호" 안내문구
+   //
     private let petNameInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "애완동물 이름"
@@ -30,7 +43,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         return label
     }()
     
-    // 로그인 - 이메일 입력 필드
+    
     private lazy var petNameTextField: UITextField = {
         var tf = UITextField()
         tf.frame.size.height = 48
@@ -40,7 +53,6 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
         tf.spellCheckingType = .no
-        tf.keyboardType = .emailAddress
         tf.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
         return tf
     }()
@@ -58,7 +70,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         return view
     }()
     
-    // 패스워드텍스트필드의 안내문구
+    
     private let petageInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "애완동물 나이"
@@ -67,7 +79,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         return label
     }()
     
-    // 로그인 - 비밀번호 입력 필드
+   
     private lazy var petageTextField: UITextField = {
         let tf = UITextField()
         tf.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
@@ -129,9 +141,9 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         button.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         
         button.setTitle("추가하기", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        button.isEnabled = true
+        button.setTitleColor(.lightGray, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.isEnabled = true // 버튼 기능 활성화 
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
         return button
@@ -154,27 +166,61 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     // 오토레이아웃 향후 변경을 위한 변수(애니메이션)
     lazy var petNameInfoLabelCenterYConstraint = petNameInfoLabel.centerYAnchor.constraint(equalTo: petNameTextFieldView.centerYAnchor)
-    lazy var passwordInfoLabelCenterYConstraint = petageInfoLabel.centerYAnchor.constraint(equalTo: petageTextFieldView.centerYAnchor)
-    lazy var petSpeciesInfoLabelCenterYConstraint = petageInfoLabel.centerYAnchor.constraint(equalTo: petSpeciesTextFieldView.centerYAnchor)
+    lazy var petageInfoLabelCenterYConstraint = petageInfoLabel.centerYAnchor.constraint(equalTo: petageTextFieldView.centerYAnchor)
+    lazy var petSpeciesInfoLabelCenterYConstraint = petSpeciesInfoLabel.centerYAnchor.constraint(equalTo: petSpeciesTextFieldView.centerYAnchor)
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print()
         configure()
+        view.addSubview(profileImageView)
+        self.view.addSubview(topHalfView)
+        self.view.sendSubviewToBack(topHalfView)
         setupAutoLayout()
         
         
     }
+    
+    override func viewDidLayoutSubviews() {
+            super.viewDidLayoutSubviews()
+            
+            // 상단 뷰의 모양을 파인 형태로 변경
+            let path = UIBezierPath()
+            path.move(to: CGPoint(x: 0, y: 0))
+            path.addLine(to: CGPoint(x: view.bounds.width, y: 0))
+            path.addLine(to: CGPoint(x: view.bounds.width, y: topHalfView.bounds.height))
+            path.addQuadCurve(to: CGPoint(x: 0, y: topHalfView.bounds.height), controlPoint: CGPoint(x: view.bounds.width / 2, y: topHalfView.bounds.height - 50))
+            path.close()
+
+            let shapeLayer = CAShapeLayer()
+            shapeLayer.path = path.cgPath
+            topHalfView.layer.mask = shapeLayer
+        }
     
     // 셋팅
     private func configure() {
         view.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         petNameTextField.delegate = self
         petageTextField.delegate = self
+        petSpeciesTextField.delegate = self
         [stackView].forEach { view.addSubview($0) }
     }
     
     // 오토레이아웃
     private func setupAutoLayout() {
+        
+        profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+
+        topHalfView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+                topHalfView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+                topHalfView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+                topHalfView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
+        
         
         petNameInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         petNameInfoLabel.leadingAnchor.constraint(equalTo: petNameTextFieldView.leadingAnchor, constant: 8).isActive = true
@@ -190,7 +236,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         petageInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         petageInfoLabel.leadingAnchor.constraint(equalTo: petageTextFieldView.leadingAnchor, constant: 8).isActive = true
         petageInfoLabel.trailingAnchor.constraint(equalTo: petageTextFieldView.trailingAnchor, constant: -8).isActive = true
-        passwordInfoLabelCenterYConstraint.isActive = true
+        petageInfoLabelCenterYConstraint.isActive = true
         
         
         petageTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -200,26 +246,51 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         petageTextField.trailingAnchor.constraint(equalTo: petageTextFieldView.trailingAnchor, constant: -8).isActive = true
         //
         petSpeciesInfoLabel.translatesAutoresizingMaskIntoConstraints = false
-        petSpeciesInfoLabel.leadingAnchor.constraint(equalTo: petageTextFieldView.leadingAnchor, constant: 8).isActive = true
-        petSpeciesInfoLabel.trailingAnchor.constraint(equalTo: petageTextFieldView.trailingAnchor, constant: -8).isActive = true
+        petSpeciesInfoLabel.leadingAnchor.constraint(equalTo: petSpeciesTextFieldView.leadingAnchor, constant: 8).isActive = true
+        petSpeciesInfoLabel.trailingAnchor.constraint(equalTo: petSpeciesTextFieldView.trailingAnchor, constant: -8).isActive = true
         petSpeciesInfoLabelCenterYConstraint.isActive = true
         
-        petageTextField.translatesAutoresizingMaskIntoConstraints = false
-        petageTextField.topAnchor.constraint(equalTo: petageTextFieldView.topAnchor, constant: 15).isActive = true
-        petageTextField.bottomAnchor.constraint(equalTo: petageTextFieldView.bottomAnchor, constant: -2).isActive = true
-        petageTextField.leadingAnchor.constraint(equalTo: petageTextFieldView.leadingAnchor, constant: 8).isActive = true
-        petageTextField.trailingAnchor.constraint(equalTo: petageTextFieldView.trailingAnchor, constant: -8).isActive = true
+        petSpeciesTextField.translatesAutoresizingMaskIntoConstraints = false
+        petSpeciesTextField.topAnchor.constraint(equalTo: petSpeciesTextFieldView.topAnchor, constant: 15).isActive = true
+        petSpeciesTextField.bottomAnchor.constraint(equalTo: petSpeciesTextFieldView.bottomAnchor, constant: -2).isActive = true
+        petSpeciesTextField.leadingAnchor.constraint(equalTo: petSpeciesTextFieldView.leadingAnchor, constant: 8).isActive = true
+        petSpeciesTextField.trailingAnchor.constraint(equalTo: petSpeciesTextFieldView.trailingAnchor, constant: -8).isActive = true
+        
+        
+        
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 80).isActive = true
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
         stackView.heightAnchor.constraint(equalToConstant: textViewHeight*4 + 36).isActive = true
         
-        
-       
-        
+ 
+    }
+    
+   
+    //애완동물나이 숫자만 입력기능
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == petageTextField {
+            let allowedCharacters = CharacterSet.decimalDigits
+            let characterSet = CharacterSet(charactersIn: string)
+            return allowedCharacters.isSuperset(of: characterSet)
+        }
+        return true
+    }
+
+    @objc func profileImageTapped() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = .photoLibrary
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            profileImageView.image = selectedImage
+        }
     }
     
     @objc private func addButtonTapped() {
@@ -229,28 +300,7 @@ class PetInfoViewController: UIViewController, UIImagePickerControllerDelegate, 
         print("추가하기 버튼 눌림")
         
         }
-    
-    
-    
-    
-    // 리셋버튼이 눌리면 동작하는 함수
-    @objc func resetButtonTapped() {
-        //만들기
-        let alert = UIAlertController(title: "비밀번호 바꾸기", message: "비밀번호를 바꾸시겠습니까?", preferredStyle: .alert)
-        let success = UIAlertAction(title: "확인", style: .default) { action in
-            print("확인버튼이 눌렸습니다.")
-        }
-        let cancel = UIAlertAction(title: "취소", style: .cancel) { action in
-            print("취소버튼이 눌렸습니다.")
-        }
-        
-        alert.addAction(success)
-        alert.addAction(cancel)
-        
-        // 실제 띄우기
-        self.present(alert, animated: true, completion: nil)
-    }
-    
+
     // 앱의 화면을 터치하면 동작하는 함수
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -273,7 +323,7 @@ extension PetInfoViewController: UITextFieldDelegate {
             petageTextFieldView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
             petageInfoLabel.font = UIFont.systemFont(ofSize: 11)
             // 오토레이아웃 업데이트
-            passwordInfoLabelCenterYConstraint.constant = -13
+            petageInfoLabelCenterYConstraint.constant = -13
         }
         
         if textField == petSpeciesTextField {
@@ -304,7 +354,7 @@ extension PetInfoViewController: UITextFieldDelegate {
             // 빈칸이면 원래로 되돌리기
             if petageTextField.text == "" {
                 petageInfoLabel.font = UIFont.systemFont(ofSize: 18)
-                passwordInfoLabelCenterYConstraint.constant = 0
+                petageInfoLabelCenterYConstraint.constant = 0
             }
         }
         if textField == petSpeciesTextField {
@@ -313,15 +363,16 @@ extension PetInfoViewController: UITextFieldDelegate {
             if petSpeciesTextField.text == "" {
                 petSpeciesInfoLabel.font = UIFont.systemFont(ofSize: 18)
                 petSpeciesInfoLabelCenterYConstraint.constant = 0
-                // 실제 레이아웃 변경은 애니메이션으로 줄꺼야
-                UIView.animate(withDuration: 0.3) {
-                    self.stackView.layoutIfNeeded()
-                }
             }
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.stackView.layoutIfNeeded()
         }
     }
     
-
+    
+    
+    
     // MARK: - 이메일텍스트필드, 비밀번호 텍스트필드 두가지 다 채워져 있을때, 로그인 버튼 빨간색으로 변경
     @objc private func textFieldEditingChanged(_ textField: UITextField) {
         if textField.text?.count == 1 {
@@ -331,21 +382,17 @@ extension PetInfoViewController: UITextFieldDelegate {
             }
         }
         guard
-            let email = petNameTextField.text, !email.isEmpty,
-            let password = petageTextField.text, !password.isEmpty
+            let petname = petNameTextField.text, !petname.isEmpty,
+            let petage = petageTextField.text, !petage.isEmpty,
+            let petspecies = petSpeciesTextField.text, !petspecies.isEmpty
+                
         else {
             addButton.backgroundColor = .clear
             addButton.isEnabled = false
             return
         }
-        addButton.backgroundColor = .systemPink
+        addButton.backgroundColor = UIColor.systemPink.withAlphaComponent(0.35) // 투명도를 0.3으로 설정
+
         addButton.isEnabled = true
-    }
-    
-    
-    // 엔터 누르면 일단 키보드 내림
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }

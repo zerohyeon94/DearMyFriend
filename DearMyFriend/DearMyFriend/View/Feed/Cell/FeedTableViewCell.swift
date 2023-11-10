@@ -80,7 +80,10 @@ class FeedTableViewCell: UITableViewCell {
     
     func setFeed(feedData: FeedModel, index: Int) {
         feedView.tableViewCellindex = index
-        feedView.userNicknameLabel.text = feedData.uid
+        
+        MyFirestore().getUsername(uid: feedData.uid) { name in
+            self.feedView.userNicknameLabel.text = name
+        }
         feedView.postTextView.text = feedData.post
         imageNames = feedData.imageUrl
         
