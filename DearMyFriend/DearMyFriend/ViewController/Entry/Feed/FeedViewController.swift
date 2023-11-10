@@ -72,6 +72,23 @@ class FeedViewController: UIViewController, UIViewControllerTransitioningDelegat
     override func viewWillAppear(_ animated: Bool) {
         // NavigationBar 숨김.
         navigationController?.isNavigationBarHidden = true
+        print("B ViewController 종료")
+        
+        myFirestore.getFeed { feedData in
+            print("feedData: \(feedData)")
+            // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
+            if feedData.isEmpty {
+                print("데이터가 없습니다!")
+            } else {
+                print("데이터가 있습니다!")
+            }
+            
+            FeedViewController.allFeedData = feedData
+            
+            self.feedTableView.reloadData()
+//            self.setupTableView() // 테이블 뷰 설정
+//            self.setupFloatingButton() // Floating Button 설정.
+        }
     }
     
     override func viewDidLayoutSubviews() {

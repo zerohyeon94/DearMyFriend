@@ -169,6 +169,8 @@ extension AddPostViewController: AddPostViewDelegate {
                     print("error: \(error)")
                 }
                 
+                // 업로드 후 게시물 초기화
+                
                 self.dismiss(animated: true)
             }
         }
