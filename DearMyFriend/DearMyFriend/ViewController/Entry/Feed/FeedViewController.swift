@@ -330,7 +330,18 @@ extension FeedViewController {
     @objc func refreshTable(refresh: UIRefreshControl) {
         print("refreshTable")
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.feedTableView.reloadData()
+            self.myFirestore.getFeed(displayIndex: self.displayFeedData-1) { feedData in // 이것 같은 경우는 refresh scroll을 내리면서 셀값을 하나 더 읽어서 -1을 함.
+                print("feedData: \(feedData)")
+                // NEED: 만약에 데이터가 없는 경우 어떻게 표시할지 추후 구현
+                if feedData.isEmpty {
+                    print("데이터가 없습니다!")
+                } else {
+                    print("데이터가 있습니다!")
+                }
+                FeedViewController.allFeedData = feedData
+                self.feedTableView.reloadData()
+            }
+            
             refresh.endRefreshing()
         }
     }
