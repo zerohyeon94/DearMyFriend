@@ -274,6 +274,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         if isLoadingResults {
             return
         }
+        loadAnimalHospitalCoordinatesFromFirebase()
 
         searchResults.removeAll()
         searchStart = 1 // 다시 첫 번째 페이지부터 시작
@@ -363,34 +364,35 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         }
     }
 
-    func addMarker(forUser userId: String, at coordinate: CLLocationCoordinate2D, title: String) {
+    func addMarker(at coordinate: CLLocationCoordinate2D, title: String) {
         guard let mapView = naverMapView?.mapView else {
             return
         }
 
         // 중복 체크
-        if let existingMarker = userMarkers[userId] {
-            existingMarker.mapView = nil
+        let isDuplicate = markers.contains { existingMarker in
+            existingMarker.position.lat == coordinate.latitude &&
+            existingMarker.position.lng == coordinate.longitude
         }
 
-        let marker = NMFMarker()
-        marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
-        marker.mapView = mapView
-        marker.captionText = title
+        if !isDuplicate {
+            let marker = NMFMarker()
+            marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
+            marker.mapView = mapView
+            marker.captionText = title
+            markers.append(marker)
 
-        marker.touchHandler = { [weak self] overlay in
-            if let marker = overlay as? NMFMarker {
-                let selectedItem = self?.searchResults.first(where: { $0.title == marker.captionText })
-                self?.modalData = selectedItem
-                self?.showHalfModal()
+            marker.touchHandler = { [weak self] overlay in
+                if let marker = overlay as? NMFMarker {
+                    let selectedItem = self?.searchResults.first(where: { $0.title == marker.captionText })
+                    self?.modalData = selectedItem
+                    self?.showHalfModal()
+                }
+                return true
             }
-            return true
         }
-
-        // 사용자별 마커 저장
-        userMarkers[userId] = marker
+        
     }
-}
 
 // MARK: - CLLocationManagerDelegate Extension
 extension MapViewController: CLLocationManagerDelegate {
