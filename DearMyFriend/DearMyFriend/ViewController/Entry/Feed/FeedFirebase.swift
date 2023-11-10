@@ -287,7 +287,7 @@ final class MyFirestore {
         // 'Users' collection. 확인
         let collectionListener = Firestore.firestore().collection(collectionFeed)
         
-        collectionListener.order(by: "date", descending: true).getDocuments() { (querySnapshot, error) in
+        collectionListener.order(by: "date", descending: true).getDocuments() { (querySnapshot, error) in // 날짜 순으로 내림차순.
             print("querySnapshot:\(querySnapshot)")
             if let error = error {
                 print("Error getting documents: \(error)")
@@ -346,18 +346,14 @@ final class MyFirestore {
                     
                     // document ID를 key값으로 저장.
                     resultFeedData.append([document.documentID : feedData])
+                    
+                    // 데이터 수가 10개가 되면 함수를 종료
+                    if resultFeedData.count == 10 {
+                        completion(resultFeedData)
+                        return
+                    }
                 }
                 dispatchGroup.notify(queue: .main) {
-                    // 받아온 데이터를 날짜순으로 배열
-//                    resultFeedData.sort { (feedData1, feedData2) in
-//                        guard let date1 = feedData1.values.first?.date,
-//                              let date2 = feedData2.values.first?.date else {
-//                            return false
-//                        }
-//                        
-//                        return date1 > date2
-//                    }
-                    
                     completion(resultFeedData)
                 }
             }

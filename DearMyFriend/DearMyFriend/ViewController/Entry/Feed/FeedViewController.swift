@@ -343,11 +343,4 @@ extension FeedViewController {
             refresh.endRefreshing()
         }
     }
- 
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if(velocity.y < -0.1) {
-            self.refreshTable(refresh: self.refreshControl)
-        }
-    }
- 
 }
