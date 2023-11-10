@@ -9,12 +9,17 @@ class AuthService {
     public static let shared = AuthService()
     private init() {}
     
-    public func photoUpdate(email: String?, photo: UIImage?, completion: @escaping (Error?) -> Void ) {
+    public func photoUpdate(email: String?, photo: UIImage?, _ petCount: Int? = nil, completion: @escaping (Error?) -> Void) {
+        
+        var photoName = "profile"
+        
+        if let petCount = petCount {
+            photoName = "petPhoto_\(petCount)"
+        }
         
         guard let email = email,
               let photo = photo else { return }
-        
-        let storageRef = Storage.storage().reference().child("UserProfile/\(email)/profile.jpg")
+        let storageRef = Storage.storage().reference().child("UserProfile/\(email)/\(photoName).jpg")
         
         guard let uploadImage = photo.jpegData(compressionQuality: 0.5) else {
             print("업로드 에러")
@@ -24,10 +29,32 @@ class AuthService {
         storageRef.putData(uploadImage) { (_, error) in
             completion(nil)
         }
-        
     }
     
-    public func getPhotoUrl(email: String?, completion: @escaping (String?, Error?) -> Void) {
+    public func checkPetCount(completion: @escaping (Int? ,Error?) -> Void) {
+        guard let loginUser = Auth.auth().currentUser else { return }
+        
+        let userDB = Firestore.firestore().collection("Users")
+        
+        let petDB = userDB.document(loginUser.uid).collection("Pet")
+        
+        petDB.getDocuments { query, error in
+            if let error = error {
+                completion(nil, error)
+            } else {
+                let petCount = query?.documents.count ?? 0
+                completion(petCount, nil)
+            }
+        }
+    }
+    
+    public func getPhotoUrl(email: String?, _ petCount: Int? = nil, completion: @escaping (String?, Error?) -> Void) {
+        
+        var photoName = "profile"
+        
+        if let petCount = petCount {
+            photoName = "petPhoto_\(petCount)"
+        }
         
         guard let email = email else { return }
         
@@ -38,7 +65,7 @@ class AuthService {
                 completion(nil, error)
                 return
             } else {
-                let profileImageRef = result?.items.first { $0.name == "profile.jpg"}
+                let profileImageRef = result?.items.first { $0.name == "\(photoName).jpg"}
                 guard let profileImageRef = profileImageRef else {
                     completion(nil, error)
                     return
@@ -89,6 +116,33 @@ class AuthService {
                 
                 completion(true, nil)
             }
+        }
+    }
+    
+    public func registerPet(with userRequest: RegisterMyPetInfo, document: String, completion: @escaping (Error?)->Void) {
+        
+        guard let loginUser = Auth.auth().currentUser?.uid else { return }
+        
+        guard let petName = userRequest.name,
+              let petAge = userRequest.age,
+              let petSpices = userRequest.type,
+              let petPhoto = userRequest.photoUrl  else { return }
+        
+        let userDB = Firestore.firestore().collection("Users")
+        
+        let petDB = userDB.document(loginUser)
+        petDB.collection("Pet").document(document).setData([
+            "name": petName,
+            "age": petAge,
+            "spices": petSpices,
+            "photo": petPhoto
+        ]) { error in
+            if error != nil {
+                completion(error)
+                return
+            }
+            
+            completion(nil)
         }
     }
     
@@ -151,35 +205,72 @@ class AuthService {
     }
     
     public func deleteAccount(completion: @escaping (Error?) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        guard let email = Auth.auth().currentUser?.email else { return }
         
         guard let user = Auth.auth().currentUser else { return }
-        
+
         user.delete { error in
-            if let error = error {
+            if error != nil {
+                completion(error)
+                return
+            }
+            completion(nil)
+        }
+    }
+    
+    public func deleteStorage(completion: @escaping (Error?) -> Void) {
+        guard let email = Auth.auth().currentUser?.email else { return }
+        let folder = Storage.storage().reference().child("UserProfile/\(email)")
+        let dispatchGroup = DispatchGroup()
+        
+        folder.listAll { result, error in
+            if error != nil {
+                completion(error)
+            }
+            guard let allList = result?.items else {
                 completion(error)
                 return
             }
             
-            let folder = Storage.storage().reference().child("UserProfile/\(email)")
-            folder.listAll { result, error in
-                if let error = error {
-                    completion(error)
-                    return
-                }
-                
-                guard let allItem = result?.items else { return }
-                for item in allItem {
-                    item.delete { error in
-                        if let error = error {
-                            completion(error)
-                        } else {
-                            Firestore.firestore().collection("Users").document(uid).delete()
-                            completion(nil)
-                        }
+            for item in allList {
+                dispatchGroup.enter()
+                item.delete { error in
+                    defer { dispatchGroup.leave() }
+                    if error != nil {
+                        completion(error)
                     }
                 }
+            }
+            dispatchGroup.notify(queue: .main) {
+                completion(nil)
+            }
+        }
+    }
+    
+    
+    public func deleteStore(completion: @escaping (Error?) -> Void) {
+        guard let user = Auth.auth().currentUser else { return }
+        
+        Firestore.firestore().collection("Users").document(user.uid).collection("Pet").getDocuments { query, error in
+            if error != nil {
+                completion(error)
+            }
+            guard let allList = query?.documents else {
+                completion(error)
+                return
+            }
+            let dispatchGroup = DispatchGroup()
+            for item in allList {
+                dispatchGroup.enter()
+                item.reference.delete { error in
+                    defer { dispatchGroup.leave() }
+                    if error != nil {
+                        completion(error)
+                    }
+                }
+            }
+            dispatchGroup.notify(queue: .main) {
+                Firestore.firestore().collection("Users").document(user.uid).delete()
+                completion(nil)
             }
         }
     }
@@ -203,28 +294,3 @@ class AuthService {
         }
     }
 }
-
-
-//public func fetchUser(completion: @escaping (User?, Error?) -> Void) {
-//    guard let userUID = Auth.auth().currentUser?.uid else { return }
-//
-//    let db = Firestore.firestore()
-//
-//    db.collection("users")
-//        .document(userUID)
-//        .getDocument { snapshot, error in
-//            if let error = error {
-//                completion(nil, error)
-//                return
-//            }
-//
-//            if let snapshot = snapshot,
-//               let snapshotData = snapshot.data(),
-//               let username = snapshotData["username"] as? String,
-//               let email = snapshotData["email"] as? String {
-//                let user = User(username: username, email: email, userUID: userUID)
-//                completion(user, nil)
-//            }
-//
-//        }
-//}

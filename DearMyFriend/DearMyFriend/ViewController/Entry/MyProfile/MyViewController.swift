@@ -65,7 +65,7 @@ class MyViewController: UIViewController {
     // segment
 
     private let segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["마이프렌드", "내 게시물"])
+        let control = UISegmentedControl(items: ["마이프렌드"])
         control.selectedSegmentIndex = 0
         return control
     }()
