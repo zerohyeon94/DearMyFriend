@@ -225,7 +225,8 @@ class FeedView: UIView {
     }
     
     private func setUI(){
-        [profileImageView, userNicknameLabel, imageCollectionView, pageControl, likeButton, commentButton, like1ImageView, like2ImageView, like3ImageView, likeLabel,  postTextView].forEach { view in
+//        [profileImageView, userNicknameLabel, imageCollectionView, pageControl, likeButton, commentButton, like1ImageView, like2ImageView, like3ImageView, likeLabel,  postTextView].forEach { view in
+        [profileImageView, userNicknameLabel, imageCollectionView, pageControl, likeButton, commentButton, postTextView].forEach { view in
             addSubview(view)
             view.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -238,8 +239,8 @@ class FeedView: UIView {
         setPageControlConstraint()
         setLikeButtonConstraint()
         setCommentButtonConstraint()
-        setLikeImageViewConstraint()
-        setLikeLabelConstraint()
+//        setLikeImageViewConstraint()
+//        setLikeLabelConstraint()
         setPostTextViewConstraint()
     }
     
@@ -267,7 +268,8 @@ class FeedView: UIView {
     let likeImageViewWidth: CGFloat = 20
     let likeLabelLeadingConstant: CGFloat = 4
     // post TextView
-    let postTextViewTopConstant: CGFloat = 8
+//    let postTextViewTopConstant: CGFloat = 8
+    let postTextViewTopConstant: CGFloat = 0
     let postTextViewHeight: CGFloat = 50
     
     private func setProfileImageViewConstraint() {
@@ -353,7 +355,8 @@ class FeedView: UIView {
     
     private func setPostTextViewConstraint() {
         NSLayoutConstraint.activate([
-            postTextView.topAnchor.constraint(equalTo: like1ImageView.bottomAnchor, constant: postTextViewTopConstant),
+            postTextView.topAnchor.constraint(equalTo: likeButton.bottomAnchor, constant: postTextViewTopConstant),
+//            postTextView.topAnchor.constraint(equalTo: like1ImageView.bottomAnchor, constant: postTextViewTopConstant),
             postTextView.leadingAnchor.constraint(equalTo: leadingAnchor),
             postTextView.trailingAnchor.constraint(equalTo: trailingAnchor),
             postTextView.heightAnchor.constraint(equalToConstant: postTextViewHeight)
