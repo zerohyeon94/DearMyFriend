@@ -103,18 +103,26 @@ class AuthService {
             }
             
             let db = Firestore.firestore()
-            db.collection("Users").document(resultUser.uid).setData([
-                "username": username,
-                "email": email,
-                "agreeMent": agreeMent,
-                "photoUrl": photoUrl
+            db.collection("UsersId").document("이메일 중복검사").updateData([
+                "email": FieldValue.arrayUnion([email])
             ]) { error in
                 if let error = error {
                     completion(false, error)
                     return
                 }
-                
-                completion(true, nil)
+                db.collection("Users").document(resultUser.uid).setData([
+                    "username": username,
+                    "email": email,
+                    "agreeMent": agreeMent,
+                    "photoUrl": photoUrl
+                ]) { error in
+                    if let error = error {
+                        completion(false, error)
+                        return
+                    }
+                    
+                    completion(true, nil)
+                }
             }
         }
     }
@@ -276,20 +284,21 @@ class AuthService {
     }
     
     public func emailCheck(email: String, completion: @escaping (Bool, Error?) -> Void) {
-        let emailDB = Firestore.firestore().collection("Users")
+        let emailDB = Firestore.firestore().collection("UsersId").document("이메일 중복검사")
         
-        let query = emailDB.whereField("email", isEqualTo: email)
-        query.getDocuments { qs, error in
+        emailDB.getDocument { qs, error in
             if let error = error {
                 completion(false, error)
             }
+            //qs.exists 문서존재여부
+            guard let qs = qs, qs.exists else { return completion(false, error) }
             
-            guard let qs = qs else { return completion(false, error) }
+            guard let allEmail = qs.data()?["email"] as? [String] else { return completion(false, error)}
             
-            if qs.documents.isEmpty {
-                completion(true, nil)
-            } else {
+            if allEmail.contains(email) {
                 completion(false, nil)
+            } else {
+                completion(true, nil)
             }
         }
     }
