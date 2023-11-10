@@ -277,6 +277,7 @@ extension FeedViewController: FeedViewDelegate {
             FeedViewController.allFeedData = feedAllData
             
             self.setupTableView()
+            self.setupFloatingButton()
         }
     }
     
