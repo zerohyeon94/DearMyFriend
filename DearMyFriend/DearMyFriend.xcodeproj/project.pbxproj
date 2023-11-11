@@ -563,7 +563,10 @@
 				52D9982C2AD6AAF000679B15 /* MyViewController.swift */,
 				7DFCD0132AF8E166000644DC /* SettingViewController.swift */,
 				EB16BA3E2AF8CEE60036CFE8 /* MyProfileFirebase.swift */,
+<<<<<<< HEAD
 				EB16BA432AFA0FE30036CFE8 /* MyFeedViewController.swift */,
+=======
+>>>>>>> 65bd8e1 ([FEAT]: myview에 버튼 추가 및 petinfo ui 수정)
 				7DFCD0152AFAB809000644DC /* PetInfoViewController.swift */,
 			);
 			path = MyProfile;
@@ -949,7 +952,10 @@
 				EBD2B7522AE2235C007FD1DA /* FeedFirebaseError.swift in Sources */,
 				52713E802AFD1E3000D2F377 /* ImageAPIService.swift in Sources */,
 				52D9983F2AD6ABB500679B15 /* StoreViewController.swift in Sources */,
+<<<<<<< HEAD
 				52C18DC72AFCB45E0087BA37 /* RecommendationPlaceService.swift in Sources */,
+=======
+>>>>>>> 65bd8e1 ([FEAT]: myview에 버튼 추가 및 petinfo ui 수정)
 				7DFCD0162AFAB809000644DC /* PetInfoViewController.swift in Sources */,
 				EB5EDEEA2AEF4FBF002075F9 /* CommentTitleView.swift in Sources */,
 				528DDAA52AF88A7300E08DEC /* Login.swift in Sources */,
