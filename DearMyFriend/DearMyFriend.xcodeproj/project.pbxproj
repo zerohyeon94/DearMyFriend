@@ -966,8 +966,11 @@
 				52713E802AFD1E3000D2F377 /* ImageAPIService.swift in Sources */,
 				52D9983F2AD6ABB500679B15 /* StoreViewController.swift in Sources */,
 				7DFCD0162AFAB809000644DC /* PetInfoViewController.swift in Sources */,
+
 				52C18DC72AFCB45E0087BA37 /* RecommendationPlaceService.swift in Sources */,
 				7DFCD0162AFAB809000644DC /* PetInfoViewController.swift in Sources */,
+				7DFCD0162AFAB809000644DC /* PetInfoViewController.swift in Sources */,
+				52C18DC72AFCB45E0087BA37 /* RecommendationPlaceService.swift in Sources */,
 				EB5EDEEA2AEF4FBF002075F9 /* CommentTitleView.swift in Sources */,
 				528DDAA52AF88A7300E08DEC /* Login.swift in Sources */,
 				52D9982B2AD6AADC00679B15 /* FeedViewController.swift in Sources */,
