@@ -218,25 +218,27 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         isLoadingResults = false
         searchResultsTableView.reloadData()
     }
+
     func saveMarkersToFirestore() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+
         let db = Firestore.firestore()
         let markersCollection = db.collection("markers")
 
-        markersCollection.getDocuments { [weak self] snapshot, error in
-            guard let documents = snapshot?.documents else {
-                print("Error fetching documents: \(error?.localizedDescription ?? "")")
-                return
-            }
+        for (index, marker) in (self.markers ?? []).enumerated() {
+            let markerData: [String: Any] = [
+                "userID": uid,
+                "latitude": marker.position.lat,
+                "longitude": marker.position.lng,
+                "title": marker.captionText ?? ""
+            ]
+            markersCollection.document(marker.captionText ?? "").setData(markerData)
+            print("마커 데이터 저장: \(markerData)")
 
-            for (index, marker) in (self?.markers ?? []).enumerated() {
-                let markerData: [String: Any] = [
-                    "latitude": marker.position.lat,
-                    "longitude": marker.position.lng,
-                    "title": marker.captionText ?? ""
-                ]
-                markersCollection.document("marker_\(index + 1)").setData(markerData)
-            }
         }
+
     }
     func loadMarkersFromFirestore() {
         let db = Firestore.firestore()
@@ -244,7 +246,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
         markersCollection.getDocuments { [weak self] snapshot, error in
             guard let documents = snapshot?.documents else {
-                print("Error fetching documents: \(error?.localizedDescription ?? "")")
+                print("문서 가져오기 오류: \(error?.localizedDescription ?? "")")
                 return
             }
 
@@ -255,13 +257,10 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                    let title = data["title"] as? String {
                     let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
 
-                    // 중복 체크
-                    let isDuplicate = self?.markers.contains(where: { existingMarker in
-                        existingMarker.position.lat == coordinate.latitude &&
-                        existingMarker.position.lng == coordinate.longitude
-                    }) ?? false
-
-                    if !isDuplicate {
+                    // 중복 체크 및 현재 사용자의 마커인지 확인
+                    if let uid = Auth.auth().currentUser?.uid,
+                       let markerUserID = data["userID"] as? String,
+                       markerUserID == uid {
                         self?.addMarker(at: coordinate, title: title)
                     }
                 }
@@ -274,7 +273,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         if isLoadingResults {
             return
         }
-        loadAnimalHospitalCoordinatesFromFirebase()
+        //        loadAnimalHospitalCoordinatesFromFirebase()
 
         searchResults.removeAll()
         searchStart = 1 // 다시 첫 번째 페이지부터 시작
@@ -363,13 +362,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             $0.width.height.equalTo(30)
         }
     }
-
     func addMarker(at coordinate: CLLocationCoordinate2D, title: String) {
-        guard let mapView = naverMapView?.mapView else {
-            return
-        }
-
-        // 중복 체크
         let isDuplicate = markers.contains { existingMarker in
             existingMarker.position.lat == coordinate.latitude &&
             existingMarker.position.lng == coordinate.longitude
@@ -378,8 +371,17 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         if !isDuplicate {
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
-            marker.mapView = mapView
             marker.captionText = title
+
+            if ["동물병원", "센터","의료"].contains(where: title.contains) {
+                if let image = UIImage(named: "animalhospital") {
+                    let resizedImage = ImageResizer.resizeImage(image: image, newWidth: 30)
+                    marker.iconImage = NMFOverlayImage(image: resizedImage)
+                }
+                marker.iconTintColor = UIColor.orange
+            }
+
+            marker.mapView = naverMapView?.mapView
             markers.append(marker)
 
             marker.touchHandler = { [weak self] overlay in
@@ -391,8 +393,9 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                 return true
             }
         }
-        
     }
+}
+
 
 // MARK: - CLLocationManagerDelegate Extension
 extension MapViewController: CLLocationManagerDelegate {
@@ -487,7 +490,7 @@ extension MapViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text, !searchText.isEmpty else { return }
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(delayedSearch(_:)), object: searchController)
-        perform(#selector(delayedSearch(_:)), with: searchController, afterDelay: 0.2)
+        perform(#selector(delayedSearch(_:)), with: searchController, afterDelay: 0.5)
     }
 
     @objc func delayedSearch(_ searchController: UISearchController) {
@@ -512,6 +515,7 @@ extension MapViewController {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode(Welcome.self, from: response.data)
                     self?.searchResults = results.items.map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
+                    print("검색된 위치정보:\(self?.searchResults)")
 
                     for result in self?.searchResults ?? [] {
                         self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
@@ -531,26 +535,6 @@ extension MapViewController {
         }
     }
 }
-
-//    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
-//        if reason == NMFMapChangedByGesture { // 사용자 제스처에 의해 지도가 이동된 경우
-//            let cameraPosition = mapView.cameraPosition
-//            let coordinates = cameraPosition.target
-//
-//            // 동물병원 검색
-//            let query = "동물병원"
-//            let places: [Place] = searchLocalPlaces(query)
-//
-//            // 검색 결과 돌면서
-//            for place in places {
-//                let distance = distance(coordinates, place.coordinate)
-//                if distance <= 1000 { // 일정 반경 내에 있는 경우
-//                    // 마커 추가
-//                    addMarker(at: place.coordinate, title: place.title)
-//                }
-//            }
-//        }
-//    }
 
 extension MapViewController {
     func searchImage(query: String, completion: @escaping (String?) -> Void) {
