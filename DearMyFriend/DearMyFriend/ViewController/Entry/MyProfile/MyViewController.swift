@@ -65,11 +65,7 @@ class MyViewController: UIViewController {
     // segment
 
     private let segmentedControl: UISegmentedControl = {
-<<<<<<< HEAD
         let control = UISegmentedControl(items: ["마이 프렌드", "마이 게시물"])
-=======
-        let control = UISegmentedControl(items: ["마이프렌드"])
->>>>>>> 99ebf3f (rebase)
         control.selectedSegmentIndex = 0
         return control
     }()

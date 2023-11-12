@@ -225,7 +225,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         }
 
         let db = Firestore.firestore()
-        let markersCollection = db.collection("markers")
+        let markersCollection = db.collection("24시간동물병원")
 
         for (index, marker) in (self.markers ?? []).enumerated() {
             let markerData: [String: Any] = [
@@ -286,6 +286,8 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     }
 
     @objc func showHalfModal() {
+        print("showHalfModal 함수 호출 확인")
+
         guard let data = modalData else { return }
         print(data)
         self.searchImage(query: data.title) { imageURL in
@@ -373,7 +375,15 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
             marker.captionText = title
 
-            if ["동물병원", "센터","의료"].contains(where: title.contains) {
+            if title.lowercased().contains("24") {
+                // 24시간 동물병원 아이콘
+                if let image = UIImage(named: "24") {
+                    let resizedImage = ImageResizer.resizeImage(image: image, newWidth: 30)
+                    marker.iconImage = NMFOverlayImage(image: resizedImage)
+                }
+                marker.iconTintColor = UIColor.orange
+            } else if ["동물병원", "센터", "의료"].contains(where: title.lowercased().contains) {
+                // 일반 동물병원 아이콘
                 if let image = UIImage(named: "animalhospital") {
                     let resizedImage = ImageResizer.resizeImage(image: image, newWidth: 30)
                     marker.iconImage = NMFOverlayImage(image: resizedImage)
