@@ -96,6 +96,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         if heartButton.tintColor == .red {
             heartButton.tintColor = .gray
         } else {
+            
             heartButton.tintColor = .red
         }
     }
