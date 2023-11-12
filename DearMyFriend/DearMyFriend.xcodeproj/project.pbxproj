@@ -11,6 +11,7 @@
 		372923422AF3C191009993F8 /* CalculInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372923412AF3C191009993F8 /* CalculInfo.swift */; };
 		4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */; };
 		4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AB12AE27D39005146AA /* NaverSearchService.swift */; };
+		4E2F96772B017EA300FED791 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2F96762B017EA300FED791 /* Toast */; };
 		4E44779F2AFF915000A7A458 /* ImageResiger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E44779E2AFF915000A7A458 /* ImageResiger.swift */; };
 		5225A1422AFC8643005CE724 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 5225A1412AFC8643005CE724 /* loading.json */; };
 		5225A1452AFC866A005CE724 /* LoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5225A1442AFC866A005CE724 /* LoadingController.swift */; };
@@ -298,6 +299,7 @@
 				525C36792AF8BFCA001F76AB /* FirebaseFirestoreCombine-Community in Frameworks */,
 				525C36632AF8BFCA001F76AB /* FirebaseAnalyticsSwift in Frameworks */,
 				525C369D2AF8C072001F76AB /* FirebaseAppCheck in Frameworks */,
+				4E2F96772B017EA300FED791 /* Toast in Frameworks */,
 				525C36712AF8BFCA001F76AB /* FirebaseDatabase in Frameworks */,
 				EBD2B7402AE221F5007FD1DA /* FirebaseFirestore in Frameworks */,
 				EBD2B7422AE221F5007FD1DA /* FirebaseFirestoreSwift in Frameworks */,
@@ -822,6 +824,7 @@
 				525C36C62AF8C072001F76AB /* FirebaseStorage */,
 				525C36C82AF8C072001F76AB /* FirebaseStorageCombine-Community */,
 				EB16BA412AF9F0F10036CFE8 /* Kingfisher */,
+				4E2F96762B017EA300FED791 /* Toast */,
 			);
 			productName = DearMyFriend;
 			productReference = 52D998132AD6A89600679B15 /* DearMyFriend.app */;
@@ -857,6 +860,7 @@
 				EBD2B74B2AE22232007FD1DA /* XCRemoteSwiftPackageReference "Moya" */,
 				EBD2B74E2AE22241007FD1DA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				EB16BA402AF9F0F10036CFE8 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				4E2F96752B017EA200FED791 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 52D998142AD6A89600679B15 /* Products */;
 			projectDirPath = "";
@@ -1253,6 +1257,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4E2F96752B017EA200FED791 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		EB16BA402AF9F0F10036CFE8 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -1296,6 +1308,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4E2F96762B017EA300FED791 /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E2F96752B017EA200FED791 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
 		525C365E2AF8BFCA001F76AB /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FirebaseAnalytics;

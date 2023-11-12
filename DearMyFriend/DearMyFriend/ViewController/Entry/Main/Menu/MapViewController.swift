@@ -5,6 +5,7 @@ import Moya
 import SnapKit
 import Kingfisher
 import Firebase
+import Toast
 
 
 class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewDelegate {
@@ -41,11 +42,11 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
     }()
 
-    private lazy var showAnimalHospitalButton: UIButton = {
-        let button = createStyledButton(title: "동물병원")
-        button.addTarget(self, action: #selector(showAnimalHospital), for: .touchUpInside)
-        return button
-    }()
+//    private lazy var showAnimalHospitalButton: UIButton = {
+//        let button = createStyledButton(title: "동물병원")
+//        button.addTarget(self, action: #selector(showAnimalHospital), for: .touchUpInside)
+//        return button
+//    }()
 
 
     private lazy var modalView: UIView = {
@@ -125,14 +126,14 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         if let naverMapView = naverMapView {
             self.view.addSubview(naverMapView)
         }
-        //        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        //           self.view.addGestureRecognizer(tapGesture)
-        //       }
-        //
-        //       @objc func dismissKeyboard() {
-        //           self.view.endEditing(true)
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+                   self.view.addGestureRecognizer(tapGesture)
+               }
 
-        setupButtonLayout()
+               @objc func dismissKeyboard() {
+                   self.view.endEditing(true)
+
+//        setupButtonLayout()
         setupLocationManager()
         if let currentLocation = locationManager.location {
             addMarker(at: currentLocation.coordinate, title: "현재 위치입니다.")
@@ -150,18 +151,18 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         return button
     }
 
-    private func setupButtonLayout() {
-        view.addSubview(showAnimalHospitalButton)
-
-        showAnimalHospitalButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12)
-            $0.leading.equalToSuperview().offset(12)
-            $0.width.equalTo(100)
-            $0.height.equalTo(40)
-        }
-
-        showAnimalHospitalButton.layer.cornerRadius = 10
-    }
+//    private func setupButtonLayout() {
+//        view.addSubview(showAnimalHospitalButton)
+//
+//        showAnimalHospitalButton.snp.makeConstraints {
+//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12)
+//            $0.leading.equalToSuperview().offset(12)
+//            $0.width.equalTo(100)
+//            $0.height.equalTo(40)
+//        }
+//
+//        showAnimalHospitalButton.layer.cornerRadius = 10
+//    }
 
     func setupLocationManager() {
         self.locationManager.delegate = self
@@ -316,10 +317,9 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         self.view.addSubview(modalView)
 
         modalView.addSubview(imageView)
-        //    modalView.addSubview(heartButton)
 
         imageView.snp.makeConstraints {
-            $0.top.equalTo(modalView).offset(16)
+            $0.top.equalTo(modalView).offset(80)
             $0.leading.equalTo(modalView).offset(16)
             $0.trailing.equalTo(modalView).offset(-16)
             $0.height.equalTo(100)
@@ -333,7 +333,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.bottom.equalToSuperview().offset(-16)
-            $0.height.equalTo(300)
+            $0.height.equalTo(350)
         }
         modalView.addSubview(locationNameLabel)
         locationNameLabel.snp.makeConstraints {
@@ -510,46 +510,52 @@ extension MapViewController: UISearchResultsUpdating {
 
 extension MapViewController {
     func searchLocalPlaces(_ query: String) {
-        if isLoadingResults {
-            return
-        }
+           if isLoadingResults {
+               return
+           }
 
-        isLoadingResults = true
+           isLoadingResults = true
 
-        naverSearch.request(.search(query: query)) { [weak self] result in
-            switch result {
-            case .success(let response):
-                do {
-                    let decoder = JSONDecoder()
-                    let results = try decoder.decode(Welcome.self, from: response.data)
+           naverSearch.request(.search(query: query)) { [weak self] result in
+               switch result {
+               case .success(let response):
+                   do {
+                       let decoder = JSONDecoder()
+                       let results = try decoder.decode(Welcome.self, from: response.data)
 
-                    // 데이터베이스에 저장된 데이터만 필터링
-                    let filteredResults = results.items
-                        .filter { item in
-                            self?.markers.contains { $0.captionText == item.cleanTitle() } ?? false
-                        }
-                        .map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
+                       let filteredResults = results.items
+                           .filter { item in
+                               self?.markers.contains { $0.captionText == item.cleanTitle() } ?? false
+                           }
+                           .map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
 
-                    self?.searchResults = filteredResults
+                       if filteredResults.isEmpty {
+                           self?.showNoSearchResultsToast()
+                       } else {
+                           self?.searchResults = filteredResults
 
-                    for result in filteredResults {
-                        self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
-                    }
+                           for result in filteredResults {
+                               self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
+                           }
 
-                    DispatchQueue.main.async {
-                        self?.searchResultsTableView.reloadData()
-                    }
-                } catch {
-                    print("JSON decoding error: \(error)")
-                }
-            case .failure(let error):
-                print("Network request error: \(error)")
-            }
+                           DispatchQueue.main.async {
+                               self?.searchResultsTableView.reloadData()
+                           }
+                       }
+                   } catch {
+                       print("JSON decoding error: \(error)")
+                   }
+               case .failure(let error):
+                   print("Network request error: \(error)")
+               }
 
-            self?.isLoadingResults = false
-        }
-    }
-}
+               self?.isLoadingResults = false
+           }
+       }
+    func showNoSearchResultsToast() {
+          view.makeToast("해당지역은 아직 추가되지않은 지역입니다 ㅜㅜ")
+      }
+   }
 extension MapViewController {
     func searchImage(query: String, completion: @escaping (String?) -> Void) {
         print("searchImage 함수가 호출되었습니다. query: \(query)")
