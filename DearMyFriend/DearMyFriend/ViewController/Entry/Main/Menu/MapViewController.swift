@@ -189,7 +189,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         searchController = UISearchController(searchResultsController: searchResultsTableViewController)
         searchController.searchResultsUpdater = self
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.placeholder = "찿으시는 매장을 입력하세요!"
+        searchController.searchBar.placeholder = "찿으시는 매장이름과 지역을 입력하세요!"
         searchController.searchBar.delegate = self
 
         navigationItem.searchController = searchController
@@ -228,11 +228,14 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         let markersCollection = db.collection("24시간동물병원")
 
         for (index, marker) in (self.markers ?? []).enumerated() {
+            let roadAddress = searchResults.first(where: { $0.title == marker.captionText })?.roadAddress
+
             let markerData: [String: Any] = [
                 "userID": uid,
                 "latitude": marker.position.lat,
                 "longitude": marker.position.lng,
-                "title": marker.captionText ?? ""
+                "title": marker.captionText ?? "",
+                "roadAddress": roadAddress ?? ""
             ]
             markersCollection.document(marker.captionText ?? "").setData(markerData)
             print("마커 데이터 저장: \(markerData)")
@@ -242,7 +245,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     }
     func loadMarkersFromFirestore() {
         let db = Firestore.firestore()
-        let markersCollection = db.collection("markers")
+        let markersCollection = db.collection("24시간동물병원")
 
         markersCollection.getDocuments { [weak self] snapshot, error in
             guard let documents = snapshot?.documents else {
@@ -254,7 +257,8 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                 let data = document.data()
                 if let latitude = data["latitude"] as? Double,
                    let longitude = data["longitude"] as? Double,
-                   let title = data["title"] as? String {
+                   let title = data["title"] as? String,
+                   let roadAddress = data["roadAddress"] as? String {
                     let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
 
                     // 중복 체크 및 현재 사용자의 마커인지 확인
@@ -317,7 +321,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             $0.top.equalTo(modalView).offset(16)
             $0.leading.equalTo(modalView).offset(16)
             $0.trailing.equalTo(modalView).offset(-16)
-            $0.height.equalTo(150)
+            $0.height.equalTo(100)
         }
 
         locationNameLabel.text = data.title
@@ -342,13 +346,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             $0.leading.equalTo(modalView).offset(16)
             $0.trailing.equalTo(modalView).offset(-16)
         }
-        modalView.addSubview(phoneNumberLabel)
-        phoneNumberLabel.snp.makeConstraints {
-            $0.top.equalTo(roadAddressLabel.snp.bottom).offset(16)
-            $0.leading.equalTo(modalView).offset(16)
-            $0.trailing.equalTo(modalView).offset(-16)
-        }
-
 
         modalView.addSubview(closeButton)
         closeButton.snp.makeConstraints {
@@ -381,7 +378,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                     let resizedImage = ImageResizer.resizeImage(image: image, newWidth: 30)
                     marker.iconImage = NMFOverlayImage(image: resizedImage)
                 }
-                marker.iconTintColor = UIColor.orange
+                marker.iconTintColor = UIColor.red
             } else if ["동물병원", "센터", "의료"].contains(where: title.lowercased().contains) {
                 // 일반 동물병원 아이콘
                 if let image = UIImage(named: "animalhospital") {
@@ -524,10 +521,17 @@ extension MapViewController {
                 do {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode(Welcome.self, from: response.data)
-                    self?.searchResults = results.items.map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
-                    print("검색된 위치정보:\(self?.searchResults)")
 
-                    for result in self?.searchResults ?? [] {
+                    // 데이터베이스에 저장된 데이터만 필터링
+                    let filteredResults = results.items
+                        .filter { item in
+                            self?.markers.contains { $0.captionText == item.cleanTitle() } ?? false
+                        }
+                        .map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
+
+                    self?.searchResults = filteredResults
+
+                    for result in filteredResults {
                         self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
                     }
 
@@ -545,7 +549,6 @@ extension MapViewController {
         }
     }
 }
-
 extension MapViewController {
     func searchImage(query: String, completion: @escaping (String?) -> Void) {
         print("searchImage 함수가 호출되었습니다. query: \(query)")
