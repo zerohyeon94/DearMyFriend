@@ -226,25 +226,27 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
-
+        
         let db = Firestore.firestore()
         let markersCollection = db.collection("24시간동물병원")
-
+        
         for (index, marker) in (self.markers ?? []).enumerated() {
             let roadAddress = searchResults.first(where: { $0.title == marker.captionText })?.roadAddress
-
-            let markerData: [String: Any] = [
-                "userID": uid,
-                "latitude": marker.position.lat,
-                "longitude": marker.position.lng,
-                "title": marker.captionText ?? "",
-                "roadAddress": roadAddress ?? ""
-            ]
-            markersCollection.document(marker.captionText ?? "").setData(markerData)
-            print("마커 데이터 저장: \(markerData)")
-
+            
+            if marker.captionText != "현재 위치입니다." {
+                let markerData: [String: Any] = [
+                    "userID": uid,
+                    "latitude": marker.position.lat,
+                    "longitude": marker.position.lng,
+                    "title": marker.captionText ?? "",
+                    "roadAddress": roadAddress ?? ""
+                ]
+                markersCollection.document(marker.captionText ?? "").setData(markerData)
+                print("마커 데이터 저장: \(markerData)")
+                
+            }
+            
         }
-
     }
     func loadMarkersFromFirestore() {
         let db = Firestore.firestore()
@@ -265,15 +267,14 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                     let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
 
                     // 중복 체크 및 현재 사용자의 마커인지 확인
-                    if let uid = Auth.auth().currentUser?.uid,
-                       let markerUserID = data["userID"] as? String,
-                       markerUserID == uid {
+//                    if let uid = Auth.auth().currentUser?.uid,
+//                       let markerUserID = data["userID"] as? String,
+//                       markerUserID == uid {
                         self?.addMarker(at: coordinate, title: title)
                     }
                 }
             }
         }
-    }
 
 
     @objc func showAnimalHospital() {
