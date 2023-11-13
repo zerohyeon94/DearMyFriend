@@ -117,23 +117,74 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let alert = UIAlertController(title: "회원탈퇴", message: "정말로 회원탈퇴 하시겠습니까?", preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "확인", style: .destructive) { _ in
             let accountManeger = AuthService.shared
+            print("확인버튼 누름")
             
-            accountManeger.deleteStore { error in
+            accountManeger.deleteFeedInStorage { [weak self] error in
+                guard let self = self else { return }
+                print("스토리지 삭제")
                 if error != nil {
                     AlertManager.registerCheckAlert(on: self)
+                    return
                 }
                 
-                accountManeger.deleteStorage { error in
+                accountManeger.deleteFeedInStore { [weak self] error in
+                    guard let self = self else { return }
+                    
                     if error != nil {
                         AlertManager.registerCheckAlert(on: self)
+                        print("회원탈퇴 : firestore 정보 삭제 실패")
+                        return
                     }
-                    
-                    accountManeger.deleteAccount { [weak self] error in
+                    accountManeger.deleteStore { [weak self] error in
                         guard let self = self else { return }
+                        
                         if error != nil {
                             AlertManager.registerCheckAlert(on: self)
+                            print("회원탈퇴 : firestore 정보 삭제 실패")
+                            return
                         }
-                        accountManeger.changeController(self)
+                        
+                        accountManeger.deleteStorage { [weak self] error in
+                            guard let self = self else { return }
+                            
+                            if error != nil {
+                                AlertManager.registerCheckAlert(on: self)
+                                print("회원탈퇴 : Storage 정보 삭제 실패")
+                                return
+                            }
+                            
+                            accountManeger.findEmailIndex { [weak self] emailList, error in
+                                guard let self = self else { return }
+                                
+                                if error != nil {
+                                    AlertManager.registerCheckAlert(on: self)
+                                    print("회원탈퇴 : 이메일 인덱스추출 실패")
+                                    return
+                                }
+                                
+                                let emailList = emailList ?? []
+                                
+                                accountManeger.deleteEmail(emailList: emailList) { [weak self] error in
+                                    guard let self = self else { return }
+                                    
+                                    if error != nil {
+                                        AlertManager.registerCheckAlert(on: self)
+                                        return
+                                    }
+                                    
+                                    accountManeger.deleteAccount { [weak self] error in
+                                        guard let self = self else { return }
+                                        
+                                        if error != nil {
+                                            AlertManager.registerCheckAlert(on: self)
+                                            print("회원탈퇴 : Account 정보 삭제 실패")
+                                            return
+                                        }
+                                        accountManeger.changeController(self)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

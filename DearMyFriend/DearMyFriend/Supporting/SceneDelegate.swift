@@ -105,8 +105,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return oobCode
     }
     
-    //guard let queryOfUrl = URLComponents(string: urlString)?.queryItems else { return nil }
-    
     private func authenticationOfEmail(_ oobCode: String, completion: @escaping (Error?)->Void) {
         print("이메일 인증")
         Auth.auth().applyActionCode(oobCode) { error in
