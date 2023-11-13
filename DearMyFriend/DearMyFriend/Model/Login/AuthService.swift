@@ -215,7 +215,7 @@ class AuthService {
     public func deleteAccount(completion: @escaping (Error?) -> Void) {
         
         guard let user = Auth.auth().currentUser else { return }
-
+        
         user.delete { error in
             if error != nil {
                 completion(error)
@@ -278,6 +278,114 @@ class AuthService {
             }
             dispatchGroup.notify(queue: .main) {
                 Firestore.firestore().collection("Users").document(user.uid).delete()
+                completion(nil)
+            }
+        }
+    }
+    
+    public func deleteFeedInStore(completion: @escaping (Error?) -> Void) {
+        let uid = Auth.auth().currentUser?.uid ?? ""
+        let feedDB = Firestore.firestore().collection("Feeds")
+        
+        feedDB.whereField("uid", isEqualTo: uid).getDocuments { query, error in
+            if error != nil {
+                completion(error)
+                return
+            }
+            guard let allList = query?.documents else {
+                completion(error)
+                return
+            }
+            let dispatchGroup = DispatchGroup()
+            
+            for item in allList {
+                let documentID = item.documentID
+                dispatchGroup.enter()
+                feedDB.document(documentID).delete { error in
+                    defer { dispatchGroup.leave() }
+                    if error != nil {
+                        completion(error)
+                        return
+                    }
+                }
+            }
+            dispatchGroup.notify(queue: .main) {
+                completion(nil)
+            }
+        }
+    }
+    
+    public func deleteFeedInStorage(completion: @escaping (Error?) -> Void) {
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let folder = Storage.storage().reference().child("Feeds/\(uid)")
+        
+        folder.listAll { result, error in
+            if error != nil {
+                completion(error)
+                return
+            }
+            
+            guard let allFolder = result?.prefixes else { return }
+            let dispatchGroup = DispatchGroup()
+
+            for folder in allFolder {
+                folder.listAll { result, error in
+                    if error != nil {
+                        completion(error)
+                        return
+                    }
+                    
+                    guard let allImage = result?.items else { return }
+                    
+                    for image in allImage {
+                        dispatchGroup.enter()
+                        image.delete { error in
+                            defer { dispatchGroup.leave() }
+                            if error != nil {
+                                completion(error)
+                                return
+                            }
+                        }
+                    }
+                }
+            }
+            dispatchGroup.notify(queue: .main) {
+                completion(nil)
+            }
+        }
+    }
+    
+    public func findEmailIndex(completion: @escaping ([String]?, Error?) -> Void) {
+        let userEmail = Auth.auth().currentUser?.email ?? ""
+        let emailDB = Firestore.firestore().collection("UsersId").document("이메일 중복검사")
+        
+        emailDB.getDocument { qs, error in
+            if let error = error {
+                completion(nil, error)
+            }
+            //qs.exists 문서존재여부
+            guard let qs = qs, qs.exists else { return completion(nil, error) }
+            
+            guard var emailList = qs.data()?["email"] as? [String] else { return completion(nil,error)}
+            
+            if let index = emailList.firstIndex(of: userEmail) {
+                emailList.remove(at: index)
+                completion(emailList, nil)
+            } else {
+                completion(nil, error)
+            }
+        }
+    }
+    
+    public func deleteEmail(emailList: [String], completion: @escaping (Error?) -> Void) {
+        let emailDB = Firestore.firestore().collection("UsersId").document("이메일 중복검사")
+        
+        emailDB.updateData(["email": emailList]) { error in
+            if error != nil {
+                completion(error)
+                return
+            } else {
                 completion(nil)
             }
         }

@@ -1174,7 +1174,7 @@
 				CODE_SIGN_ENTITLEMENTS = DearMyFriend/DearMyFriend.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9A69549U7C;
+				DEVELOPMENT_TEAM = LNXWGGBBH6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DearMyFriend/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한 허용 - 좀 쓸께요~";
@@ -1208,7 +1208,7 @@
 				CODE_SIGN_ENTITLEMENTS = DearMyFriend/DearMyFriend.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9A69549U7C;
+				DEVELOPMENT_TEAM = LNXWGGBBH6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DearMyFriend/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한 허용 - 좀 쓸께요~";
