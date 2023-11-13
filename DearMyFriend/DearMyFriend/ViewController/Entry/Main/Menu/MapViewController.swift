@@ -6,6 +6,7 @@ import SnapKit
 import Kingfisher
 import Firebase
 import Toast
+import FirebaseAuth
 
 
 class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewDelegate {
