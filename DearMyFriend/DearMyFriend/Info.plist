@@ -42,9 +42,5 @@
 			</array>
 		</dict>
 	</dict>
-	<key>NMFClientId</key>
-	<string>gzytrcks96</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>위치 권한 허용 - 좀 쓸께요~</string>
 </dict>
 </plist>
