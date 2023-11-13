@@ -225,13 +225,13 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
-        
+
         let db = Firestore.firestore()
-        let markersCollection = db.collection("24시간동물병원")
-        
+        let markersCollection = db.collection("24시간동물병원2")
+
         for (index, marker) in (self.markers ?? []).enumerated() {
             let roadAddress = searchResults.first(where: { $0.title == marker.captionText })?.roadAddress
-            
+
             if marker.captionText != "현재 위치입니다." {
                 let markerData: [String: Any] = [
                     "userID": uid,
@@ -242,14 +242,14 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                 ]
                 markersCollection.document(marker.captionText ?? "").setData(markerData)
                 print("마커 데이터 저장: \(markerData)")
-                
+
             }
-            
+
         }
     }
     func loadMarkersFromFirestore() {
         let db = Firestore.firestore()
-        let markersCollection = db.collection("24시간동물병원")
+        let markersCollection = db.collection("24시간동물병원2")
 
         markersCollection.getDocuments { [weak self] snapshot, error in
             guard let documents = snapshot?.documents else {
@@ -511,48 +511,38 @@ extension MapViewController: UISearchResultsUpdating {
 
 extension MapViewController {
     func searchLocalPlaces(_ query: String) {
-           if isLoadingResults {
-               return
-           }
+        if isLoadingResults {
+            return
+        }
 
-           isLoadingResults = true
+        isLoadingResults = true
 
-           naverSearch.request(.search(query: query)) { [weak self] result in
-               switch result {
-               case .success(let response):
-                   do {
-                       let decoder = JSONDecoder()
-                       let results = try decoder.decode(Welcome.self, from: response.data)
+        naverSearch.request(.search(query: query)) { [weak self] result in
+            switch result {
+            case .success(let response):
+                do {
+                    let decoder = JSONDecoder()
+                    let results = try decoder.decode(Welcome.self, from: response.data)
+                    self?.searchResults = results.items.map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
+                    print("검색된 위치정보:\(self?.searchResults)")
 
-                       let filteredResults = results.items
-                           .filter { item in
-                               self?.markers.contains { $0.captionText == item.cleanTitle() } ?? false
-                           }
-                           .map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
+                    for result in self?.searchResults ?? [] {
+                        self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
+                    }
 
-                       if filteredResults.isEmpty {
-                           self?.showNoSearchResultsToast()
-                       } else {
-                           self?.searchResults = filteredResults
+                    DispatchQueue.main.async {
+                        self?.searchResultsTableView.reloadData()
+                    }
+                } catch {
+                    print("JSON decoding error: \(error)")
+                }
+            case .failure(let error):
+                print("Network request error: \(error)")
+            }
 
-                           for result in filteredResults {
-                               self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
-                           }
-
-                           DispatchQueue.main.async {
-                               self?.searchResultsTableView.reloadData()
-                           }
-                       }
-                   } catch {
-                       print("JSON decoding error: \(error)")
-                   }
-               case .failure(let error):
-                   print("Network request error: \(error)")
-               }
-
-               self?.isLoadingResults = false
-           }
-       }
+            self?.isLoadingResults = false
+        }
+    }
     func showNoSearchResultsToast() {
           view.makeToast("해당지역은 아직 추가되지않은 지역입니다 ㅜㅜ")
       }
