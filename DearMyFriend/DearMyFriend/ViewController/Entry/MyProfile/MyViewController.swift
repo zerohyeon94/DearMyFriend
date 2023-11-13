@@ -88,9 +88,16 @@ class MyViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
+
+            super.viewDidLayoutSubviews()
+            floatingButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 8 - 40 - 50, width: 60, height: 60)
+            writeButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 80 - 8 - 40 - 50, width: 60, height: 60)
+        
+
         super.viewDidLayoutSubviews()
         floatingButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 8 - 120, width: 60, height: 60)
         writeButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 80 - 8 - 120, width: 60, height: 60)
+
 
         // 먼저 floatingButton과 writeButton을 추가
         view.addSubview(floatingButton)
