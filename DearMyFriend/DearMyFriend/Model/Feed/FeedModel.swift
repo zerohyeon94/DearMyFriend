@@ -52,6 +52,25 @@ struct FeedModel: Codable {
     var likeCount: Int
     var comment: [[String: String]]
     
+    func toFirestoreData() -> [String: Any] {
+        
+         let timestamp = Timestamp(date: date)
+
+         let imageUrlArray: [Any] = imageUrl
+         let commentArray: [Any] = comment.map { $0 as Any }
+
+         let data: [String: Any] = [
+             "uid": uid,
+             "date": timestamp,
+             "imageUrl": imageUrlArray,
+             "post": post,
+             "likeCount": likeCount,
+             "comment": commentArray
+         ]
+
+         return data
+     }
+    
     init(uid: String, date: Date, imageUrl: [String], post: String, like: [String], likeCount: Int, comment: [[String : String]]) {
         self.uid = uid
         self.date = date

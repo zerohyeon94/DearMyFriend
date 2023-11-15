@@ -9,6 +9,12 @@ class FeedController: UIViewController {
     private var lastText: String?
     private var remainingFeed = true
     
+    private var isActive: Bool = false {
+        didSet {
+            showActionButtons()
+        }
+    }
+    
     private let loadView: LottieAnimationView = {
         let animation = LottieAnimationView(name: "load")
         animation.loopMode = .loop
@@ -22,6 +28,9 @@ class FeedController: UIViewController {
         return animation
     }()
     
+    private let basicButton = FloatingButton(imageName: "plus", type: .basic)
+    private let writeButton = FloatingButton(imageName: "pencil", type: .write)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -34,6 +43,12 @@ class FeedController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         // NavigationBar 숨김.
         navigationController?.isNavigationBarHidden = true
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        basicButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 8 - 40 - 50, width: 60, height: 60)
+        writeButton.frame = CGRect(x: view.frame.size.width - 60 - 8 - 20, y: view.frame.size.height - 60 - 80 - 8 - 40 - 50, width: 60, height: 60)
     }
     
     // MARK: - 테이블뷰 설정
@@ -83,6 +98,8 @@ class FeedController: UIViewController {
             
             self.loadView.stop()
             self.loadView.isHidden = true
+            self.setupFloatingButton()
+            setupFloatingButtonAction()
             
             switch result {
             case .success(let feeds):
@@ -92,6 +109,63 @@ class FeedController: UIViewController {
                 AlertManager.failureFeed(on: self, with: error)
             }
         }
+    }
+    
+    // MARK: Floating Button Action
+    @objc private func didTapFloatingButton() {
+        isActive.toggle()
+    }
+    
+    @objc private func didTapWriteFloatingButton() {
+        let addPostViewController = AddPostViewController()
+        addPostViewController.delegate = self
+        addPostViewController.modalPresentationStyle = .fullScreen
+        present(addPostViewController, animated: true, completion: nil)
+    }
+    
+    private func setupFloatingButton() {
+        view.backgroundColor = .clear
+        view.addSubview(basicButton)
+        view.addSubview(writeButton)
+    }
+    
+    private func showActionButtons() {
+        popButtons()
+        rotateFloatingButton()
+    }
+    
+    private func popButtons() {
+        if isActive {
+            writeButton.layer.transform = CATransform3DMakeScale(0.4, 0.4, 1)
+            UIView.animate(withDuration: 0.3, delay: 0.2, usingSpringWithDamping: 0.55, initialSpringVelocity: 0.3, options: [.curveEaseInOut], animations: { [weak self] in
+                guard let self = self else { return }
+                self.writeButton.layer.transform = CATransform3DIdentity
+                self.writeButton.alpha = 1.0
+            })
+        } else {
+            UIView.animate(withDuration: 0.15, delay: 0.2, options: []) { [weak self] in
+                guard let self = self else { return }
+                self.writeButton.layer.transform = CATransform3DMakeScale(0.4, 0.4, 0.1)
+                self.writeButton.alpha = 0.0
+            }
+        }
+    }
+    
+    private func rotateFloatingButton() {
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+        let fromValue = isActive ? 0 : CGFloat.pi / 4
+        let toValue = isActive ? CGFloat.pi / 4 : 0
+        animation.fromValue = fromValue
+        animation.toValue = toValue
+        animation.duration = 0.3
+        animation.fillMode = .forwards
+        animation.isRemovedOnCompletion = false
+        basicButton.layer.add(animation, forKey: nil)
+    }
+    
+    private func setupFloatingButtonAction() {
+        self.basicButton.addTarget(self, action: #selector(didTapFloatingButton), for: .touchUpInside)
+        self.writeButton.addTarget(self, action: #selector(didTapWriteFloatingButton), for: .touchUpInside)
     }
 }
 
@@ -233,3 +307,30 @@ extension FeedController: UIScrollViewDelegate {
         }
     }
 }
+
+extension FeedController: FeedDelegate {
+    func updateFeed() {
+        self.bringView.isHidden = false
+        self.bringView.play()
+        
+        FeedService.shared.getFeed(.basic) { [weak self] result in
+            guard let self = self else { return }
+            
+            self.bringView.stop()
+            self.bringView.isHidden = true
+            self.setupFloatingButton()
+            setupFloatingButtonAction()
+            
+            switch result {
+            case .success(let feeds):
+                self.feedData = feeds
+                self.feedTable.reloadData()
+            case .failure(let error):
+                AlertManager.failureFeed(on: self, with: error)
+            }
+        }
+    }
+}
+    
+    
+    
