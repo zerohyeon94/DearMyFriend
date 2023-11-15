@@ -139,8 +139,8 @@ class AddPostView: UIView {
     
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = .yellow
-        pageControl.pageIndicatorTintColor = .green
+        pageControl.currentPageIndicatorTintColor = ThemeColor.deepPink
+        pageControl.pageIndicatorTintColor = ThemeColor.pink
         
         return pageControl
     }()
