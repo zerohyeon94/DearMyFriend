@@ -12,7 +12,8 @@
 		4E275AB02AE27D27005146AA /* SearchAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */; };
 		4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E275AB12AE27D39005146AA /* NaverSearchService.swift */; };
 		4E2F96772B017EA300FED791 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2F96762B017EA300FED791 /* Toast */; };
-		4E44779F2AFF915000A7A458 /* ImageResiger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E44779E2AFF915000A7A458 /* ImageResiger.swift */; };
+		4E59E5C82B0493F300A91694 /* MapBoundsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E59E5C72B0493F300A91694 /* MapBoundsManager.swift */; };
+		4E59E5CA2B04942200A91694 /* ImageResiger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E59E5C92B04942200A91694 /* ImageResiger.swift */; };
 		5225A1422AFC8643005CE724 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 5225A1412AFC8643005CE724 /* loading.json */; };
 		5225A1452AFC866A005CE724 /* LoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5225A1442AFC866A005CE724 /* LoadingController.swift */; };
 		523A7B252AF8E51200EA4D5F /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523A7B242AF8E51200EA4D5F /* ForgotPasswordView.swift */; };
@@ -186,7 +187,8 @@
 		372923412AF3C191009993F8 /* CalculInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculInfo.swift; sourceTree = "<group>"; };
 		4E275AAF2AE27D27005146AA /* SearchAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAPIManager.swift; sourceTree = "<group>"; };
 		4E275AB12AE27D39005146AA /* NaverSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchService.swift; sourceTree = "<group>"; };
-		4E44779E2AFF915000A7A458 /* ImageResiger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResiger.swift; sourceTree = SOURCE_ROOT; };
+		4E59E5C72B0493F300A91694 /* MapBoundsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapBoundsManager.swift; sourceTree = "<group>"; };
+		4E59E5C92B04942200A91694 /* ImageResiger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResiger.swift; sourceTree = "<group>"; };
 		5225A1412AFC8643005CE724 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		5225A1442AFC866A005CE724 /* LoadingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingController.swift; sourceTree = "<group>"; };
 		523A7B232AF8E2DD00EA4D5F /* DearMyFriend.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DearMyFriend.entitlements; sourceTree = "<group>"; };
@@ -714,7 +716,8 @@
 		EBD2B7382AE21C4A007FD1DA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4E44779E2AFF915000A7A458 /* ImageResiger.swift */,
+				4E59E5C72B0493F300A91694 /* MapBoundsManager.swift */,
+				4E59E5C92B04942200A91694 /* ImageResiger.swift */,
 				529D7E1B2AFE60D4003A9648 /* AddPet */,
 				52F9BC0A2AFB3DF3008C4438 /* Map */,
 				528DDA9F2AF85D7C00E08DEC /* Login */,
@@ -981,6 +984,7 @@
 				524A0C222AFEF5B000D08971 /* ReadPetData.swift in Sources */,
 				52EFE7A92AE7AE3E00770F03 /* IndicatorCircle.swift in Sources */,
 				52BDFA512AF7C19F00DFE970 /* LoginView.swift in Sources */,
+				4E59E5CA2B04942200A91694 /* ImageResiger.swift in Sources */,
 				528DDA9B2AF832C900E08DEC /* RegiSterProfileView.swift in Sources */,
 				EBD2B73B2AE21C61007FD1DA /* FeedModel.swift in Sources */,
 				52EFE7AB2AE7AFC800770F03 /* PopularityCellView.swift in Sources */,
@@ -1057,6 +1061,7 @@
 				52BDFA562AF7C30C00DFE970 /* SignButton.swift in Sources */,
 				528DDA952AF8303100E08DEC /* RegisterProfileController.swift in Sources */,
 				EB5EDEE62AEF484D002075F9 /* CommentTableViewCell.swift in Sources */,
+				4E59E5C82B0493F300A91694 /* MapBoundsManager.swift in Sources */,
 				EB5EDEED2AF10277002075F9 /* CommentInputView.swift in Sources */,
 				523A7B252AF8E51200EA4D5F /* ForgotPasswordView.swift in Sources */,
 				52BDFA652AF7FB6000DFE970 /* RegisterPasswordView.swift in Sources */,
@@ -1064,7 +1069,6 @@
 				52BDFA5F2AF7F9EC00DFE970 /* RegisterEmailController.swift in Sources */,
 				52AD22F52B0368BE0053F49E /* NewFeedView.swift in Sources */,
 				52D9983D2AD6ABA700679B15 /* WishViewController.swift in Sources */,
-				4E44779F2AFF915000A7A458 /* ImageResiger.swift in Sources */,
 				528DDA992AF8307600E08DEC /* RegisterEmailView.swift in Sources */,
 				52D998372AD6AB2900679B15 /* MainViewController.swift in Sources */,
 				5258C2732AE6651000E9FC2B /* AppStoreNetworking.swift in Sources */,

@@ -11,6 +11,7 @@ import FirebaseAuth
 
 class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewDelegate {
 
+
     var isLoadingResults: Bool = false
     var searchStart: Int = 1
     var selectedItem: Item?
@@ -35,6 +36,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
 
 
+
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -43,11 +45,11 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
     }()
 
-//    private lazy var showAnimalHospitalButton: UIButton = {
-//        let button = createStyledButton(title: "동물병원")
-//        button.addTarget(self, action: #selector(showAnimalHospital), for: .touchUpInside)
-//        return button
-//    }()
+    //    private lazy var showAnimalHospitalButton: UIButton = {
+    //        let button = createStyledButton(title: "동물병원")
+    //        button.addTarget(self, action: #selector(showAnimalHospital), for: .touchUpInside)
+    //        return button
+    //    }()
 
 
     private lazy var modalView: UIView = {
@@ -98,8 +100,8 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         if heartButton.tintColor == .red {
             heartButton.tintColor = .gray
         } else {
-            
             heartButton.tintColor = .red
+
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -119,6 +121,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         naverMapView?.mapView.isScrollGestureEnabled = true
         naverMapView?.mapView.delegate = self
         searchController.searchBar.delegate = self
+        naverMapView?.mapView.addCameraDelegate(delegate: self)
 
 
         addTableView()
@@ -127,14 +130,14 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         if let naverMapView = naverMapView {
             self.view.addSubview(naverMapView)
         }
-                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-                   self.view.addGestureRecognizer(tapGesture)
-               }
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+    }
 
-               @objc func dismissKeyboard() {
-                   self.view.endEditing(true)
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
 
-//        setupButtonLayout()
+        //        setupButtonLayout()
         setupLocationManager()
         if let currentLocation = locationManager.location {
             addMarker(at: currentLocation.coordinate, title: "현재 위치입니다.")
@@ -151,19 +154,34 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         return button
     }
+    func mapView(_ mapView: NMFMapView, cameraIsIdle isIdle: Bool) {
+        if isIdle {
+            loadMarkersInVisibleArea()
+        }
 
-//    private func setupButtonLayout() {
-//        view.addSubview(showAnimalHospitalButton)
-//
-//        showAnimalHospitalButton.snp.makeConstraints {
-//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12)
-//            $0.leading.equalToSuperview().offset(12)
-//            $0.width.equalTo(100)
-//            $0.height.equalTo(40)
-//        }
-//
-//        showAnimalHospitalButton.layer.cornerRadius = 10
-//    }
+        func loadMarkersInVisibleArea() {
+            guard let mapView = naverMapView?.mapView else {
+                return
+            }
+
+            let cameraPosition = mapView.cameraPosition
+            let center = CLLocationCoordinate2D(latitude: cameraPosition.target.lat, longitude: cameraPosition.target.lng)
+            let zoomLevel = cameraPosition.zoom
+
+            FirestoreManager.shared.fetchDataInVisibleArea(center: center, zoomLevel: zoomLevel) { [weak self] documents in
+                for document in documents {
+                    let data = document.data()
+                    if let latitude = data["latitude"] as? Double,
+                       let longitude = data["longitude"] as? Double,
+                       let title = data["title"] as? String,
+                       let roadAddress = data["roadAddress"] as? String {
+                        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                        self?.addMarker(at: coordinate, title: title)
+                    }
+                }
+            }
+        }
+    }
 
     func setupLocationManager() {
         self.locationManager.delegate = self
@@ -182,6 +200,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             print("위치 서비스가 활성화되어 있지 않습니다.")
         }
     }
+
 
     func setupSearchController() {
         searchResultsTableViewController = UITableViewController(style: .plain)
@@ -226,31 +245,53 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
-        
+
         let db = Firestore.firestore()
-        let markersCollection = db.collection("24시간동물병원")
-        
+        let markersCollection = db.collection("24시간동물병원2")
+
         for (index, marker) in (self.markers ?? []).enumerated() {
-            let roadAddress = searchResults.first(where: { $0.title == marker.captionText })?.roadAddress
-            
             if marker.captionText != "현재 위치입니다." {
+                let modalData = searchResults.first(where: { $0.title == marker.captionText })
+                let modalTitle = modalData?.title ?? ""
+                let modalRoadAddress = modalData?.roadAddress
+
                 let markerData: [String: Any] = [
                     "userID": uid,
                     "latitude": marker.position.lat,
                     "longitude": marker.position.lng,
                     "title": marker.captionText ?? "",
-                    "roadAddress": roadAddress ?? ""
+                    "roadAddress": modalRoadAddress,
+                    "modalData": [
+                        "title": modalTitle,
+                        "roadAddress": modalRoadAddress
+                    ]
                 ]
-                markersCollection.document(marker.captionText ?? "").setData(markerData)
-                print("마커 데이터 저장: \(markerData)")
-                
+
+                let docRef = markersCollection.document(marker.captionText ?? "")
+
+                docRef.getDocument { (documentSnapshot, error) in
+                    if let document = documentSnapshot, document.exists {
+                        docRef.updateData(["modalData": markerData]) { error in
+                            if let error = error {
+                                print("마커 데이터 업데이트 오류: \(error.localizedDescription)")
+                            }
+                        }
+                    } else {
+                        docRef.setData(markerData) { error in
+                            if let error = error {
+                                print("마커 데이터 저장 오류: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                }
             }
-            
         }
     }
+
+
     func loadMarkersFromFirestore() {
         let db = Firestore.firestore()
-        let markersCollection = db.collection("24시간동물병원")
+        let markersCollection = db.collection("24시간동물병원2")
 
         markersCollection.getDocuments { [weak self] snapshot, error in
             guard let documents = snapshot?.documents else {
@@ -263,30 +304,62 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                 if let latitude = data["latitude"] as? Double,
                    let longitude = data["longitude"] as? Double,
                    let title = data["title"] as? String,
-                   let roadAddress = data["roadAddress"] as? String {
+                   let roadAddress = data["roadAddress"] as? String,
+                   let modalDataDict = data["modalData"] as? [String: Any] {
+
+                    let modalTitle = modalDataDict["title"] as? String
+                    let modalRoadAddress = modalDataDict["roadAddress"] as? String
+                    // let modalImageView = modalDataDict["imageView"] // imageView를 적절한 타입으로 변환해야 합니다.
+
                     let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
 
                     // 중복 체크 및 현재 사용자의 마커인지 확인
-//                    if let uid = Auth.auth().currentUser?.uid,
-//                       let markerUserID = data["userID"] as? String,
-//                       markerUserID == uid {
-                        self?.addMarker(at: coordinate, title: title)
-                    }
+                    // if let uid = Auth.auth().currentUser?.uid,
+                    //    let markerUserID = data["userID"] as? String,
+                    //    markerUserID == uid {
+                    self?.addMarker(at: coordinate, title: title, roadAddress: roadAddress, modalTitle: modalTitle ?? "", modalRoadAddress: modalRoadAddress ?? "")
+
                 }
             }
+            self?.setTouchHandlersForMarkers()
+
         }
-
-
-    @objc func showAnimalHospital() {
-        if isLoadingResults {
-            return
-        }
-        //        loadAnimalHospitalCoordinatesFromFirebase()
-
-        searchResults.removeAll()
-        searchStart = 1 // 다시 첫 번째 페이지부터 시작
-
     }
+    func setTouchHandlersForMarkers() {
+        for marker in markers {
+            marker.touchHandler = { [weak self] overlay in
+                if let marker = overlay as? NMFMarker {
+
+
+
+                    let db = Firestore.firestore()
+                    let markersCollection = db.collection("24시간동물병원2")
+                    markersCollection.document(marker.captionText).getDocument { documentSnapshot, error in
+                        if let document = documentSnapshot, document.exists {
+                            let data = document.data()
+                            let title = data?["title"] as? String ?? ""
+                            let roadAddress = data?["roadAddress"] as? String ?? ""
+                            self?.modalData = (title: title, roadAddress: roadAddress)
+                            print("모달 데이터: \(self?.modalData)")
+
+                            self?.showHalfModal()
+                        }
+                    }
+                }
+                return true
+            }
+        }
+    }
+//    @objc func showAnimalHospital() {
+//        if isLoadingResults {
+//            return
+//        }
+//        //        loadAnimalHospitalCoordinatesFromFirebase()
+//
+//        searchResults.removeAll()
+//        searchStart = 1 // 다시 첫 번째 페이지부터 시작
+//
+//    }
 
     @objc func closeModal() {
         modalView.removeFromSuperview()
@@ -306,14 +379,16 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                         let image = UIImage(data: data)
                         DispatchQueue.main.async {
                             self.imageView.image = image
+                            // 이미지 로드 후 모달 표시
+                            self.modalView.addSubview(self.imageView)
+
                         }
                     } else {
-                        print("이미지 로드 실")
+                        print("이미지 로드 실패")
                     }
                 }
             }
         }
-
         modalView.backgroundColor = .white
         modalView.layer.cornerRadius = 10
         self.view.addSubview(modalView)
@@ -329,7 +404,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
         locationNameLabel.text = data.title
         roadAddressLabel.text = data.roadAddress
-        //        phoneNumberLabel.text = data.telephone
 
         modalView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
@@ -364,7 +438,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             $0.width.height.equalTo(30)
         }
     }
-    func addMarker(at coordinate: CLLocationCoordinate2D, title: String) {
+    func addMarker(at coordinate: CLLocationCoordinate2D, title: String, roadAddress: String? = nil, modalTitle: String? = nil, modalRoadAddress: String? = nil) {
         let isDuplicate = markers.contains { existingMarker in
             existingMarker.position.lat == coordinate.latitude &&
             existingMarker.position.lng == coordinate.longitude
@@ -398,14 +472,16 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                 if let marker = overlay as? NMFMarker {
                     let selectedItem = self?.searchResults.first(where: { $0.title == marker.captionText })
                     self?.modalData = selectedItem
+                    print("모달 데이터: \(self?.modalData)")
+
                     self?.showHalfModal()
+
                 }
                 return true
             }
         }
     }
 }
-
 
 // MARK: - CLLocationManagerDelegate Extension
 extension MapViewController: CLLocationManagerDelegate {
@@ -512,48 +588,38 @@ extension MapViewController: UISearchResultsUpdating {
 
 extension MapViewController {
     func searchLocalPlaces(_ query: String) {
-           if isLoadingResults {
-               return
-           }
+        if isLoadingResults {
+            return
+        }
 
-           isLoadingResults = true
+        isLoadingResults = true
 
-           naverSearch.request(.search(query: query)) { [weak self] result in
-               switch result {
-               case .success(let response):
-                   do {
-                       let decoder = JSONDecoder()
-                       let results = try decoder.decode(Welcome.self, from: response.data)
+        naverSearch.request(.search(query: query)) { [weak self] result in
+            switch result {
+            case .success(let response):
+                do {
+                    let decoder = JSONDecoder()
+                    let results = try decoder.decode(Welcome.self, from: response.data)
+                    self?.searchResults = results.items.map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
+                    print("검색된 위치정보:\(self?.searchResults)")
 
-                       let filteredResults = results.items
-                           .filter { item in
-                               self?.markers.contains { $0.captionText == item.cleanTitle() } ?? false
-                           }
-                           .map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
+                    for result in self?.searchResults ?? [] {
+                        self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
+                    }
 
-                       if filteredResults.isEmpty {
-                           self?.showNoSearchResultsToast()
-                       } else {
-                           self?.searchResults = filteredResults
+                    DispatchQueue.main.async {
+                        self?.searchResultsTableView.reloadData()
+                    }
+                } catch {
+                    print("JSON decoding error: \(error)")
+                }
+            case .failure(let error):
+                print("Network request error: \(error)")
+            }
 
-                           for result in filteredResults {
-                               self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
-                           }
-
-                           DispatchQueue.main.async {
-                               self?.searchResultsTableView.reloadData()
-                           }
-                       }
-                   } catch {
-                       print("JSON decoding error: \(error)")
-                   }
-               case .failure(let error):
-                   print("Network request error: \(error)")
-               }
-
-               self?.isLoadingResults = false
-           }
-       }
+            self?.isLoadingResults = false
+        }
+    }
     func showNoSearchResultsToast() {
           view.makeToast("해당지역은 아직 추가되지않은 지역입니다 ㅜㅜ")
       }
