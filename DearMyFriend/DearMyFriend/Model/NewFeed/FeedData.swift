@@ -445,7 +445,7 @@ class FeedService {
     // MARK: - Post Like Filter Method
     
     // FeedDB Control Method
-    public func likedFeed(_ index: Int, _ documentID: String, completion:@escaping dbCompletion) {
+    private func likedFeed(_ index: Int, _ documentID: String, completion:@escaping dbCompletion) {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
@@ -478,7 +478,7 @@ class FeedService {
     }
     
     // UserDB Control Method
-    public func cancelLike(_ documentID: String, completion:@escaping dbCompletion) {
+    private func cancelLike(_ documentID: String, completion:@escaping dbCompletion) {
         self.fetchLikeList(documentID) { result in
             switch result {
             case .success(let likePostList):
