@@ -1,8 +1,6 @@
 import UIKit
 import Firebase
-import FirebaseDatabase
 import FirebaseStorage
-import FirebaseAuth
 
 class AuthService {
     
@@ -105,6 +103,8 @@ class AuthService {
             let db = Firestore.firestore()
             db.collection("UsersId").document("이메일 중복검사").updateData([
                 "email": FieldValue.arrayUnion([email])
+                // 배열 필드를 업데이트 할 때 사용
+                // arrayUnion : 중복된 요소 허용하지 않음
             ]) { error in
                 if let error = error {
                     completion(false, error)
@@ -219,6 +219,7 @@ class AuthService {
         user.delete { error in
             if error != nil {
                 completion(error)
+                print(error?.localizedDescription)
                 return
             }
             completion(nil)
@@ -253,7 +254,6 @@ class AuthService {
             }
         }
     }
-    
     
     public func deleteStore(completion: @escaping (Error?) -> Void) {
         guard let user = Auth.auth().currentUser else { return }

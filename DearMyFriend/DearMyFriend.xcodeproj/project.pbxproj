@@ -96,7 +96,14 @@
 		528DDAA52AF88A7300E08DEC /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528DDAA42AF88A7300E08DEC /* Login.swift */; };
 		528DDAA72AF88A8C00E08DEC /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528DDAA62AF88A8C00E08DEC /* Register.swift */; };
 		528DDAAA2AF88B2500E08DEC /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528DDAA92AF88B2500E08DEC /* AuthService.swift */; };
+		529CAC122B034ACD002F471F /* NewFeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529CAC112B034ACD002F471F /* NewFeedModel.swift */; };
 		529D7E1D2AFE60E7003A9648 /* PetInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529D7E1C2AFE60E7003A9648 /* PetInfo.swift */; };
+		52AD22F32B03684C0053F49E /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AD22F22B03684C0053F49E /* FeedController.swift */; };
+		52AD22F52B0368BE0053F49E /* NewFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AD22F42B0368BE0053F49E /* NewFeedView.swift */; };
+		52AD22F72B0374D30053F49E /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AD22F62B0374D30053F49E /* FeedImageCell.swift */; };
+		52AD22F92B0455CE0053F49E /* load.json in Resources */ = {isa = PBXBuildFile; fileRef = 52AD22F82B0455CE0053F49E /* load.json */; };
+		52AD22FB2B0469DD0053F49E /* bring.json in Resources */ = {isa = PBXBuildFile; fileRef = 52AD22FA2B0469DD0053F49E /* bring.json */; };
+		52BB422B2B0333890033707D /* FeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BB422A2B0333890033707D /* FeedData.swift */; };
 		52BDFA4E2AF7C17400DFE970 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BDFA4D2AF7C17400DFE970 /* LoginController.swift */; };
 		52BDFA512AF7C19F00DFE970 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BDFA502AF7C19F00DFE970 /* LoginView.swift */; };
 		52BDFA542AF7C2F400DFE970 /* SignTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BDFA532AF7C2F400DFE970 /* SignTextField.swift */; };
@@ -209,7 +216,14 @@
 		528DDAA42AF88A7300E08DEC /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		528DDAA62AF88A8C00E08DEC /* Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		528DDAA92AF88B2500E08DEC /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		529CAC112B034ACD002F471F /* NewFeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedModel.swift; sourceTree = "<group>"; };
 		529D7E1C2AFE60E7003A9648 /* PetInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetInfo.swift; sourceTree = "<group>"; };
+		52AD22F22B03684C0053F49E /* FeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedController.swift; sourceTree = "<group>"; };
+		52AD22F42B0368BE0053F49E /* NewFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedView.swift; sourceTree = "<group>"; };
+		52AD22F62B0374D30053F49E /* FeedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCell.swift; sourceTree = "<group>"; };
+		52AD22F82B0455CE0053F49E /* load.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = load.json; sourceTree = "<group>"; };
+		52AD22FA2B0469DD0053F49E /* bring.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bring.json; sourceTree = "<group>"; };
+		52BB422A2B0333890033707D /* FeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedData.swift; sourceTree = "<group>"; };
 		52BDFA4D2AF7C17400DFE970 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		52BDFA502AF7C19F00DFE970 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		52BDFA532AF7C2F400DFE970 /* SignTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignTextField.swift; sourceTree = "<group>"; };
@@ -435,6 +449,18 @@
 			path = AddPet;
 			sourceTree = "<group>";
 		};
+		52BB42292B0333540033707D /* NewFeed */ = {
+			isa = PBXGroup;
+			children = (
+				52BB422A2B0333890033707D /* FeedData.swift */,
+				529CAC112B034ACD002F471F /* NewFeedModel.swift */,
+				52AD22F22B03684C0053F49E /* FeedController.swift */,
+				52AD22F42B0368BE0053F49E /* NewFeedView.swift */,
+				52AD22F62B0374D30053F49E /* FeedImageCell.swift */,
+			);
+			path = NewFeed;
+			sourceTree = "<group>";
+		};
 		52BDFA4B2AF7C08200DFE970 /* LoginController */ = {
 			isa = PBXGroup;
 			children = (
@@ -494,6 +520,8 @@
 			children = (
 				52BDFA5C2AF7CF3500DFE970 /* loginAnimation.json */,
 				5225A1412AFC8643005CE724 /* loading.json */,
+				52AD22F82B0455CE0053F49E /* load.json */,
+				52AD22FA2B0469DD0053F49E /* bring.json */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -691,6 +719,7 @@
 				EB5EDEE02AEA4013002075F9 /* User */,
 				5258C26F2AE65BDF00E9FC2B /* MainPage */,
 				EBD2B7392AE21C56007FD1DA /* Feed */,
+				52BB42292B0333540033707D /* NewFeed */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -880,9 +909,11 @@
 				5258C26D2AE648AF00E9FC2B /* SpoqaHanSansNeo-Regular.ttf in Resources */,
 				52D998232AD6A89700679B15 /* LaunchScreen.storyboard in Resources */,
 				EBD2B7542AE23FC3007FD1DA /* GoogleService-Info.plist in Resources */,
+				52AD22F92B0455CE0053F49E /* load.json in Resources */,
 				5225A1422AFC8643005CE724 /* loading.json in Resources */,
 				5258C26B2AE648AF00E9FC2B /* SpoqaHanSansNeo-Medium.ttf in Resources */,
 				5258C26C2AE648AF00E9FC2B /* SpoqaHanSansNeo-Light.ttf in Resources */,
+				52AD22FB2B0469DD0053F49E /* bring.json in Resources */,
 				52BDFA5D2AF7CF3500DFE970 /* loginAnimation.json in Resources */,
 				5258C26E2AE648AF00E9FC2B /* SpoqaHanSansNeo-Thin.ttf in Resources */,
 				52D998202AD6A89700679B15 /* Assets.xcassets in Resources */,
@@ -975,12 +1006,15 @@
 				52C18DC72AFCB45E0087BA37 /* RecommendationPlaceService.swift in Sources */,
 				7DFCD0162AFAB809000644DC /* PetInfoViewController.swift in Sources */,
 				7DFCD0162AFAB809000644DC /* PetInfoViewController.swift in Sources */,
+				52AD22F72B0374D30053F49E /* FeedImageCell.swift in Sources */,
+				529CAC122B034ACD002F471F /* NewFeedModel.swift in Sources */,
 				52C18DC72AFCB45E0087BA37 /* RecommendationPlaceService.swift in Sources */,
 				EB5EDEEA2AEF4FBF002075F9 /* CommentTitleView.swift in Sources */,
 				528DDAA52AF88A7300E08DEC /* Login.swift in Sources */,
 				52D9982B2AD6AADC00679B15 /* FeedViewController.swift in Sources */,
 				529D7E1D2AFE60E7003A9648 /* PetInfo.swift in Sources */,
 				528DDAAA2AF88B2500E08DEC /* AuthService.swift in Sources */,
+				52BB422B2B0333890033707D /* FeedData.swift in Sources */,
 				52BDFA632AF7FA8800DFE970 /* ResetPasswordController.swift in Sources */,
 				528DDA912AF8264800E08DEC /* CheckPasswordView.swift in Sources */,
 				EBD2B75A2AE2402F007FD1DA /* ImageCollectionViewCell.swift in Sources */,
@@ -1024,11 +1058,13 @@
 				52BDFA652AF7FB6000DFE970 /* RegisterPasswordView.swift in Sources */,
 				EBD2B75E2AE240D1007FD1DA /* FeedTitleView.swift in Sources */,
 				52BDFA5F2AF7F9EC00DFE970 /* RegisterEmailController.swift in Sources */,
+				52AD22F52B0368BE0053F49E /* NewFeedView.swift in Sources */,
 				52D9983D2AD6ABA700679B15 /* WishViewController.swift in Sources */,
 				4E44779F2AFF915000A7A458 /* ImageResiger.swift in Sources */,
 				528DDA992AF8307600E08DEC /* RegisterEmailView.swift in Sources */,
 				52D998372AD6AB2900679B15 /* MainViewController.swift in Sources */,
 				5258C2732AE6651000E9FC2B /* AppStoreNetworking.swift in Sources */,
+				52AD22F32B03684C0053F49E /* FeedController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
