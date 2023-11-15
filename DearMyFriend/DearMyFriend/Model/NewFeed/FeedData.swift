@@ -224,7 +224,7 @@ class FeedService {
                 completion(error)
                 return
             }
-
+            
             guard let qs = qs, qs.exists else {
                 completion(error)
                 return
@@ -607,7 +607,7 @@ class FeedService {
                 completion(error)
                 return
             }
-
+            
             guard let qs = qs, qs.exists else {
                 completion(error)
                 return
@@ -621,6 +621,21 @@ class FeedService {
                 }
             }
             completion(nil)
+        }
+    }
+    
+    public func currentFeed(with feed: FeedModel, completion: @escaping dbCompletion) {
+        
+        let db = Firestore.firestore().collection("Feeds").document()
+        let feedData = feed.toFirestoreData()
+        
+        db.setData(feedData) { error in
+            if error != nil {
+                completion(.failure(.networkError))
+                return
+            }
+            
+            completion(.success(()))
         }
     }
 }

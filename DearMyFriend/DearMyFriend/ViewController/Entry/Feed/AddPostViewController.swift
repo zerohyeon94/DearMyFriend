@@ -13,6 +13,8 @@ class AddPostViewController: UIViewController {
     
     let db = Firestore.firestore()
     
+    weak var delegate: FeedDelegate?
+    
     // 선택된 이미지 CollectionView
     var selectedImages: [UIImage] = []
     
@@ -145,6 +147,7 @@ extension AddPostViewController: AddPostViewDelegate {
                             print("이미지 업로드 성공")
                             // 이미지 다운로드 URL 가져오기
                             imageRef.downloadURL { (url, error) in
+                                defer { group.leave() }
                                 if let error = error {
                                     print("URL 가져오기 실패: \(error.localizedDescription)")
                                 } else {
@@ -154,24 +157,26 @@ extension AddPostViewController: AddPostViewDelegate {
                                         print("feedImage: \(feedImage)")
                                     }
                                 }
-                                group.leave()
                             }
                         }
                     }
                 }
             }
             
-            // 모든 이미지 업로드 및 URL 저장 작업 완료시까지 대기
             group.notify(queue: .main) {
                 let feedData = FeedModel(uid: feedUid, date: currentDate, imageUrl: feedImage, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
                 
-                self.myFirestore.saveFeed(feedData: feedData) { error in
-                    print("error: \(error)")
+                FeedService.shared.currentFeed(with: feedData) { [weak self] result in
+                    guard let self = self else { return }
+                    
+                    switch result {
+                    case .success():
+                        delegate?.updateFeed()
+                        self.dismiss(animated: true)
+                    case .failure(let error):
+                        AlertManager.failureFeed(on: self, with: error)
+                    }
                 }
-                
-                // 업로드 후 게시물 초기화
-                
-                self.dismiss(animated: true)
             }
         }
     }

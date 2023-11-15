@@ -1,5 +1,9 @@
 import UIKit
 
+protocol FeedDelegate: AnyObject {
+    func updateFeed()
+}
+
 struct Collection {
     // MARK: - MainWidthOfPadding
     static let mainWidthOfPadding = UIScreen.main.bounds.width-20

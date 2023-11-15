@@ -265,9 +265,9 @@ extension MyViewController: MyProfileTitleViewDelegate {
 
 extension MyViewController: MyPostViewDelegate {
     func displayFeedView(index: Int) {
-        print("displayFeedView")
-        let myFeedViewController = MyFeedViewController(index: index)
-        navigationController?.isNavigationBarHidden = false
-        navigationController?.pushViewController(myFeedViewController, animated: true)
+//        print("displayFeedView")
+//        let myFeedViewController = MyFeedViewController(index: index)
+//        navigationController?.isNavigationBarHidden = false
+//        navigationController?.pushViewController(myFeedViewController, animated: true)
     }
 }

@@ -82,6 +82,7 @@
 		525C36C52AF8C072001F76AB /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 525C36C42AF8C072001F76AB /* FirebaseRemoteConfigSwift */; };
 		525C36C72AF8C072001F76AB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 525C36C62AF8C072001F76AB /* FirebaseStorage */; };
 		525C36C92AF8C072001F76AB /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 525C36C82AF8C072001F76AB /* FirebaseStorageCombine-Community */; };
+		52615BC32B04F94800FE5DF3 /* FloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52615BC22B04F94800FE5DF3 /* FloatingButton.swift */; };
 		526EB6722AE263200073C77D /* RankeImageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526EB6712AE263200073C77D /* RankeImageCellView.swift */; };
 		52713E802AFD1E3000D2F377 /* ImageAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52713E7F2AFD1E3000D2F377 /* ImageAPIService.swift */; };
 		528DDA912AF8264800E08DEC /* CheckPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528DDA902AF8264800E08DEC /* CheckPasswordView.swift */; };
@@ -202,6 +203,7 @@
 		5258C2692AE648AF00E9FC2B /* SpoqaHanSansNeo-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpoqaHanSansNeo-Thin.ttf"; sourceTree = "<group>"; };
 		5258C2702AE65C0F00E9FC2B /* RecommendationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationStore.swift; sourceTree = "<group>"; };
 		5258C2722AE6651000E9FC2B /* AppStoreNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreNetworking.swift; sourceTree = "<group>"; };
+		52615BC22B04F94800FE5DF3 /* FloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButton.swift; sourceTree = "<group>"; };
 		526EB6712AE263200073C77D /* RankeImageCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankeImageCellView.swift; sourceTree = "<group>"; };
 		52713E7F2AFD1E3000D2F377 /* ImageAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAPIService.swift; sourceTree = "<group>"; };
 		528DDA902AF8264800E08DEC /* CheckPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPasswordView.swift; sourceTree = "<group>"; };
@@ -457,6 +459,7 @@
 				52AD22F22B03684C0053F49E /* FeedController.swift */,
 				52AD22F42B0368BE0053F49E /* NewFeedView.swift */,
 				52AD22F62B0374D30053F49E /* FeedImageCell.swift */,
+				52615BC22B04F94800FE5DF3 /* FloatingButton.swift */,
 			);
 			path = NewFeed;
 			sourceTree = "<group>";
@@ -1041,6 +1044,7 @@
 				EB17F3E42AF492BF00971859 /* MyProfileInfoView.swift in Sources */,
 				528DDAA32AF88A5E00E08DEC /* User.swift in Sources */,
 				EB17F3E82AF4D3A700971859 /* MyPostView.swift in Sources */,
+				52615BC32B04F94800FE5DF3 /* FloatingButton.swift in Sources */,
 				528DDA932AF8301E00E08DEC /* RegisterPasswordController.swift in Sources */,
 				4E275AB22AE27D3A005146AA /* NaverSearchService.swift in Sources */,
 				52BDFA4E2AF7C17400DFE970 /* LoginController.swift in Sources */,
