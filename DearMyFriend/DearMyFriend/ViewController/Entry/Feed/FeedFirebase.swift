@@ -317,6 +317,8 @@ final class MyFirestore {
                     resultFeedData.remove(at: 0)
                 } else if displayIndex == 2 {
                     resultFeedData.removeSubrange(0...1)
+                } else if displayIndex == -1 {
+                    resultFeedData.remove(at: 0) // refresh할 때 displayIndex값이 -1이 되는 경우를 방지
                 } else {
                     resultFeedData.removeSubrange(0...(displayIndex-2))
                 }
