@@ -6,7 +6,6 @@ import SnapKit
 import Kingfisher
 import Firebase
 import Toast
-import FirebaseAuth
 
 
 class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewDelegate {
@@ -101,7 +100,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             heartButton.tintColor = .gray
         } else {
             heartButton.tintColor = .red
-            
+
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -200,7 +199,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             print("위치 서비스가 활성화되어 있지 않습니다.")
         }
     }
-    
+
 
     func setupSearchController() {
         searchResultsTableViewController = UITableViewController(style: .plain)
@@ -254,7 +253,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                 let modalData = searchResults.first(where: { $0.title == marker.captionText })
                 let modalTitle = modalData?.title ?? ""
                 let modalRoadAddress = modalData?.roadAddress
-                // let modalImageView = modalData?.imageView // imageView를 문자열 또는 다른 Firestore 지원 타입으로 변환해야 합니다.
 
                 let markerData: [String: Any] = [
                     "userID": uid,
@@ -264,16 +262,31 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                     "roadAddress": modalRoadAddress,
                     "modalData": [
                         "title": modalTitle,
-                        "roadAddress": modalRoadAddress,
-                        // "imageView": modalImageView
+                        "roadAddress": modalRoadAddress
                     ]
                 ]
 
-                markersCollection.document(marker.captionText ?? "").setData(markerData)
-                print("마커 데이터 저장: \(markerData)")
+                let docRef = markersCollection.document(marker.captionText ?? "")
+
+                docRef.getDocument { (documentSnapshot, error) in
+                    if let document = documentSnapshot, document.exists {
+                        docRef.updateData(["modalData": markerData]) { error in
+                            if let error = error {
+                                print("마커 데이터 업데이트 오류: \(error.localizedDescription)")
+                            }
+                        }
+                    } else {
+                        docRef.setData(markerData) { error in
+                            if let error = error {
+                                print("마커 데이터 저장 오류: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+
 
     func loadMarkersFromFirestore() {
         let db = Firestore.firestore()
@@ -315,9 +328,9 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         for marker in markers {
             marker.touchHandler = { [weak self] overlay in
                 if let marker = overlay as? NMFMarker {
-                    
-                    
-                    
+
+
+
                     let db = Firestore.firestore()
                     let markersCollection = db.collection("24시간동물병원2")
                     markersCollection.document(marker.captionText).getDocument { documentSnapshot, error in
