@@ -314,24 +314,29 @@ final class MyFirestore {
                     print("처음 실행이라 상관 없음.")
                 }
                 else if displayIndex == 1 {
+                    print("displayIndex == 1")
                     resultFeedData.remove(at: 0)
                 } else if displayIndex == 2 {
+                    print("displayIndex == 2")
                     resultFeedData.removeSubrange(0...1)
                 } else if displayIndex == -1 {
+                    print("displayIndex == -1")
                     resultFeedData.remove(at: 0) // refresh할 때 displayIndex값이 -1이 되는 경우를 방지
                 } else {
+                    print("displayIndex == else")
                     resultFeedData.removeSubrange(0...(displayIndex-2))
                 }
                 
                 print("지우기 후 resultFeedData: \(resultFeedData.count)")
                 
                 // Users에 있는 사용자들의 ID 정보 획득
-                for document in querySnapshot!.documents {
+                for (index, document) in querySnapshot!.documents.enumerated() {
                     print("등록된 documentID : \(document.documentID)")
                     dispatchGroup.enter() // 디스패치 그룹 진입 - 작업이 시작될 때마다 내부 카운터가 증가
                     defer { // defer 내에 코드를 작성하면 해당 블록을 빠져나갈 때 실행됨. - 조건문에서 return이 실행되면 실행됨. 작업이 어떤 이유로 종료되어도 'dispatchGroup.leave()'를 실행 시키기 위해 사용.
                         dispatchGroup.leave() // 디스패치 그룹 이탈
                     }
+                    // 기존에 있는 데이터에서
                     if allKeys.contains(document.documentID) {
                         print("응~ 이미 있음!")
                         continue
@@ -386,7 +391,12 @@ final class MyFirestore {
                     let feedData = FeedModel(uid: feedUid, date: feedDate, imageUrl: feedImageUrl, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
                     
                     // document ID를 key값으로 저장.
-                    resultFeedData.append([document.documentID : feedData])
+                    if index == 0 {
+                        resultFeedData.insert([document.documentID : feedData], at: 0) // 제일 첫번째 데이터 추가.
+                        resultFeedData.removeLast() // 맨 뒤 데이터는 제거.
+                    } else {
+                        resultFeedData.append([document.documentID : feedData])
+                    }
                     print("for문 안 resultFeedData: \(resultFeedData.count)")
                 }
                 dispatchGroup.notify(queue: .main) {

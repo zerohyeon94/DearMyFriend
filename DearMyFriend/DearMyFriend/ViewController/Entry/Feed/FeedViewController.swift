@@ -254,7 +254,9 @@ extension FeedViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.identifier, for: indexPath) as! FeedTableViewCell
         cell.selectionStyle = .none // cell 선택 효과 없애기
         
-        displayFeedData = indexPath.row
+        if displayFeedData < indexPath.row {
+            displayFeedData = indexPath.row
+        }
         
         cell.feedView.delegate = self
         
