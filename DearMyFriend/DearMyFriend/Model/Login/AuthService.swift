@@ -20,7 +20,6 @@ class AuthService {
         let storageRef = Storage.storage().reference().child("UserProfile/\(email)/\(photoName).jpg")
         
         guard let uploadImage = photo.jpegData(compressionQuality: 0.5) else {
-            print("업로드 에러")
             return
         }
         
@@ -219,7 +218,6 @@ class AuthService {
         user.delete { error in
             if error != nil {
                 completion(error)
-                print(error?.localizedDescription)
                 return
             }
             completion(nil)

@@ -30,13 +30,33 @@ class AlertManager {
                 FeedService.shared.reportFeed(documentID) { result in
                     switch result {
                     case .success():
-                        self.reportCompleteAlert(on: vc)
+                        self.reportCommentCompleteAlert(on: vc)
                         completion()
                     case .failure(let error):
                         self.failureFeed(on: vc, with: error)
                     }
                 }
                 
+            }))
+                            
+            alert.addAction(UIAlertAction(title: "아니오", style: .default))
+            vc.present(alert, animated: true)
+        }
+    }
+    
+    private static func showReportCommentAlert(_ comment: String,_ documentID: String ,on vc: UIViewController, title: String, message: String?) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "네", style: .default, handler: { _ in
+                
+                CommentService.shared.reportComment(comment, documentID) { result in
+                    switch result {
+                    case .success():
+                        self.reportCommentCompleteAlert(on: vc)
+                    case .failure(let error):
+                        self.failureFeed(on: vc, with: error)
+                    }
+                }
             }))
                             
             alert.addAction(UIAlertAction(title: "아니오", style: .default))
@@ -119,17 +139,30 @@ extension AlertManager {
     
     public static func failureFeed(on vc: UIViewController, with error: Error) {
         self.showBasicAlert(on: vc, title: "네트워크 실패", message: "서버와 통신이 불안정합니다.\n잠시 후 다시 시도해주세요.")
-        print("-----Feed ERROR \(error.localizedDescription)-----")    }
+        print("-----Feed ERROR \(error.localizedDescription)-----")
+    }
     
-    // MARK: - 신고하기
+    public static func errorAlert(on vc: UIViewController) {
+        self.showBasicAlert(on: vc, title: "지연오류", message: "정보를 읽어오지 못했습니다.")
+    }
+    
+    // MARK: - 신고하기(게시글)
     public static func reportAlert(on vc: UIViewController, documentID: String, completion: @escaping () -> Void) {
         self.reportAlert(documentID: documentID, on: vc, title: "신고하기", message: "게시글을 신고하시겠습니까?") {
             completion()
         }
     }
     
-    
     public static func reportCompleteAlert(on vc: UIViewController) {
         self.showBasicAlert(on: vc, title: "신고완료", message: "감사합니다.")
+    }
+    
+    // MARK: - 신고하기(댓글)
+    public static func reportCommentAlert(on vc: UIViewController,_ comment: String,_ documentID: String) {
+        self.showReportCommentAlert(comment, documentID, on: vc, title: "신고하기", message: "댓글을 신고하시겠습니까?")
+    }
+    
+    public static func reportCommentCompleteAlert(on vc: UIViewController) {
+        self.showBasicAlert(on: vc, title: "신고완료", message: "신고 내용은 24시간 이내에\n조치됩니다.")
     }
 }

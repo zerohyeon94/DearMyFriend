@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>이 앱은 현재 위치를 찾기 위해 위치 정보를 사용합니다.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>프로필 사진 및 게시글 작성을 위해서 카메라 접근요청을 드립니다. 자세한 내용은 개인 정보 보호 정책을 참조하세요.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>프로필 사진 및 게시글 작성을 위해서 앨범 접근요청을 드립니다. 자세한 내용은 개인 정보 보호 정책을 참조하세요.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

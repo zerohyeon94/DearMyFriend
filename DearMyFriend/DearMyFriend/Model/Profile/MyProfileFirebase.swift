@@ -17,7 +17,7 @@ final class MyProfileFirestore {
         
         collectionListener.getDocument { (querySnapshot, error) in
             if let error = error {
-                print("Error getting documents: \(error)")
+                return
             } else {
                 
                 var documentData: [String: Any] = [:]
@@ -61,13 +61,7 @@ final class MyProfileFirestore {
                 if let petType = documentData["petType"] as? [String] {
                     userPetType = petType
                 }
-                print("userProfile: \(userProfile)")
-                print("userId: \(userId)")
-                print("userNickname: \(userNickname)")
-                print("userPetProfile: \(userPetProfile)")
-                print("userPetName: \(userPetName)")
-                print("userPetAge: \(userPetAge)")
-                print("userPetType: \(userPetType)")
+     
                 
                 let userMyProfile = UserData(profile: userProfile, id: userId, nickname: userNickname, petProfile: userPetProfile, petName: userPetName, petAge: userPetAge, petType: userPetType)
                 
@@ -84,20 +78,15 @@ final class MyProfileFirestore {
         // 'Users' collection & 해당되는 User ID
         let documentID: String = uid
         let collectionListener = Firestore.firestore().collection(collectionFeeds)
-        print("1111 documentID: \(documentID)")
         collectionListener.whereField("uid", isEqualTo: documentID)
             .order(by: "date", descending: true)
             .getDocuments { (querySnapshot, error) in
 //        collectionListener.whereField("uid", isEqualTo: documentID).getDocuments() { (querySnapshot, error) in
 //        collectionListener.order(by: "date", descending: true).getDocuments() { (querySnapshot, error) in
-            print("1111 querySnapshot: \(querySnapshot)")
             if let error = error {
-                print("뭐지?")
-                print("Error getting documents: \(error)")
+
             } else {
-                print("1111 querySnapshot!.documents: \(querySnapshot!.documents)")
                 for document in querySnapshot!.documents{
-                    print("1111 documentID: \(documentID)")
                     // Firestore 문서의 데이터를 딕셔너리로 가져옴
                     var feedUid: String = ""
                     var feedDate: Date = Date()
@@ -108,7 +97,6 @@ final class MyProfileFirestore {
                     var feedComment: [[String: String]] = []
                     
                     let data = document.data()
-                    print("data: \(data)")
                     if let uid = data["uid"] as? String {
                         feedUid = uid
                     }
@@ -116,7 +104,6 @@ final class MyProfileFirestore {
                     if let date = data["date"] as? Date {
                         feedDate = date
                     }
-                    print("feedDate: \(feedDate)")
                     
                     if let imageUrl = data["imageUrl"] as? [String] {
                         feedImageUrl = imageUrl
@@ -157,7 +144,6 @@ final class MyProfileFirestore {
         // Pet 내에 있는 pet document ID 값 얻기
         collectionListener.getDocuments() { (querySnapshot, error) in
             if let error = error {
-                print("Error getting documents: \(error)")
             } else {
                 
                 for document in querySnapshot!.documents{

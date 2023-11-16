@@ -144,7 +144,6 @@ extension YouTubeViewController {
 
         referencePreCol.addSnapshotListener { snapshot, error in
             if let error = error {
-                print("Error fetching \(nomDePreCol): \(error)")
             } else {
                 let count = snapshot?.documents.count ?? 0
                 self.compterPremierColDocSec = count
@@ -156,7 +155,6 @@ extension YouTubeViewController {
 
         referenceDeuCol.addSnapshotListener { snapshot, error in
             if let error = error {
-                print("Error fetching \(nomDeDeuCol): \(error)")
             } else {
                 let count = snapshot?.documents.count ?? 0
                 self.compterDeuxiemeColDocSec = count
@@ -281,10 +279,8 @@ extension YouTubeViewController: UITableViewDataSource, UITableViewDelegate {
         telechargerDesInfos(collection: collectionName, document: channelDocumentName) { donnes, _ in
             if let selectedChannel = donnes {
                 if let title = selectedChannel["채널제목"] as? String {
-                    print("\(title) 링크로 이동")
                     let selectedLink = selectedChannel["채널링크"] as? String
                     if let url = URL(string: selectedLink ?? "") {
-                        print("성공")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                             self.cellSelectAnime.removeFromSuperview()

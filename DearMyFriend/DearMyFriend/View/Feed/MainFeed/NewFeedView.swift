@@ -13,7 +13,6 @@ class NewFeedView: UITableViewCell {
     public var feed: NewFeedModel? {
         didSet {
             if let feed = feed {
-                print("피드 게시글 이미지 수 : \(feed.feedImages.count)")
                 self.imageList = feed.feedImages
                 self.userName.text = feed.userName
                 self.postLabel.text = feed.post
@@ -29,7 +28,6 @@ class NewFeedView: UITableViewCell {
     public var likePost: Bool? {
         didSet {
             guard let likePost = likePost else { return }
-            print(likePost)
             if likePost {
                 let configuration = UIButton.Configuration.buttonConfigurationWithImage(imageName: "heart.fill")
                 self.likeButton.configuration = configuration
@@ -47,7 +45,7 @@ class NewFeedView: UITableViewCell {
     private var imageList: [Int:UIImage] = [:]
     
     public var likeButtonTapped: ((String, Bool) -> Void) = { documentID, likeBool in }
-    public var commetButtonTapped: (() -> Void) = { }
+    public var commetButtonTapped: ((String) -> Void) = { documentID in }
     public var reportButtonTapped: ((String) -> Void) = { documentID in }
     
     private let profileView: UIImageView = {
@@ -56,8 +54,6 @@ class NewFeedView: UITableViewCell {
         view.backgroundColor = .clear
         view.clipsToBounds = true
         view.layer.cornerRadius = 20
-    
-        //        view.image =   ‼️ 하영이한테 기본 고양이, 강아지 달라고 하기
         return view
     }()
     
@@ -156,7 +152,7 @@ class NewFeedView: UITableViewCell {
     }()
     
     
-    private lazy var bottomStakView: UIStackView = {
+    private lazy var bottomStackView: UIStackView = {
         let sv = UIStackView(arrangedSubviews: [postNameLabel, postLabel])
         sv.spacing = 5
         sv.axis = .horizontal
@@ -220,7 +216,7 @@ class NewFeedView: UITableViewCell {
             topStakView,
             imageCollection,
             middleStakView,
-            bottomStakView,
+            bottomStackView,
             bottomLabel,
             pageControl
         ])
@@ -246,10 +242,10 @@ class NewFeedView: UITableViewCell {
             pageControl.centerYAnchor.constraint(equalTo: self.middleStakView.centerYAnchor),
             pageControl.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
             
-            bottomStakView.topAnchor.constraint(equalTo: self.middleStakView.bottomAnchor),
-            bottomStakView.leadingAnchor.constraint(equalTo: self.middleStakView.leadingAnchor, constant: 5),
-            bottomStakView.heightAnchor.constraint(equalToConstant: 30),
-           
+            bottomStackView.topAnchor.constraint(equalTo: self.middleStakView.bottomAnchor),
+            bottomStackView.leadingAnchor.constraint(equalTo: self.middleStakView.leadingAnchor, constant: 5),
+            bottomStackView.heightAnchor.constraint(equalToConstant: 30),
+            
             bottomLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
             bottomLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
@@ -271,7 +267,8 @@ class NewFeedView: UITableViewCell {
     
     @objc
     private func commentButtonTapped(_ sender: UIButton) {
-        commetButtonTapped()
+        guard let documentID = self.documentID else { return }
+        commetButtonTapped(documentID)
     }
     
     @objc
@@ -279,7 +276,7 @@ class NewFeedView: UITableViewCell {
         guard let documentID = self.documentID else { return }
         reportButtonTapped(documentID)
     }
-
+    
 }
 
 extension NewFeedView: UICollectionViewDataSource {
@@ -300,7 +297,7 @@ extension NewFeedView: UICollectionViewDataSource {
 
 extension NewFeedView: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt                            indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }

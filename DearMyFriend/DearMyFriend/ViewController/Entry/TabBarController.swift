@@ -26,7 +26,7 @@ class TabBarController: UITabBarController {
         
         
         feedViewController.tabBarItem = self.setupTabBarAttributes("피드", "list.bullet")
-
+        
         mainViewController.tabBarItem = self.setupTabBarAttributes("메인", "heart.fill")
         
         profileViewController.tabBarItem = self.setupTabBarAttributes("프로필", "pawprint.fill")
@@ -34,7 +34,7 @@ class TabBarController: UITabBarController {
         UITabBar.clearShadow()
         tabBar.layer.borderWidth = 1
         tabBar.layer.borderColor = ThemeColor.borderLineColor.cgColor
-
+        
         viewControllers = [feedViewController, mainViewController, profileViewController]
         selectedIndex = 1
     }
@@ -47,9 +47,18 @@ class TabBarController: UITabBarController {
         let image = UIImage(systemName: defaultImageName)
         
         let tabBarItem = UITabBarItem(title: title, image: image, selectedImage: image?.withTintColor(tabBarColor, renderingMode: .alwaysOriginal))
-    
+        
         tabBarItem.setTitleTextAttributes(attributes, for: .normal)
         
         return tabBarItem
+    }
+}
+
+extension TabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        // 선택된 탭이 변경될 때 호출되는 메서드
+        if viewController is MyViewController {
+            // ProfileViewController가 선택될 때 수행할 작업
+        }
     }
 }

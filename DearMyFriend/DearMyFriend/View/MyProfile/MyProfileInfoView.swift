@@ -16,8 +16,6 @@ class MyProfileInfoView: UIView {
         imageView.frame = CGRect(x: 0, y: 0, width: profileImageFrame, height: profileImageFrame)
         
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "spider1")
-        
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = profileImageFrame / 2
         imageView.layer.borderColor = UIColor.black.cgColor

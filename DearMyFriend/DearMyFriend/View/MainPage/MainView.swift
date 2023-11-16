@@ -86,7 +86,6 @@ class MainView: UIView {
         backgroundColor = .white
         autoLayout()
         setupContentView()
-        print("메뉴사이즈",Collection.menuSize)
     }
     
     required init?(coder: NSCoder) {
@@ -119,7 +118,6 @@ class MainView: UIView {
         contentView.addSubview(recommendedStore)
         contentView.addSubview(secondBorderView)
         contentView.addSubview(recommendedPlace)
-        print("asdf",UIScreen.main.bounds.width)
         NSLayoutConstraint.activate([
             rankCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
             // rankCollectionView 배너와 같이 뷰의 크기와 셀의 크기를 맞추는 경우

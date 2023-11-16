@@ -93,9 +93,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
             AuthService.shared.signOut { error in
                 if let error = error {
-                    print("로그아웃 실패", error)
+                    return
                 } else {
-                    print("로그아웃 성공")
                     AuthService.shared.changeController(self)
                 }
             }
@@ -117,7 +116,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let alert = UIAlertController(title: "회원탈퇴", message: "정말로 회원탈퇴 하시겠습니까?", preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "확인", style: .destructive) { _ in
             let accountManeger = AuthService.shared
-            print("확인버튼 누름")
             
             accountManeger.deleteAccount { [weak self] error in
                 guard let self = self else { return }
@@ -129,7 +127,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
                 accountManeger.deleteFeedInStorage { [weak self] error in
                     guard let self = self else { return }
-                    print("스토리지 삭제")
                     if error != nil {
                         AlertManager.registerCheckAlert(on: self)
                         return
@@ -140,7 +137,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         
                         if error != nil {
                             AlertManager.registerCheckAlert(on: self)
-                            print("회원탈퇴 : firestore 정보 삭제 실패")
                             return
                         }
                         accountManeger.deleteStore { [weak self] error in
@@ -148,7 +144,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                             
                             if error != nil {
                                 AlertManager.registerCheckAlert(on: self)
-                                print("회원탈퇴 : firestore 정보 삭제 실패")
                                 return
                             }
                             
@@ -157,7 +152,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                                 
                                 if error != nil {
                                     AlertManager.registerCheckAlert(on: self)
-                                    print("회원탈퇴 : Storage 정보 삭제 실패")
                                     return
                                 }
                                 
@@ -166,7 +160,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                                     
                                     if error != nil {
                                         AlertManager.registerCheckAlert(on: self)
-                                        print("회원탈퇴 : 이메일 인덱스추출 실패")
                                         return
                                     }
                                     

@@ -53,7 +53,6 @@ class MyPostView: UIView {
     }
     
     func reloadCollectionView() {
-        print("reloadCollectionView")
         postCollectionView.delegate = self
         postCollectionView.dataSource = self
         
@@ -65,7 +64,6 @@ extension MyPostView: UICollectionViewDataSource {
     // collection view의 item 갯수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let userFeedData = MyViewController.myFeedData
-        print("userFeedData.count: \(userFeedData.count)")
         return userFeedData.count
     }
     
@@ -77,7 +75,6 @@ extension MyPostView: UICollectionViewDataSource {
         
         let userFeedData = MyViewController.myFeedData[indexPath.row]
 
-        print("image: \(userFeedData.values.first?.imageUrl.first)")
         
         cell.setPostImageView(with: userFeedData.values.first?.imageUrl.first ?? "image upload fail")
         return cell
@@ -86,7 +83,6 @@ extension MyPostView: UICollectionViewDataSource {
 
 extension MyPostView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("click index : \(indexPath.row)")
         let selectedCell = collectionView.cellForItem(at: indexPath) as! MyPostCollectionViewCell
         
         delegate?.displayFeedView(index: indexPath.row)

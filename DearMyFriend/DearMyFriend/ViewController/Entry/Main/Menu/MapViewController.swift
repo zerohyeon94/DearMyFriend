@@ -113,7 +113,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         super.viewDidLoad()
         setupSearchController()
         loadMarkersFromFirestore()
-
+        setupLocationManager()
         searchResultsTableView.register(UITableViewCell.self, forCellReuseIdentifier: SearchResultCell)
 
         naverMapView = NMFNaverMapView(frame: self.view.frame)
@@ -138,7 +138,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         self.view.endEditing(true)
 
         //        setupButtonLayout()
-        setupLocationManager()
+        
         if let currentLocation = locationManager.location {
             addMarker(at: currentLocation.coordinate, title: "현재 위치입니다.")
             moveMapToLocation(currentLocation.coordinate)
@@ -186,19 +186,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     func setupLocationManager() {
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-
-        if CLLocationManager.locationServicesEnabled() {
-            let status = self.locationManager.authorizationStatus
-            if status == .notDetermined {
-                self.locationManager.requestWhenInUseAuthorization()
-            } else if status == .authorizedWhenInUse || status == .authorizedAlways {
-                DispatchQueue.main.async {
-                    self.locationManager.startUpdatingLocation()
-                }
-            }
-        } else {
-            print("위치 서비스가 활성화되어 있지 않습니다.")
-        }
+        self.locationManager.requestWhenInUseAuthorization()
     }
 
 
@@ -273,13 +261,11 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                     if let document = documentSnapshot, document.exists {
                         docRef.updateData(["modalData": markerData]) { error in
                             if let error = error {
-                                print("마커 데이터 업데이트 오류: \(error.localizedDescription)")
                             }
                         }
                     } else {
                         docRef.setData(markerData) { error in
                             if let error = error {
-                                print("마커 데이터 저장 오류: \(error.localizedDescription)")
                             }
                         }
                     }
@@ -295,7 +281,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
         markersCollection.getDocuments { [weak self] snapshot, error in
             guard let documents = snapshot?.documents else {
-                print("문서 가져오기 오류: \(error?.localizedDescription ?? "")")
                 return
             }
 
@@ -340,7 +325,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                             let title = data?["title"] as? String ?? ""
                             let roadAddress = data?["roadAddress"] as? String ?? ""
                             self?.modalData = (title: title, roadAddress: roadAddress)
-                            print("모달 데이터: \(self?.modalData)")
 
                             self?.showHalfModal()
                         }
@@ -367,10 +351,8 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     }
 
     @objc func showHalfModal() {
-        print("showHalfModal 함수 호출 확인")
 
         guard let data = modalData else { return }
-        print(data)
         self.searchImage(query: data.title) { imageURL in
             if let imageURL = imageURL, let url = URL(string: imageURL) {
                 DispatchQueue.global().async {
@@ -384,7 +366,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
                         }
                     } else {
-                        print("이미지 로드 실패")
                     }
                 }
             }
@@ -472,7 +453,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                 if let marker = overlay as? NMFMarker {
                     let selectedItem = self?.searchResults.first(where: { $0.title == marker.captionText })
                     self?.modalData = selectedItem
-                    print("모달 데이터: \(self?.modalData)")
 
                     self?.showHalfModal()
 
@@ -487,7 +467,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
-            print("현재 위치: \(location.coordinate.latitude), \(location.coordinate.longitude)")
             self.addMarker(at: location.coordinate, title: "현재 위치입니다.")
 
         }
@@ -550,7 +529,6 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func moveMapToLocation(_ coordinate: CLLocationCoordinate2D) {
-        print("Moving to coordinate: \(coordinate.latitude), \(coordinate.longitude)")
 
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(from: coordinate))
         if let mapView = naverMapView?.mapView {
@@ -595,38 +573,37 @@ extension MapViewController {
         isLoadingResults = true
 
         naverSearch.request(.search(query: query)) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let response):
                 do {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode(Welcome.self, from: response.data)
-                    self?.searchResults = results.items.map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ?? "") }
-                    print("검색된 위치정보:\(self?.searchResults)")
+                    self.searchResults = results.items.map { (title: $0.cleanTitle(), roadAddress: $0.roadAddress ) }
 
-                    for result in self?.searchResults ?? [] {
-                        self?.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
+                    for result in self.searchResults {
+                        self.geocodeAndAddMarker(for: result.title, roadAddress: result.roadAddress)
                     }
 
                     DispatchQueue.main.async {
-                        self?.searchResultsTableView.reloadData()
+                        self.searchResultsTableView.reloadData()
                     }
                 } catch {
-                    print("JSON decoding error: \(error)")
                 }
-            case .failure(let error):
-                print("Network request error: \(error)")
+            case .failure(_):
+                AlertManager.errorAlert(on: self)
             }
 
-            self?.isLoadingResults = false
+            self.isLoadingResults = false
         }
     }
     func showNoSearchResultsToast() {
-          view.makeToast("해당지역은 아직 추가되지않은 지역입니다 ㅜㅜ")
+          view.makeToast("해당지역은 아직 추가되지않은 지역입니다.")
       }
    }
 extension MapViewController {
     func searchImage(query: String, completion: @escaping (String?) -> Void) {
-        print("searchImage 함수가 호출되었습니다. query: \(query)")
         naverSearch.request(.searchImage(query: query)) { result in
             switch result {
             case .success(let response):
@@ -642,20 +619,16 @@ extension MapViewController {
                                     completion(firstImageURL)
                                 }
                             } catch {
-                                print("이미지 로드 실패")
                                 completion(nil)
                             }
                         }
                     } else {
-                        print("이미지를 찾을 수 없음")
                         completion(nil)
                     }
                 } catch {
-                    print("search Image 디코딩 실패: \(error)")
                     completion(nil)
                 }
             case .failure(let error):
-                print("Network request error: \(error)")
                 completion(nil)
             }
         }
@@ -669,11 +642,9 @@ func extractImageURL(from data: Data) -> String? {
         if let firstImageURL = results.first?.thumbnail {
             return firstImageURL
         } else {
-            print("이미지를 찾을 수 없음")
             return nil
         }
     } catch {
-        print("search Image 디코딩 실패: \(error)")
         return nil
     }
 }

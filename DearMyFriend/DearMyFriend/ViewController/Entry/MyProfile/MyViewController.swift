@@ -87,6 +87,7 @@ class MyViewController: UIViewController {
         configure()
     }
     
+    
     override func viewDidLayoutSubviews() {
         
         super.viewDidLayoutSubviews()
@@ -112,6 +113,7 @@ class MyViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
+        reloadPetInfo()
     }
     
     private func configure() {
@@ -247,6 +249,22 @@ class MyViewController: UIViewController {
         }
         
         // 사용자의 Feed 정보
+        myProfileFirestore.getMyFeed(uid: userUid) { myFeed in
+            MyViewController.myFeedData = myFeed
+            
+            self.myPostView.reloadCollectionView()
+        }
+    }
+    
+    func reloadPetInfo() {
+        myProfileFirestore.getMyPet(uid: userUid) { myPet in
+            
+            MyViewController.myProfileData = myPet
+            
+            self.myProfileInfoView.setupUserProfile()
+            self.myPetInfoView.setupTableView()
+            self.myPetInfoView.reloadTableView()
+        }
         myProfileFirestore.getMyFeed(uid: userUid) { myFeed in
             MyViewController.myFeedData = myFeed
             

@@ -2,10 +2,11 @@ import UIKit
 
 class PopularityCellView: UICollectionViewCell {
     
-    var storyUrl: String? {
+    var storyImage: UIImage? {
         didSet {
-            guard let storyUrl = storyUrl else { return }
-            loadImage(storyUrl)
+            guard let storyImage = storyImage else { return }
+            self.findAverageColor(storyImage)
+            petPhoto.image = storyImage
         }
     }
     
@@ -126,18 +127,10 @@ class PopularityCellView: UICollectionViewCell {
         self.toucheOfImage(self)
     }
     
-    private func loadImage(_ url: String?) {
-        guard let imageUrl = url else { return }
-        guard let url = URL(string: imageUrl)  else { return }
+    private func findAverageColor(_ image: UIImage) {
         DispatchQueue.global().async {
-            guard let data = try? Data(contentsOf: url) else {
-                self.petPhoto.image = UIImage()
-                return
-            }
-            guard let storyIamge = UIImage(data: data) else { return }
-            let averageColor = storyIamge.findAverageColor() ?? UIColor.black
+            let averageColor = image.findAverageColor() ?? UIColor.black
             DispatchQueue.main.async {
-                self.petPhoto.image = UIImage(data: data)
                 self.petPhoto.backgroundColor = averageColor
             }
         }

@@ -27,7 +27,6 @@ class FirestoreManager {
 
         query.getDocuments { snapshot, error in
             guard let documents = snapshot?.documents else {
-                print("문서 가져오기 오류: \(error?.localizedDescription ?? "")")
                 return
             }
             completion(documents)

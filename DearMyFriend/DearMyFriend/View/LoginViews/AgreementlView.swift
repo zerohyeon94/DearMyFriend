@@ -2,11 +2,7 @@ import UIKit
 
 class AgreementView: UIView {
     
-    public var allCheckBool = false {
-        didSet {
-            print(self.allCheckBool)
-        }
-    }
+    public var allCheckBool = false 
 
     private let agreementlabel: UILabel = {
         let label = UILabel()

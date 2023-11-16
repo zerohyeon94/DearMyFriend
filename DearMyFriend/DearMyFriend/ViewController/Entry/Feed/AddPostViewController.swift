@@ -18,6 +18,56 @@ class AddPostViewController: UIViewController {
     // 선택된 이미지 CollectionView
     var selectedImages: [UIImage] = []
     
+    func imageViewTapped() {
+        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
+
+        switch photoAuthorizationStatus {
+        case .authorized:
+            // 이미지를 선택하는 로직 유지
+            var configuration = PHPickerConfiguration()
+            configuration.selectionLimit = 5 // 선택한 이미지 수 제한 (옵션)
+            
+            let picker = PHPickerViewController(configuration: configuration)
+            picker.delegate = self
+            present(picker, animated: true)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { status in
+                DispatchQueue.main.async {
+                    if status == .authorized {
+                        // 이미지를 선택하는 로직 유지
+                        var configuration = PHPickerConfiguration()
+                        configuration.selectionLimit = 5 // 선택한 이미지 수 제한 (옵션)
+                        
+                        let picker = PHPickerViewController(configuration: configuration)
+                        picker.delegate = self
+                        self.present(picker, animated: true)
+                    } else {
+                        self.showPhotoPermissionDeniedAlert()
+                    }
+                }
+            }
+        case .denied, .restricted:
+            showPhotoPermissionDeniedAlert()
+        default:
+            break
+        }
+    }
+
+    private func showPhotoPermissionDeniedAlert() {
+        let alertController = UIAlertController(title: "알림", message: "사진 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.", preferredStyle: .alert)
+        let settingsAction = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSettings, completionHandler: nil)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+    
     private func setupCollectionView() {
         addPostView.imageCollectionView.delegate = self
         addPostView.imageCollectionView.dataSource = self
@@ -55,7 +105,6 @@ class AddPostViewController: UIViewController {
     }
 
     @objc private func keyboardWillHide(_ notification: Notification) {
-        print("hide")
         self.addPostView.transform = .identity
     }
     
@@ -106,7 +155,6 @@ extension AddPostViewController: AddPostViewDelegate {
             // 이미지를 추가해주세요
             AlertManager.notSelectedImageAlert(on: self)
         } else {
-            print("있음!")
             // document : 현재 시간
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // 표시 형식을 원하는 대로 설정
@@ -114,7 +162,6 @@ extension AddPostViewController: AddPostViewDelegate {
             let currentDate = Date() // 현재 시간 가져오기
             let formattedCurrentDate = dateFormatter.string(from: currentDate) // 형식에 맞게 날짜를 문자열로 변환
             
-            print("현재 시간: \(currentDate)")
             
             let feedUid: String = MyFirestore().getCurrentUser() ?? "" // 사용자 UID 확인
             var feedImage: [String] = []
@@ -142,19 +189,15 @@ extension AddPostViewController: AddPostViewDelegate {
                 if let imageData = image.element.jpegData(compressionQuality: 0.8) { // JPEG형식의 데이터로 변환. compressionQuality 이미지 품질(0.8 일반적인 값)
                     imageRef.putData(imageData, metadata: nil) { (metadata, error) in
                         if let error = error {
-                            print("이미지 업로드 실패: \(error.localizedDescription)")
                         } else {
-                            print("이미지 업로드 성공")
                             // 이미지 다운로드 URL 가져오기
                             imageRef.downloadURL { (url, error) in
                                 defer { group.leave() }
                                 if let error = error {
-                                    print("URL 가져오기 실패: \(error.localizedDescription)")
                                 } else {
                                     if let downloadURL = url?.absoluteString {
                                         // Firestore에 URL 저장
                                         feedImage.append(downloadURL)
-                                        print("feedImage: \(feedImage)")
                                     }
                                 }
                             }
@@ -180,15 +223,15 @@ extension AddPostViewController: AddPostViewDelegate {
             }
         }
     }
-    
-    func imageViewTapped(){
-        var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = 10 // 선택한 이미지 수 제한 (옵션)
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        present(picker, animated: true)
-    }
+//    
+//    func imageViewTapped(){
+//        var configuration = PHPickerConfiguration()
+//        configuration.selectionLimit = 5 // 선택한 이미지 수 제한 (옵션)
+//        
+//        let picker = PHPickerViewController(configuration: configuration)
+//        picker.delegate = self
+//        present(picker, animated: true)
+//    }
 }
 
 extension AddPostViewController: UIScrollViewDelegate {
@@ -203,7 +246,6 @@ extension AddPostViewController: UIScrollViewDelegate {
 
 extension AddPostViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("selectedImages.count: \(selectedImages.count)")
         
         addPostView.pageControl.numberOfPages = selectedImages.count
         return self.selectedImages.count
@@ -211,9 +253,6 @@ extension AddPostViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as! ImageCollectionViewCell
-        print(indexPath.item, "indexPath.item")
-        print(selectedImages.count, "selected image count")
-        print(selectedImages[indexPath.item], "selected image")
         cell.configure(image: selectedImages[indexPath.item])
         
         return cell
@@ -247,8 +286,6 @@ extension AddPostViewController: PHPickerViewControllerDelegate {
         guard let result = results.first else {
             return
         }
-        print("results: \(results.count)")
-        print("results: \(results)")
         
         var loadedImages: [UIImage] = [] // 이미지를 로드한 배열
         let dispatchGroup = DispatchGroup() // 디스패치 그룹 생성

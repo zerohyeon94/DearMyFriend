@@ -21,18 +21,21 @@ class FeedService {
     
     typealias ConversionCompletion = (Result<UIImage, ConversionImageError>) -> Void
     
-    typealias bringPostCompletion = (Result<[NewFeedModel], ConversionImageError>) -> Void
+    typealias BringPostCompletion = (Result<[NewFeedModel], ConversionImageError>) -> Void
     
-    typealias dbCompletion = (Result<Void, ConversionImageError>) -> Void
+    typealias DBCompletion = (Result<Void, ConversionImageError>) -> Void
     
-    typealias likePostCompletion = (Result<[String], ConversionImageError>) -> Void
+    typealias LikePostCompletion = (Result<[String], ConversionImageError>) -> Void
+    
+    typealias UserInfoCompletion = (Result<UserInfoModel, ConversionCommentError>) -> Void
     
     private var lastDocument:QueryDocumentSnapshot?
     
     public var feeds: [NewFeedModel] = []
+    public var userInfo: UserInfoModel?
     
     // MARK: - Post Main Method
-    public func getFeed(_ type: BringFeed, completion:@escaping bringPostCompletion) {
+    public func getFeed(_ type: BringFeed, completion:@escaping BringPostCompletion) {
         
         self.getFeedData(type) { [weak self] error in
             guard let self = self else { return }
@@ -76,6 +79,20 @@ class FeedService {
                             dispatchGroup.leave()
                         }
                         
+                        if userInfo == nil {
+                            dispatchGroup.enter()
+                            self.getUserInfo { result in
+                                defer { dispatchGroup.leave() }
+                                
+                                switch result {
+                                case .success(let userInfo):
+                                    self.userInfo = userInfo
+                                case .failure(_):
+                                    completion(.failure(.networkError))
+                                }
+                            }
+                        }
+                        
                         dispatchGroup.notify(queue: .main) {
                             completion(.success(self.feeds))
                         }
@@ -85,7 +102,7 @@ class FeedService {
         }
     }
     
-    public func reportFeed(_ documentID: String, completion:@escaping dbCompletion) {
+    public func reportFeed(_ documentID: String, completion:@escaping DBCompletion) {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
@@ -95,7 +112,6 @@ class FeedService {
                 dispatchGroup.leave()
             case .failure(let error):
                 completion(.failure(.networkError))
-                print(error.localizedDescription)
             }
         }
         
@@ -106,7 +122,6 @@ class FeedService {
                 dispatchGroup.leave()
             case .failure(let error):
                 completion(.failure(.networkError))
-                print(error.localizedDescription)
             }
         }
         
@@ -115,7 +130,7 @@ class FeedService {
         }
     }
     
-    public func checkLike(_ likeBool: Bool, _ index: Int, _ documentID: String, completion: @escaping dbCompletion) {
+    public func checkLike(_ likeBool: Bool, _ index: Int, _ documentID: String, completion: @escaping DBCompletion) {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
@@ -190,7 +205,6 @@ class FeedService {
                     self.feeds.append(feed)
                 }
                 
-                print("문서 식별자 : \(item.element.documentID)")
                 if item.offset == feedCount-1 {
                     self.lastDocument = item.element
                 }
@@ -264,7 +278,6 @@ class FeedService {
     }
     
     private func userInfoBasedOnUid(completion: @escaping (Error?) -> Void) {
-        print("유저정보 업데이트")
         
         let store = Firestore.firestore().collection("Users")
         
@@ -324,7 +337,6 @@ class FeedService {
                     case .success(let image):
                         self.feeds[item.offset].profileImage = image
                     case .failure(let error):
-                        print(error.localizedDescription)
                         self.feeds[item.offset].profileImage = UIImage()
                     }
                 }
@@ -355,7 +367,6 @@ class FeedService {
                         case .success(let image):
                             self.feeds[item.offset].feedImages.updateValue(image, forKey: imageUrl.offset)
                         case .failure(let error):
-                            print(error.localizedDescription)
                             self.feeds[item.offset].feedImages.updateValue(UIImage(), forKey: imageUrl.offset)
                         }
                     }
@@ -395,7 +406,7 @@ class FeedService {
     
     // MARK: - Post Report Method
     
-    private func reportDataUpdateFeedDB(_ documentID: String, completion:@escaping dbCompletion) {
+    private func reportDataUpdateFeedDB(_ documentID: String, completion:@escaping DBCompletion) {
         let db = Firestore.firestore().collection("Feeds").document(documentID)
         
         db.getDocument { document, error in
@@ -424,7 +435,7 @@ class FeedService {
         }
     }
     
-    private func reportDataUpdateUserDB(_ documentID: String, completion: @escaping dbCompletion) {
+    private func reportDataUpdateUserDB(_ documentID: String, completion: @escaping DBCompletion) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(.failure(.authenticationError))
             return
@@ -445,7 +456,7 @@ class FeedService {
     // MARK: - Post Like Filter Method
     
     // FeedDB Control Method
-    private func likedFeed(_ index: Int, _ documentID: String, completion:@escaping dbCompletion) {
+    private func likedFeed(_ index: Int, _ documentID: String, completion:@escaping DBCompletion) {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
@@ -455,7 +466,6 @@ class FeedService {
                 dispatchGroup.leave()
             case .failure(let error):
                 completion(.failure(.networkError))
-                print(error.localizedDescription)
                 return
             }
         }
@@ -467,7 +477,6 @@ class FeedService {
                 dispatchGroup.leave()
             case .failure(let error):
                 completion(.failure(.networkError))
-                print(error.localizedDescription)
                 return
             }
         }
@@ -478,7 +487,7 @@ class FeedService {
     }
     
     // UserDB Control Method
-    private func cancelLike(_ documentID: String, completion:@escaping dbCompletion) {
+    private func cancelLike(_ documentID: String, completion:@escaping DBCompletion) {
         self.fetchLikeList(documentID) { result in
             switch result {
             case .success(let likePostList):
@@ -496,7 +505,7 @@ class FeedService {
     }
     
     // LikeCount UP : DB에 접근해서 해당 게시글의 LikeCount 변경
-    private func likeCountUpdateFeedDB(_ index: Int, _ documentID: String, completion:@escaping dbCompletion) {
+    private func likeCountUpdateFeedDB(_ index: Int, _ documentID: String, completion:@escaping DBCompletion) {
         let db = Firestore.firestore().collection("Feeds").document(documentID)
         
         db.getDocument { [weak self] document, error in
@@ -534,7 +543,7 @@ class FeedService {
     }
     
     // LikePost 추가 : Users(uid)의 LikeDocuments list에 추가
-    private func likeDataUpdateUserDB(_ documentID: String, completion: @escaping dbCompletion) {
+    private func likeDataUpdateUserDB(_ documentID: String, completion: @escaping DBCompletion) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(.failure(.authenticationError))
             return
@@ -553,7 +562,7 @@ class FeedService {
     }
     
     // LikePost 삭제 1번 : Users(uid)의 LikeDocuments list에서 삭제 후 리스트[String] 리턴
-    private func fetchLikeList(_ documentID: String, completion: @escaping likePostCompletion) {
+    private func fetchLikeList(_ documentID: String, completion: @escaping LikePostCompletion) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let likePostDB = Firestore.firestore().collection("Users").document(uid)
         
@@ -624,7 +633,7 @@ class FeedService {
         }
     }
     
-    public func currentFeed(with feed: FeedModel, completion: @escaping dbCompletion) {
+    public func currentFeed(with feed: FeedModel, completion: @escaping DBCompletion) {
         
         let db = Firestore.firestore().collection("Feeds").document()
         let feedData = feed.toFirestoreData()
@@ -636,6 +645,47 @@ class FeedService {
             }
             
             completion(.success(()))
+        }
+    }
+    
+    public func getUserInfo(completion:@escaping UserInfoCompletion) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(.failure(.networkError))
+            return
+        }
+        
+        let store = Firestore.firestore().collection("Users").document(uid)
+        
+        store.getDocument { [weak self] query, error in
+            guard let self = self else { return }
+            
+            if error != nil {
+                completion(.failure(.networkError))
+                return
+            }
+            
+            guard let document = query, document.exists else {
+                completion(.failure(.dataError))
+                return
+            }
+            
+            guard let userName = document["username"] as? String, let userImage = document["photoUrl"] as? String else {
+                completion(.failure(.conversionError))
+                return
+            }
+            
+            var profile = UserInfoModel(userName: userName, imageUrl: userImage)
+            
+            let imageUrl = profile.imageUrl ?? ""
+            self.loadImage(imageUrl) { result in
+                switch result {
+                case .success(let profileImage):
+                    profile.profileImage = profileImage
+                    completion(.success(profile))
+                case .failure(_):
+                    completion(.failure(.networkError))
+                }
+            }
         }
     }
 }

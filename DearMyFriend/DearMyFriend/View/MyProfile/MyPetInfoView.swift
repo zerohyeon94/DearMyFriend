@@ -9,7 +9,6 @@ class MyPetInfoView: UIView {
     // MARK: Initalizers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("MyPetInfoView 실행")
         
         setupTableView()
     }
@@ -20,7 +19,6 @@ class MyPetInfoView: UIView {
     
     // MARK: Configure & Constant
     func setupTableView(){
-        print("setupTableView 실행")
         
         petInfoTableView.separatorStyle = .none // Cell 사이 줄 제거
         let petInfoCellHeight: CGFloat = 150 // Cell의 여유분의 높이 10을 줌.
@@ -43,7 +41,6 @@ class MyPetInfoView: UIView {
     }
     
     func reloadTableView() {
-        print("reloadTableView")
         petInfoTableView.dataSource = self
         
         petInfoTableView.reloadData()
@@ -54,7 +51,6 @@ extension MyPetInfoView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let userPetData = MyViewController.myProfileData
-        print("userPetData.petName.count: \(userPetData.count)")
         return userPetData.count
     }
     
@@ -71,7 +67,6 @@ extension MyPetInfoView: UITableViewDataSource {
         let petType = userPetData.values.first?.type
         
         let petData: RegisterMyPetInfo = RegisterMyPetInfo(name: petName, age: petAge, type: petType, photoUrl: petPhotoUrl)
-        print("petData: \(petData)")
         cell.setPetInfo(petData: petData, index: indexPath.row)
         
         return cell

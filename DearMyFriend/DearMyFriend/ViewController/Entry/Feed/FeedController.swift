@@ -198,6 +198,22 @@ extension FeedController: UITableViewDataSource {
             }
         }
         
+        cell.commetButtonTapped = { [weak self] documentID in
+            guard let self = self else { return }
+            let commentVC = CommentController()
+            commentVC.documentID = documentID
+            
+            let navCommentVC = UINavigationController(rootViewController: commentVC)
+            navCommentVC.modalPresentationStyle = .pageSheet
+            
+            
+            if let presentationController = navCommentVC.presentationController as? UISheetPresentationController {
+                presentationController.detents = [.medium()]
+            }
+            
+            present(navCommentVC, animated: true, completion: nil)
+        }
+        
         cell.reportButtonTapped = { [weak self] documentID in
             guard let self = self else { return }
             

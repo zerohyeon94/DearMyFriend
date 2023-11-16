@@ -318,16 +318,13 @@ class AddPostView: UIView {
     
     // MARK: - Action
     @objc private func cancelButtonTapped(){
-        print("cancel 클릭")
         delegate?.cancelButtonTapped()
     }
     @objc private func uploadButtonTapped(){
-        print("upload 클릭")
         delegate?.uploadButtonTapped()
     }
     
     @objc private func profileImageViewTapped(){
-        print("image 클릭")
         delegate?.imageViewTapped()
     }
     

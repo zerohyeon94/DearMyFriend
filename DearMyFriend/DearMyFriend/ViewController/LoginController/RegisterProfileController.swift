@@ -3,6 +3,16 @@ import PhotosUI
 
 class RegisterProfileController: UIViewController {
     
+    private var selectedImage: UIImage? {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.registerView.pickerView.image = selectedImage
+            }
+        }
+    }
+    
     public var registerUser: RegisterUserRequest?
         
     private var isKeyboardUp = false
@@ -48,7 +58,7 @@ class RegisterProfileController: UIViewController {
         let registerUsername = self.registerView.usernameField.text ?? ""
         registerUser?.username = registerUsername
         let vc = AgreementController()
-        vc.myPhoto = self.registerView.pickerView.image
+        vc.myPhoto = self.selectedImage ?? UIImage(named: "userImage")
         vc.registerUser = self.registerUser
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -81,17 +91,6 @@ class RegisterProfileController: UIViewController {
         self.registerView.pickerView.addGestureRecognizer(tapGesture)
         self.registerView.pickerView.isUserInteractionEnabled = true
     }
-    
-    @objc
-    private func setupImagePicker() {
-        var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = 1
-        configuration.filter = .any(of: [.images])
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        self.present(picker, animated: true, completion: nil)
-    }
 }
 
 extension RegisterProfileController {
@@ -123,22 +122,78 @@ extension RegisterProfileController {
 
 extension RegisterProfileController: PHPickerViewControllerDelegate {
     
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        
-        let itemProvider = results.first?.itemProvider
-        
-        if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
+    @objc
+    private func setupImagePicker() {
+        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
+
+        switch photoAuthorizationStatus {
+        case .authorized:
+            openPhotoPicker()
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { status in
                 DispatchQueue.main.async {
-                    self.registerView.pickerView.clipsToBounds = true
-                    self.registerView.pickerView.image = image as? UIImage
+                    if status == .authorized {
+                        self.openPhotoPicker()
+                    } else {
+                        self.showPermissionDeniedAlert()
+                    }
                 }
             }
-        } else {
-            print("얼럿창 표시")
+        case .denied, .restricted:
+            showPermissionDeniedAlert()
+        default:
+            break
         }
     }
+
+    private func openPhotoPicker() {
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 1
+        configuration.filter = .any(of: [.images])
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
+    }
+
+    private func showPermissionDeniedAlert() {
+        let alertController = UIAlertController(title: "알림", message: "사진 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.", preferredStyle: .alert)
+        let settingsAction = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSettings, completionHandler: nil)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+           picker.dismiss(animated: true)
+           
+           guard let result = results.first else {
+               return
+           }
+
+           let itemProvider = result.itemProvider
+
+           if itemProvider.canLoadObject(ofClass: UIImage.self) {
+               // 수정된 부분: 이미지 데이터를 가져올 수 있는 경우
+               itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
+                   DispatchQueue.main.async { [weak self] in
+                       guard let self = self, let selectedImage = image as? UIImage else { return }
+                       
+                       self.registerView.pickerView.clipsToBounds = true
+                       self.selectedImage = selectedImage
+                   }
+               }
+           } else {
+               AlertManager.errorAlert(on: self)
+           }
+       }
 }
 
 extension RegisterProfileController : UITextFieldDelegate {
