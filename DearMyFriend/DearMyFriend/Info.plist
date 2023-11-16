@@ -21,6 +21,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleIdentifier</key>
+	<string></string>
 	<key>NMFClientId</key>
 	<string>gzytrcks96</string>
 	<key>UIAppFonts</key>
