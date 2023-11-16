@@ -1,5 +1,9 @@
 import UIKit
 
+protocol FeedDelegate: AnyObject {
+    func updateFeed()
+}
+
 struct Collection {
     // MARK: - MainWidthOfPadding
     static let mainWidthOfPadding = UIScreen.main.bounds.width-20
@@ -17,7 +21,7 @@ struct Collection {
 
     // MARK: - 메뉴 컬렉션 뷰
     static let menuSpacing: CGFloat = 20
-    static let menuColumns: CGFloat = 4
+    static let menuColumns: CGFloat = 3
     static let menuSize = Int((mainWidthOfPadding - (menuSpacing * menuColumns)) / Collection.menuColumns)+1
     static let cellHeightSize = Int((mainWidthOfPadding - (menuSpacing * menuColumns)) / Collection.menuColumns)+17
     
@@ -62,7 +66,7 @@ struct MenuTest {
     static let wishList: [String:UIImage?] = ["저장리스트":UIImage(named: "wish")]
     static let calculate: [String:UIImage?] = ["급여량계산기":UIImage(named: "calcul")]
     
-    static let allMenu: [[String:UIImage?]] = [youtube,hospital,wishList,calculate]
+    static let allMenu: [[String:UIImage?]] = [youtube,hospital,calculate]
 }
 
 struct Rankbanner {

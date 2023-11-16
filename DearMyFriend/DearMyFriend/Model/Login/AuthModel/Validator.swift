@@ -6,7 +6,6 @@ class Validator {
         let username = password.trimmingCharacters(in: .whitespacesAndNewlines)
         let usernameRegEx = ".{8,}"
         let usernamePred = NSPredicate(format: "SELF MATCHES %@", usernameRegEx)
-        print(usernamePred.evaluate(with: username))
         return usernamePred.evaluate(with: username)
     }
     

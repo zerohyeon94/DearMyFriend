@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import Kingfisher
 
 class MyProfileInfoView: UIView {
     // MARK: Properties
@@ -15,8 +16,6 @@ class MyProfileInfoView: UIView {
         imageView.frame = CGRect(x: 0, y: 0, width: profileImageFrame, height: profileImageFrame)
         
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "spider1")
-        
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = profileImageFrame / 2
         imageView.layer.borderColor = UIColor.black.cgColor
@@ -45,18 +44,8 @@ class MyProfileInfoView: UIView {
         return label
     }()
     
-    lazy var userPetLabel: UILabel = {
-        let label = UILabel()
-        
-        label.font = UIFont(name: "SpoqaHanSansNeo-Regular", size: profileSubTitleLabelSize)
-        label.text = "00이와 00이의 친구"
-        label.textAlignment = .left
-        
-        return label
-    }()
-    
     private lazy var postStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [userNicknameLabel, userEmailLabel, userPetLabel])
+        let stackView = UIStackView(arrangedSubviews: [userNicknameLabel, userEmailLabel])
         stackView.spacing = 0
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
@@ -116,20 +105,20 @@ class MyProfileInfoView: UIView {
     }
     
     func setupUserProfile() {
-        let userData = MyViewController.myProfileData
+        var userUid: String = MyFirestore().getCurrentUser() ?? ""
+        var userEmail: String = MyFirestore().getCurrentUserEmail() ?? ""
         
-        userNicknameLabel.text = userData.nickname
-        userEmailLabel.text = userData.id
-        
-        var petCount: String = ""
-        for petIndex in 0..<userData.petName.count {
-            if petIndex == 0 {
-                petCount = "\(userData.petName[petIndex])"
-            } else {
-                petCount = "\(petCount)와 \(userData.petName[petIndex])"
-            }
+        MyFirestore().getUsername(uid: userUid) { name in
+            self.userNicknameLabel.text = name
         }
         
-        userPetLabel.text = "\(petCount)의 친구"
+        self.userEmailLabel.text = userEmail
+        
+        MyFirestore().getUserProfile(uid: userUid) { imageURL in
+            let url = URL(string: imageURL)
+            
+            self.profileImageView.kf.indicatorType = .activity
+            self.profileImageView.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
+        }
     }
 }

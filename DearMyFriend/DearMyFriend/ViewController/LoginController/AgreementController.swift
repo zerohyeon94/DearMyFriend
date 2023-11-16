@@ -56,13 +56,11 @@ class AgreementController: UIViewController {
         
         AuthService.shared.photoUpdate(email: self.registerUser?.email, photo: self.myPhoto) { error in
             if let error = error {
-                print("업로드 에러 발생", error)
                 return
             }
             
             AuthService.shared.getPhotoUrl(email: self.registerUser?.email) { photoUrl, error in
                 if let error = error {
-                    print("에러발생", error)
                     return
                 }
                 let registerAgreement = self.registerView.allCheckBool ? "전체동의" : "미동의"

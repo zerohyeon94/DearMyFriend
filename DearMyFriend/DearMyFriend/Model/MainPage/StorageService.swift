@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseStorage
+import Firebase
 
 class StorageService {
     
@@ -8,12 +9,12 @@ class StorageService {
     
     let storage = Storage.storage()
     var bannerUrl: [Int:String] = [:]
+    var storyImage: [PopularityModel] = []
     var storyUrl: [Int:String] = [:]
     var storyCount: Int = 0
     
     
     public func uploadBanner(completion: @escaping (Error?) -> Void) {
-        self.bannerUrl = [:]
         let folder = self.storage.reference().child("Main")
         
         folder.listAll { [weak self] result, error in
@@ -26,19 +27,9 @@ class StorageService {
                 let dispatchGroup = DispatchGroup()
                 
                 for (index,item) in imageList.enumerated() {
-                    print(index)
                     dispatchGroup.enter()
                     
                     item.downloadURL { url, error in
-                        // defer의 역할 : 클로저 내의 모든 작업이 종료된 다음 무조건적으로 실행되는 코드
-                        // 여기서 defer의 역할?
-                        // dispatchGroup을 첫번째에 클로저의 첫 실행으로 하면 딕셔너리의 마지막 업데이트가 이루어지지 않았는데 completion(nil)이 보내진다.
-                        // dispatchGroup을 마지막에 둔다면 에러가 난 경우에는 실행되지 않음으로 dispatchGroup.notify가 실행되지 않는다.
-                        // 고로 어떤 상황에서든 클로저의 작업이 마무리되는 시점에 무조건적으로 실행시켜주는 defer의 내부에서 dispatchGroup.leave()를 실행시켜주는 것
-                        
-                        // 요약 : 모든 데이터의 다운로드가 완료되는 시점은 DispatchGroup의 dispatchGroup.notify 클로저 내에서 completion(nil)이 호출되는 시점과 일치
-                        // 이것은 모든 이미지의 URL을 self.bannerUrl 딕셔너리에 안전하게 업데이트한 후에 completion 클로저를 호출하는 안정적인 방법입니다.
-                        
                         defer {
                             dispatchGroup.leave()
                         }
@@ -93,52 +84,104 @@ class StorageService {
             }
         }
     }
+    
+    public func bringStoryImage(completion: @escaping ([PopularityModel]?, Error?) -> Void) {
+        self.storyImage = []
+        self.getStoryData { error in
+            if error != nil {
+                completion(nil, error)
+                return
+            }
+            self.getStoryImage { [weak self] error in
+                guard let self = self else { return }
+                
+                if error != nil {
+                    completion(nil, error)
+                    return
+                }
+                completion(self.storyImage, nil)
+            }
+        }
+    }
+    
+    
+    private func getStoryData(completion: @escaping (Error?) -> Void) {
+        let store = Firestore.firestore().collection("Feeds").order(by: "likeCount", descending: true).limit(to: 5)
+        
+        store.getDocuments { [weak self] query, error in
+            guard let self = self else { return }
+            if error != nil {
+                completion(error)
+                return
+            }
+            
+            guard let query = query else { return }
+            
+            
+            for item in query.documents.enumerated() {
+                if let images = item.element["imageUrl"] as? [String] {
+                    let popularityImage = PopularityModel(imageUrl: images.first)
+                    
+                    self.storyImage.append(popularityImage)
+                }
+            }
+            
+            completion(nil)
+        }
+    }
+    
+    private func getStoryImage(completion:@escaping (Error?) -> Void) {
+        
+        let dispatchGroup = DispatchGroup()
+        
+        for item in storyImage.enumerated() {
+            var imageInfo = self.storyImage[item.offset]
+            let index = item.offset
+            dispatchGroup.enter()
+            guard let imageUrls = item.element.imageUrl else { return }
+            
+            loadImage(imageUrls) { [weak self] image, error in
+                defer { dispatchGroup.leave() }
+                guard let self = self else { return }
+                
+                if error != nil {
+                    completion(error)
+                    return
+                }
+                
+                imageInfo.image = image
+                self.storyImage[index] = imageInfo
+            }
+            
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            completion(nil)
+        }
+    }
+    
+    private func loadImage(_ url: String?, completion:@escaping (UIImage? ,Error?) -> Void) {
+        guard let imageUrl = url, let downloadUrl = URL(string: imageUrl) else { return }
+        
+        URLSession.shared.dataTask(with: downloadUrl) { (data, response, error) in
+            
+            if error != nil {
+                completion(nil ,error)
+                return
+            }
+            
+            guard let safeData = data else {
+                completion(nil, error)
+                return
+            }
+            
+            guard let image = UIImage(data: safeData) else {
+                completion(nil, error)
+                return
+            }
+            
+            completion(image, nil)
+            
+        }.resume()
+    }
 }
-
-
-//public func uploadStory(completion: @escaping (Error?) -> Void) {
-//    self.storyUrl = []
-//    
-//    let folder = self.storage.reference().child("Story")
-//    
-//    folder.listAll { [weak self] result, error in
-//        guard let self = self,
-//              let imageList = result?.items else { return }
-//        
-//        if let error = error {
-//            completion(error)
-//        } else {
-//            var downloadCount = 0
-//            
-//            for item in imageList {
-//                item.downloadURL { url, error in
-//                    downloadCount += 1
-//                    // 이전에는 반복주기의 끝과 같다면 바로 completion을 호출했음
-//                    // 그럼 반복문이 전부 완료되고 한개의 이미지만 다운받아지더라도 completion이 호출됨
-//                    // 하지만 downloadURL는 오래걸리는 작업이며
-//                    // 반복주기의 끝에서도 downloadUrl은 계속 진행되고 있음
-//                    // 그럼으로 이미지 다운로드가 완료된 시점에만 카운트를 올려줌
-//                    
-//                    if let error = error {
-//                        if downloadCount == imageList.count {
-//                            completion(error)
-//                        }
-//                    } else {
-//                        guard let bannerLink = url?.absoluteString else {
-//                            if downloadCount == imageList.count {
-//                                completion(error)
-//                            }
-//                            return
-//                        }
-//                        self.storyUrl.append(bannerLink)
-//                        
-//                        if downloadCount == imageList.count {
-//                            print("완료시점", imageList.count)
-//                            completion(nil)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}

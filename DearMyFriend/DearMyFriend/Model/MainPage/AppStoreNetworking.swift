@@ -35,7 +35,6 @@ class AppNetworking {
         session.dataTask(with: url) { data, url, error in
             
             if error != nil {
-                print(error!)
                 completionHandler(.failure(.networkError))
                 return
             }
@@ -62,7 +61,6 @@ class AppNetworking {
             return searchResult.results
         // 실패
         } catch {
-            print(error.localizedDescription)
             return nil
         }
     }

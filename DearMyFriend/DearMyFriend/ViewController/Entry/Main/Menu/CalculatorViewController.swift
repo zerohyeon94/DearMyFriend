@@ -276,7 +276,6 @@ class CalculatorViewController: UIViewController {
         return result
     }
     @objc func 계산버튼클릭() {
-        print("계산중")
         let resultInfo = calculateFoodAmount(몸무게: 몸무게입력.text ?? "", 상태: 상태선택)
         칼로리결과.text = resultInfo.칼로리
         대사량결과.text = resultInfo.대사량
@@ -297,12 +296,10 @@ class CalculatorViewController: UIViewController {
                 make.height.equalTo(20)
                 make.width.equalTo(20)
             }
-            print("고양이 버튼이 클릭되었습니다.")
             targetAnimal.text = "냥냥이 & 사료 정보"
             checking.play()
         } else if 고양이버튼.subviews.contains(checking) {
             checking.removeFromSuperview()
-            print("버튼클릭 취소")
             targetAnimal.text = "반려동물 & 사료 정보"
         }
     }

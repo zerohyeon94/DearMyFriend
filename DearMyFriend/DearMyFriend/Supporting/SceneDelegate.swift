@@ -69,7 +69,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 self.authenticationOfEmail(oobCode) { [weak self] error in
                     guard let self = self else { return }
                     if let error = error {
-                        print(error.localizedDescription)
                         // error alert add
                     } else {
                         if let currentViewController = self.window?.rootViewController {
@@ -105,10 +104,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return oobCode
     }
     
-    //guard let queryOfUrl = URLComponents(string: urlString)?.queryItems else { return nil }
-    
     private func authenticationOfEmail(_ oobCode: String, completion: @escaping (Error?)->Void) {
-        print("이메일 인증")
         Auth.auth().applyActionCode(oobCode) { error in
             if let error = error {
                 completion(error)

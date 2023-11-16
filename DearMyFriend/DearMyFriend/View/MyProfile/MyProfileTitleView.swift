@@ -81,7 +81,6 @@ class MyProfileTitleView: UIView {
     }
     
     @objc func settingButtonTapped() {
-        print("설정 창 실행")
         delegate?.settingButtonTapped()
     }
 }

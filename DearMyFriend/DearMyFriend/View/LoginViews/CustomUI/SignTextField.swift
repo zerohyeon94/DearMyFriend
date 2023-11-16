@@ -19,6 +19,7 @@ class SignTextField: UITextField {
         self.returnKeyType = .done
         self.autocorrectionType = .no
         self.autocapitalizationType = .none
+        self.tintColor = ThemeColor.titleColor
         
         self.leftViewMode = .always
         self.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: self.frame.size.height))

@@ -16,7 +16,6 @@ class LoginController: UIViewController {
         self.setupAction()
         self.setupTextfield()
         setupUI()
-        print("로그인뷰",StorageService.shared.bannerUrl)
         title = "로그인"
     }
     
@@ -39,7 +38,6 @@ class LoginController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print(#function)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -127,13 +125,11 @@ class LoginController: UIViewController {
     }
     
     @objc func keyboardDown() {
-        print("test")
         isKeyboardUp = false
         UIView.animate(
             withDuration: 0.3,
             animations: {
                 self.view.transform = .identity
-                print(self.view.transform)
             }
         )
     }

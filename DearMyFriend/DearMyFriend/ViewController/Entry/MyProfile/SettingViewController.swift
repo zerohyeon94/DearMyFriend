@@ -93,9 +93,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
             AuthService.shared.signOut { error in
                 if let error = error {
-                    print("로그아웃 실패", error)
+                    return
                 } else {
-                    print("로그아웃 성공")
                     AuthService.shared.changeController(self)
                 }
             }
@@ -116,17 +115,73 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         // 🟡 추가했음
         let alert = UIAlertController(title: "회원탈퇴", message: "정말로 회원탈퇴 하시겠습니까?", preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "확인", style: .destructive) { _ in
-            AuthService.shared.deleteAccount { [weak self] error in
+            let accountManeger = AuthService.shared
+            
+            accountManeger.deleteAccount { [weak self] error in
                 guard let self = self else { return }
-                if let error = error {
-                    print("탈퇴 실패", error)
-                } else {
-                    print("탈퇴 성공")
-                    AuthService.shared.changeController(self)
-                    AlertManager.loginFailedAlert(on: self)
+                
+                if error != nil {
+                    AlertManager.logoutAlert(on: self)
+                    return
+                }
+            
+                accountManeger.deleteFeedInStorage { [weak self] error in
+                    guard let self = self else { return }
+                    if error != nil {
+                        AlertManager.registerCheckAlert(on: self)
+                        return
+                    }
+                    
+                    accountManeger.deleteFeedInStore { [weak self] error in
+                        guard let self = self else { return }
+                        
+                        if error != nil {
+                            AlertManager.registerCheckAlert(on: self)
+                            return
+                        }
+                        accountManeger.deleteStore { [weak self] error in
+                            guard let self = self else { return }
+                            
+                            if error != nil {
+                                AlertManager.registerCheckAlert(on: self)
+                                return
+                            }
+                            
+                            accountManeger.deleteStorage { [weak self] error in
+                                guard let self = self else { return }
+                                
+                                if error != nil {
+                                    AlertManager.registerCheckAlert(on: self)
+                                    return
+                                }
+                                
+                                accountManeger.findEmailIndex { [weak self] emailList, error in
+                                    guard let self = self else { return }
+                                    
+                                    if error != nil {
+                                        AlertManager.registerCheckAlert(on: self)
+                                        return
+                                    }
+                                    
+                                    let emailList = emailList ?? []
+                                    
+                                    accountManeger.deleteEmail(emailList: emailList) { [weak self] error in
+                                        guard let self = self else { return }
+                                        
+                                        if error != nil {
+                                            AlertManager.registerCheckAlert(on: self)
+                                            return
+                                        }
+                                        accountManeger.changeController(self)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+        
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         alert.addAction(confirmAction)
         alert.addAction(cancelAction)

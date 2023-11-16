@@ -4,7 +4,8 @@ class PopularityViewController: UIViewController {
     
     var mainPage: MainViewController?
     
-    private var storyImageList: [Int:String] = [:]
+    public var storyImages: [PopularityModel] = []
+    
     private var startSeting: Bool = false
     private var storyTime = Timer()
     private var pageOfNumber = 0
@@ -36,9 +37,7 @@ class PopularityViewController: UIViewController {
         view.backgroundColor = .black
         autoLayout()
         setupCollectionView()
-        setupBanner()
         setupTimer()
-        print(storyImageList.count)
     }
     
     func autoLayout() {
@@ -80,12 +79,6 @@ class PopularityViewController: UIViewController {
         }
     }
     
-    func setupBanner() {
-        print("넣은 시점에 스토리뷰 갯수: \(storyImageList.count)")
-        print("넣은 시점에 스토리지 갯수: \(StorageService.shared.storyUrl.count)")
-        storyImageList = StorageService.shared.storyUrl
-    }
-    
     func setupTimer() {
         if !storyTime.isValid {
             storyTime = Timer.scheduledTimer(timeInterval: storyDuration , target: self, selector: #selector(timerCounter), userInfo: nil, repeats: false)
@@ -93,10 +86,8 @@ class PopularityViewController: UIViewController {
     }
     
     @objc func timerCounter() {
-        print("pageNumber: ", pageOfNumber)
-        print("storyImageCount:", storyImageList.count)
 
-        if pageOfNumber < storyImageList.count-1 {
+        if pageOfNumber < self.storyImages.count-1 {
             pageOfNumber += 1
             storyDuration = IndicatorInfo.duration
             rankCollectionView.scrollToItem(at: [0, pageOfNumber], at: .left, animated: true)
@@ -147,7 +138,7 @@ class PopularityViewController: UIViewController {
 extension PopularityViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return storyImageList.count
+        return self.storyImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -157,7 +148,7 @@ extension PopularityViewController: UICollectionViewDataSource {
             self.nowCell = cell
             self.nowCell?.indicatorCircle.resetTime()
         }
-        cell.storyUrl = storyImageList[indexPath.item]
+        cell.storyImage = storyImages[indexPath.item].image
         
         cell.toucheOfImage = { [weak self] (senderCell) in
             self?.indicatorControl(senderCell.indicatorCircle, PopularityTouch.touch)

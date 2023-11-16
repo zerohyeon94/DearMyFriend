@@ -1,7 +1,8 @@
 import UIKit
+import Lottie
 
 class MainViewController: UIViewController {
-    
+    //
     let appManager = AppNetworking.shared
     var bannerImageList: [Int:String] = [:]
     var appList: [SearchResult] = []
@@ -15,7 +16,16 @@ class MainViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    let MenuViewControllers = [YouTubeViewController(), MapViewController(), WishViewController(), CalculatorViewController()]
+    
+    let MenuViewControllers = [YouTubeViewController(), MapViewController(), CalculatorViewController()]
+    
+    private let bringView: LottieAnimationView = {
+        let animation = LottieAnimationView(name: "bring")
+        animation.translatesAutoresizingMaskIntoConstraints = false
+        animation.contentMode = .scaleAspectFill
+        animation.loopMode = .loop
+        return animation
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +35,6 @@ class MainViewController: UIViewController {
         setupPlace()
         autoLayout()
         setupCollectionView()
-        print(StorageService.shared.bannerUrl.count)
     }
     
     func setupPlace() {
@@ -34,9 +43,7 @@ class MainViewController: UIViewController {
             case .success(let placeData):
                 self.placeArray = placeData
                 self.mainView.recommendedPlace.reuseCollection.reloadData()
-                print("장소갯수",self.placeArray.count)
             case .failure(let error):
-                print(error.localizedDescription)
                 AlertManager.recommendationPlaceReadFail(on: self)
             }
         }
@@ -45,6 +52,7 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
         self.setupTimer()
+        self.bringView.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,12 +61,18 @@ class MainViewController: UIViewController {
     
     func autoLayout() {
         self.view.addSubview(mainView)
+        self.view.addSubview(bringView)
         
         NSLayoutConstraint.activate([
             mainView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             mainView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             mainView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             mainView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            
+            bringView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            bringView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            bringView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/2),
+            bringView.heightAnchor.constraint(equalTo: self.bringView.widthAnchor)
         ])
     }
     
@@ -116,15 +130,17 @@ class MainViewController: UIViewController {
     }
     
     func setupAppList() {
-        appManager.fetchMusic(searchTerm: searchKeyword) { result in
+        appManager.fetchMusic(searchTerm: searchKeyword) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let apps):
                 self.appList = apps
                 DispatchQueue.main.async {
                     self.mainView.recommendedStore.reuseCollection.reloadData()
                 }
-            case .failure(let error):
-                print(error.localizedDescription)
+            case .failure(_):
+                AlertManager.errorAlert(on: self)
             }
         }
     }
@@ -197,22 +213,36 @@ extension MainViewController: UICollectionViewDelegate {
             self.navigationController?.navigationBar.isHidden = false
             self.navigationController?.pushViewController(MenuViewControllers[indexPath.row], animated: false)
         case 1:
-            if indexPath.item == 2 {
-                let storyManager = StorageService.shared
-                storyManager.uploadStory { [weak self] error in
+            switch indexPath.item {
+            case 2:
+                self.bringView.isHidden = false
+                self.bringView.play()
+
+                StorageService.shared.bringStoryImage { [weak self] result, error in
                     guard let self = self else { return }
-                    if let error = error {
-                        print(error) 
-                    } else {
-                        let popularityView = PopularityViewController()
-                        popularityView.mainPage = self
-                        popularityView.modalTransitionStyle = .crossDissolve
-                        popularityView.modalPresentationStyle = .fullScreen
-                        present(popularityView, animated: true) {
-                            self.bannerTime.invalidate()
-                        }
+                    
+                    if error != nil {
+                        return
+                    }
+                    self.bringView.stop()
+                    guard let result = result else { return }
+                    let popularityView = PopularityViewController()
+                    popularityView.mainPage = self
+                    popularityView.storyImages = result
+                    popularityView.modalTransitionStyle = .crossDissolve
+                    popularityView.modalPresentationStyle = .fullScreen
+                    self.present(popularityView, animated: true) {
+                        self.bannerTime.invalidate()
                     }
                 }
+                
+    
+                // firebase에서 정보받아올수있게 변경 필요
+            case 3:
+                let urlString = "https://hyewon07.tistory.com/entry/%EB%B0%98%EB%A0%A4%EB%8F%99%EB%AC%BC-%EC%A0%95%EB%B6%80-%EC%A7%80%EC%9B%90%EA%B8%88"
+                self.showWebViewController(with: urlString)
+            default:
+                return
             }
             
         case 2:
@@ -222,7 +252,6 @@ extension MainViewController: UICollectionViewDelegate {
             }
         case 3:
             guard let urlString = self.placeArray[indexPath.item].pageUrl else { return }
-            print("추천플레이스 url", urlString)
             self.showWebViewController(with: urlString)
         default:
             return

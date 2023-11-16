@@ -13,8 +13,60 @@ class AddPostViewController: UIViewController {
     
     let db = Firestore.firestore()
     
+    weak var delegate: FeedDelegate?
+    
     // 선택된 이미지 CollectionView
     var selectedImages: [UIImage] = []
+    
+    func imageViewTapped() {
+        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
+
+        switch photoAuthorizationStatus {
+        case .authorized:
+            // 이미지를 선택하는 로직 유지
+            var configuration = PHPickerConfiguration()
+            configuration.selectionLimit = 5 // 선택한 이미지 수 제한 (옵션)
+            
+            let picker = PHPickerViewController(configuration: configuration)
+            picker.delegate = self
+            present(picker, animated: true)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { status in
+                DispatchQueue.main.async {
+                    if status == .authorized {
+                        // 이미지를 선택하는 로직 유지
+                        var configuration = PHPickerConfiguration()
+                        configuration.selectionLimit = 5 // 선택한 이미지 수 제한 (옵션)
+                        
+                        let picker = PHPickerViewController(configuration: configuration)
+                        picker.delegate = self
+                        self.present(picker, animated: true)
+                    } else {
+                        self.showPhotoPermissionDeniedAlert()
+                    }
+                }
+            }
+        case .denied, .restricted:
+            showPhotoPermissionDeniedAlert()
+        default:
+            break
+        }
+    }
+
+    private func showPhotoPermissionDeniedAlert() {
+        let alertController = UIAlertController(title: "알림", message: "사진 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.", preferredStyle: .alert)
+        let settingsAction = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSettings, completionHandler: nil)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
     
     private func setupCollectionView() {
         addPostView.imageCollectionView.delegate = self
@@ -53,7 +105,6 @@ class AddPostViewController: UIViewController {
     }
 
     @objc private func keyboardWillHide(_ notification: Notification) {
-        print("hide")
         self.addPostView.transform = .identity
     }
     
@@ -74,7 +125,9 @@ class AddPostViewController: UIViewController {
         // 추후 현재 로그인된 ID를 받아와서 닉네임 표시
         let currentUID: String = MyFirestore().getCurrentUser() ?? "" // 사용자 ID 확인
         // 사용자 UID의 username 확인.
-        addPostView.userNicknameLabel.text = "_zerohyeon"
+        MyFirestore().getUsername(uid: currentUID) { name in
+            self.addPostView.userNicknameLabel.text = name
+        }
         
         NSLayoutConstraint.activate([
             addPostView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -89,91 +142,96 @@ extension AddPostViewController: AddPostViewDelegate {
     func cancelButtonTapped() {
         dismiss(animated: true)
     }
-
+    
     func uploadButtonTapped() {
-        print("selectedImages: \(selectedImages)")
-        
-        // document : 현재 시간
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm" // 표시 형식을 원하는 대로 설정
-        
-        let currentDate = Date() // 현재 시간 가져오기
-        let formattedCurrentDate = dateFormatter.string(from: currentDate) // 형식에 맞게 날짜를 문자열로 변환
-        
-        print("현재 시간: \(currentDate)")
-        
-        let feedUid: String = MyFirestore().getCurrentUser() ?? "" // 사용자 UID 확인
-        var feedImage: [String] = []
-        let feedPost: String = addPostView.postTextView.text
-        let feedLike: [String] = [] // 처음에 생성할 때는 좋아요 수가 없음.
-        let feedLikeCount: Int = 0 // 초기 생성 시 좋아요 수는 0
-        let feedComment: [[String: String]] = [] // 처음에 생성할 때는 댓글이 없음.
-        
-        // Firebase Storage에 이미지 업로드
-        // Firebase Storage 인스턴스, 스토리지 참조 생성
-        let storage = Storage.storage()
-        let storageRef = storage.reference()
-        let group = DispatchGroup() // Dispatch Group 생성
-        // 선택한 이미지 전체 확인
-        for image in selectedImages.enumerated() {
-            group.enter() // Dispatch Group 진입
+        // textView와 iamge가 선택된 경우에만
+        if selectedImages.isEmpty && addPostView.postTextView.text == "" {
+            // 이미지와 Post를 작성해주세요
+            AlertManager.nothingAlert(on: self)
+        } else if addPostView.postTextView.text == "" {
+            // Post를 작성해주세요
+            AlertManager.notEnteredTextAlert(on: self)
+        } else if selectedImages.isEmpty {
+            // 이미지를 추가해주세요
+            AlertManager.notSelectedImageAlert(on: self)
+        } else {
+            // document : 현재 시간
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // 표시 형식을 원하는 대로 설정
             
-            let feedImageGroup: String = "Feeds"
+            let currentDate = Date() // 현재 시간 가져오기
+            let formattedCurrentDate = dateFormatter.string(from: currentDate) // 형식에 맞게 날짜를 문자열로 변환
             
-            // Firebase Storage 이미지 업로드 경로
-            // Feeds/사용자UID/업로드날짜/jpg파일
-            let savePath = "\(feedImageGroup)/\(feedUid)/\(formattedCurrentDate)/image\(image.offset).jpg"
-            let imageRef = storageRef.child(savePath)
             
-            if let imageData = image.element.jpegData(compressionQuality: 0.8) { // JPEG형식의 데이터로 변환. compressionQuality 이미지 품질(0.8 일반적인 값)
-                imageRef.putData(imageData, metadata: nil) { (metadata, error) in
-                    if let error = error {
-                        print("이미지 업로드 실패: \(error.localizedDescription)")
-                    } else {
-                        print("이미지 업로드 성공")
-                        // 이미지 다운로드 URL 가져오기
-                        imageRef.downloadURL { (url, error) in
-                            if let error = error {
-                                print("URL 가져오기 실패: \(error.localizedDescription)")
-                            } else {
-                                if let downloadURL = url?.absoluteString {
-                                    // Firestore에 URL 저장
-                                    feedImage.append(downloadURL)
-                                    print("feedImage: \(feedImage)")
+            let feedUid: String = MyFirestore().getCurrentUser() ?? "" // 사용자 UID 확인
+            var feedImage: [String] = []
+            let feedPost: String = addPostView.postTextView.text
+            let feedLike: [String] = [] // 처음에 생성할 때는 좋아요 수가 없음.
+            let feedLikeCount: Int = 0 // 초기 생성 시 좋아요 수는 0
+            let feedComment: [[String: String]] = [] // 처음에 생성할 때는 댓글이 없음.
+            
+            // Firebase Storage에 이미지 업로드
+            // Firebase Storage 인스턴스, 스토리지 참조 생성
+            let storage = Storage.storage()
+            let storageRef = storage.reference()
+            let group = DispatchGroup() // Dispatch Group 생성
+            // 선택한 이미지 전체 확인
+            for image in selectedImages.enumerated() {
+                group.enter() // Dispatch Group 진입
+                
+                let feedImageGroup: String = "Feeds"
+                
+                // Firebase Storage 이미지 업로드 경로
+                // Feeds/사용자UID/업로드날짜/jpg파일
+                let savePath = "\(feedImageGroup)/\(feedUid)/\(formattedCurrentDate)/image\(image.offset).jpg"
+                let imageRef = storageRef.child(savePath)
+                
+                if let imageData = image.element.jpegData(compressionQuality: 0.8) { // JPEG형식의 데이터로 변환. compressionQuality 이미지 품질(0.8 일반적인 값)
+                    imageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                        if let error = error {
+                        } else {
+                            // 이미지 다운로드 URL 가져오기
+                            imageRef.downloadURL { (url, error) in
+                                defer { group.leave() }
+                                if let error = error {
+                                } else {
+                                    if let downloadURL = url?.absoluteString {
+                                        // Firestore에 URL 저장
+                                        feedImage.append(downloadURL)
+                                    }
                                 }
                             }
-                            group.leave()
                         }
                     }
                 }
             }
-        }
-        
-        // 모든 이미지 업로드 및 URL 저장 작업 완료시까지 대기
-        group.notify(queue: .main) {
-//            let data = FeedData(id: feedUid, image: feedImage, post: feedPost, like: feedLike, comment: feedComment)
             
-            let feedData = FeedModel(uid: feedUid, date: currentDate, imageUrl: feedImage, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
-            
-            self.myFirestore.saveFeed(feedData: feedData) { error in
-                print("error: \(error)")
+            group.notify(queue: .main) {
+                let feedData = FeedModel(uid: feedUid, date: currentDate, imageUrl: feedImage, post: feedPost, like: feedLike, likeCount: feedLikeCount, comment: feedComment)
+                
+                FeedService.shared.currentFeed(with: feedData) { [weak self] result in
+                    guard let self = self else { return }
+                    
+                    switch result {
+                    case .success():
+                        delegate?.updateFeed()
+                        self.dismiss(animated: true)
+                    case .failure(let error):
+                        AlertManager.failureFeed(on: self, with: error)
+                    }
+                }
             }
-            
-//            self.myFirestore.saveUserFeed(feedData: data) { error in
-//                print("error: \(error)")
-//            }
-            self.dismiss(animated: true)
         }
     }
-    
-    func imageViewTapped(){
-        var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = 10 // 선택한 이미지 수 제한 (옵션)
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        present(picker, animated: true)
-    }
+//    
+//    func imageViewTapped(){
+//        var configuration = PHPickerConfiguration()
+//        configuration.selectionLimit = 5 // 선택한 이미지 수 제한 (옵션)
+//        
+//        let picker = PHPickerViewController(configuration: configuration)
+//        picker.delegate = self
+//        present(picker, animated: true)
+//    }
 }
 
 extension AddPostViewController: UIScrollViewDelegate {
@@ -188,7 +246,6 @@ extension AddPostViewController: UIScrollViewDelegate {
 
 extension AddPostViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("selectedImages.count: \(selectedImages.count)")
         
         addPostView.pageControl.numberOfPages = selectedImages.count
         return self.selectedImages.count
@@ -196,9 +253,6 @@ extension AddPostViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as! ImageCollectionViewCell
-        print(indexPath.item, "indexPath.item")
-        print(selectedImages.count, "selected image count")
-        print(selectedImages[indexPath.item], "selected image")
         cell.configure(image: selectedImages[indexPath.item])
         
         return cell
@@ -232,8 +286,6 @@ extension AddPostViewController: PHPickerViewControllerDelegate {
         guard let result = results.first else {
             return
         }
-        print("results: \(results.count)")
-        print("results: \(results)")
         
         var loadedImages: [UIImage] = [] // 이미지를 로드한 배열
         let dispatchGroup = DispatchGroup() // 디스패치 그룹 생성
