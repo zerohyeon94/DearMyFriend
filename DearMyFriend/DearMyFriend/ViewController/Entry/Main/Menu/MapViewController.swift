@@ -31,6 +31,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     var selectedResult: (title: String, roadAddress: String, telephone: String)?
     var userLocations: [CLLocationCoordinate2D] = []
     var userMarkers: [String: NMFMarker] = [:]
+    var selectedMarker: NMFMarker?
 
 
 
@@ -138,7 +139,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         self.view.endEditing(true)
 
         //        setupButtonLayout()
-        
+
         if let currentLocation = locationManager.location {
             addMarker(at: currentLocation.coordinate, title: "현재 위치입니다.")
             moveMapToLocation(currentLocation.coordinate)
@@ -315,6 +316,20 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             marker.touchHandler = { [weak self] overlay in
                 if let marker = overlay as? NMFMarker {
 
+                    if let image = UIImage(named: "animalhospital") {
+                        let resizedImage = ImageResizer.resizeImage(image: image, newWidth: 40)
+                        marker.iconImage = NMFOverlayImage(image: resizedImage)
+                    }
+
+                    if let previousMarker = self?.selectedMarker, previousMarker != marker {
+                        if let image = UIImage(named: "marker") {
+                            let resizedImage = ImageResizer.resizeImage(image: image, newWidth: 30)
+                            previousMarker.iconImage = NMFOverlayImage(image: resizedImage)
+                        }
+                    }
+
+                    self?.selectedMarker = marker
+
 
 
                     let db = Firestore.firestore()
@@ -334,16 +349,16 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             }
         }
     }
-//    @objc func showAnimalHospital() {
-//        if isLoadingResults {
-//            return
-//        }
-//        //        loadAnimalHospitalCoordinatesFromFirebase()
-//
-//        searchResults.removeAll()
-//        searchStart = 1 // 다시 첫 번째 페이지부터 시작
-//
-//    }
+    //    @objc func showAnimalHospital() {
+    //        if isLoadingResults {
+    //            return
+    //        }
+    //        //        loadAnimalHospitalCoordinatesFromFirebase()
+    //
+    //        searchResults.removeAll()
+    //        searchStart = 1 // 다시 첫 번째 페이지부터 시작
+    //
+    //    }
 
     @objc func closeModal() {
         modalView.removeFromSuperview()
@@ -574,7 +589,7 @@ extension MapViewController {
 
         naverSearch.request(.search(query: query)) { [weak self] result in
             guard let self = self else { return }
-            
+
             switch result {
             case .success(let response):
                 do {
@@ -599,9 +614,9 @@ extension MapViewController {
         }
     }
     func showNoSearchResultsToast() {
-          view.makeToast("해당지역은 아직 추가되지않은 지역입니다.")
-      }
-   }
+        view.makeToast("해당지역은 아직 추가되지않은 지역입니다.")
+    }
+}
 extension MapViewController {
     func searchImage(query: String, completion: @escaping (String?) -> Void) {
         naverSearch.request(.searchImage(query: query)) { result in
