@@ -27,17 +27,11 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     var searchResultsTableViewController: UITableViewController!
     var recentSearches: [String] = []
     var modalData: (title: String, roadAddress: String)?
-    //    var searchRadius: CLLocationDistance = 1000
     var selectedResult: (title: String, roadAddress: String, telephone: String)?
     var userLocations: [CLLocationCoordinate2D] = []
     var userMarkers: [String: NMFMarker] = [:]
     var selectedMarker: NMFMarker?
-    
-    
-    
-    
-    
-    
+
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -45,14 +39,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         return imageView
         
     }()
-    
-    //    private lazy var showAnimalHospitalButton: UIButton = {
-    //        let button = createStyledButton(title: "동물병원")
-    //        button.addTarget(self, action: #selector(showAnimalHospital), for: .touchUpInside)
-    //        return button
-    //    }()
-    
-    
+
     private lazy var modalView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -112,6 +99,8 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+
         setupSearchController()
         loadMarkersFromFirestore()
         setupLocationManager()
@@ -121,7 +110,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         naverMapView?.showLocationButton = true
         naverMapView?.mapView.isScrollGestureEnabled = true
         naverMapView?.mapView.delegate = self
-        searchController.searchBar.delegate = self
         naverMapView?.mapView.addCameraDelegate(delegate: self)
         
         
@@ -138,8 +126,8 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
         
-        //        setupButtonLayout()
-        
+        setupSearchController()
+
         if let currentLocation = locationManager.location {
             addMarker(at: currentLocation.coordinate, title: "현재 위치입니다.")
             moveMapToLocation(currentLocation.coordinate)
@@ -159,7 +147,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         if isIdle {
             loadMarkersInVisibleArea()
         }
-        
         func loadMarkersInVisibleArea() {
             guard let mapView = naverMapView?.mapView else {
                 return
@@ -184,14 +171,14 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         }
     }
     
-    func setupLocationManager() {
+    private func setupLocationManager() {
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
     }
     
     
-    func setupSearchController() {
+    private func setupSearchController() {
         searchResultsTableViewController = UITableViewController(style: .plain)
         searchResultsTableViewController.tableView = searchResultsTableView
         searchResultsTableView.delegate = self
@@ -200,19 +187,18 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
         searchController = UISearchController(searchResultsController: searchResultsTableViewController)
         searchController.searchResultsUpdater = self
         searchController.hidesNavigationBarDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "찿으시는 매장이름과 지역을 입력하세요!"
         searchController.searchBar.delegate = self
-        
+
+
         navigationItem.searchController = searchController
         definesPresentationContext = true
-        //                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        //                searchController.view.addGestureRecognizer(tapGesture)
-        
     }
     
     
     
-    func addTableView() {
+    private func addTableView() {
         searchResultsTableView.frame = view.bounds
         searchResultsTableView.delegate = self
         searchResultsTableView.dataSource = self
@@ -266,7 +252,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
                         if let error = error {
                             print("Error writing document: \(error)")
                         } else {
-                            print("Document successfully written!")
+                            print("저장 완료!")
                         }
                     }
                 }
@@ -292,7 +278,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
 
                     let modalTitle = modalDataDict["title"] as? String
                     let modalRoadAddress = modalDataDict["roadAddress"] as? String
-                    // let modalImageView = modalDataDict["imageView"] // imageView를 적절한 타입으로 변환해야 합니다.
 
                     let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
 
@@ -346,17 +331,6 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             }
         }
     }
-    //    @objc func showAnimalHospital() {
-    //        if isLoadingResults {
-    //            return
-    //        }
-    //        //        loadAnimalHospitalCoordinatesFromFirebase()
-    //
-    //        searchResults.removeAll()
-    //        searchStart = 1 // 다시 첫 번째 페이지부터 시작
-    //
-    //    }
-    
     @objc func closeModal() {
         modalView.removeFromSuperview()
         selectedItem = nil
@@ -431,7 +405,7 @@ class MapViewController: UIViewController, NMFMapViewCameraDelegate, NMFMapViewD
             $0.width.height.equalTo(30)
         }
     }
-    func addMarker(at coordinate: CLLocationCoordinate2D, title: String, roadAddress: String? = nil, modalTitle: String? = nil, modalRoadAddress: String? = nil) {
+    private func addMarker(at coordinate: CLLocationCoordinate2D, title: String, roadAddress: String? = nil, modalTitle: String? = nil, modalRoadAddress: String? = nil) {
         let isDuplicate = markers.contains { existingMarker in
             existingMarker.position.lat == coordinate.latitude &&
             existingMarker.position.lng == coordinate.longitude
@@ -523,6 +497,7 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource {
                     self?.addMarker(at: location.coordinate, title: selectedSearch)
                     self?.modalData = (title: selectedSearch, roadAddress: selectedSearch)
                     self?.showHalfModal()
+                    
                 }
             }
         } else {
@@ -538,6 +513,8 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
+        searchController.searchBar.resignFirstResponder()
+
     }
     
     func moveMapToLocation(_ coordinate: CLLocationCoordinate2D) {
